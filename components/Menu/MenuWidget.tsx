@@ -1,26 +1,23 @@
 import styled from "@emotion/styled";
-import { Fab } from "@mui/material";
-
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-
 import { MenuItems } from "./MenuItems";
 
-const Container = styled.div``;
+import { IMenuItem } from "../../types/menu";
+import PayButton from "./PayButton";
 
-export const MenuWidget = () => {
+const Container = styled.div`
+  width: 100%;
+  max-width: 500px;
+`;
+
+interface IMenuWidgetProps {
+  menuItems: IMenuItem[];
+}
+
+export const MenuWidget = ({ menuItems }: IMenuWidgetProps) => {
   return (
     <Container>
-      <MenuItems />
-      <Fab
-        variant='extended'
-        size='large'
-        color='primary'
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        aria-label='add'
-      >
-        <ShoppingCartCheckoutIcon sx={{ mr: 1 }} />
-        Pagar
-      </Fab>
+      <MenuItems items={menuItems} />
+      <PayButton />
     </Container>
   );
 };

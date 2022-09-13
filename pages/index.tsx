@@ -9,6 +9,8 @@ import { MenuWidget } from "../components/Menu/MenuWidget";
 
 import { Footer } from "../components/Footer";
 
+import menuItems from "../data/menu.json";
+
 const TopBar = styled(AppBar)`
   flex-direction: row-reverse;
   padding: 0.6em;
@@ -41,7 +43,7 @@ const Home: NextPage = () => {
 
       <MainBlock>
         <HeaderLogo />
-        <MenuWidget />
+        <MenuWidget menuItems={menuItems} />
       </MainBlock>
 
       <Footer />

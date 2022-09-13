@@ -1,15 +1,27 @@
 import styled from "@emotion/styled";
 import { AppBar, Box } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
-import { MainWidget } from "../components/MainWidget";
-import styles from "../styles/Home.module.css";
+import { HeaderLogo } from "../components/HeaderLogo";
+
+import { MenuWidget } from "../components/Menu/MenuWidget";
+
+import { Footer } from "../components/Footer";
 
 const TopBar = styled(AppBar)`
   flex-direction: row-reverse;
   padding: 0.6em;
-  background: #f7f7f7;
+`;
+
+const MainBlock = styled.main`
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: black;
 `;
 
 const Home: NextPage = () => {
@@ -26,17 +38,13 @@ const Home: NextPage = () => {
           <ConnectButton label='Conectar Wallet' />
         </TopBar>
       </Box>
-      <main className={styles.main}>
-        <h1 className={styles.title}>Bienvenidos a La Crypta Bar</h1>
 
-        <MainWidget />
-      </main>
+      <MainBlock>
+        <HeaderLogo />
+        <MenuWidget />
+      </MainBlock>
 
-      <footer className={styles.footer}>
-        <a href='https://peronio.ar' target='_blank' rel='noopener noreferrer'>
-          Hecho con ❤️ por Peronio
-        </a>
-      </footer>
+      <Footer />
     </div>
   );
 };

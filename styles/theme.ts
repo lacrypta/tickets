@@ -23,7 +23,7 @@ export const themeOptions = createTheme({
   components: {
     MuiAppBar: {
       defaultProps: {
-        color: "secondary",
+        color: "primary",
       },
     },
     MuiButton: {

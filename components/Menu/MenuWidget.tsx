@@ -7,6 +7,7 @@ import PayButton from "./PayButton";
 const Container = styled.div`
   width: 100%;
   max-width: 500px;
+  z-index: 10;
 `;
 
 interface IMenuWidgetProps {

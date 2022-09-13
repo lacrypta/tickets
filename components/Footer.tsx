@@ -8,6 +8,7 @@ const FooterBlock = styled.footer`
   justify-content: center;
   align-items: center;
   color: black;
+  position: relative;
 
   & a {
     display: flex;

@@ -11,7 +11,7 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 15px;
   &:hover {
-    background: #1b1b1b;
+    background: rgba(255, 255, 255, 0.1);
   }
 `;
 

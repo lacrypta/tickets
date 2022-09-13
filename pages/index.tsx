@@ -3,13 +3,13 @@ import { AppBar, Box } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { NextPage } from "next";
 import Head from "next/head";
+
 import { HeaderLogo } from "../components/HeaderLogo";
-
 import { MenuWidget } from "../components/Menu/MenuWidget";
-
 import { Footer } from "../components/Footer";
 
 import menuItems from "../data/menu.json";
+import { Background } from "../components/Background";
 
 const TopBar = styled(AppBar)`
   flex-direction: row-reverse;
@@ -17,13 +17,12 @@ const TopBar = styled(AppBar)`
 `;
 
 const MainBlock = styled.main`
-  min-height: 100vh;
   padding: 4rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: black;
+  position: relative;
 `;
 
 const Home: NextPage = () => {
@@ -42,6 +41,7 @@ const Home: NextPage = () => {
       </Box>
 
       <MainBlock>
+        <Background />
         <HeaderLogo />
         <MenuWidget menuItems={menuItems} />
       </MainBlock>

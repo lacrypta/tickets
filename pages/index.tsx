@@ -1,16 +1,16 @@
-import styled from "@emotion/styled";
-import { AppBar, Box } from "@mui/material";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage } from "next";
-import Head from "next/head";
-import { MainWidget } from "../components/MainWidget";
-import styles from "../styles/Home.module.css";
+import styled from '@emotion/styled'
+import { AppBar, Box } from '@mui/material'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import { MainWidget } from '../components/MainWidget'
+import styles from '../styles/Home.module.css'
 
 const TopBar = styled(AppBar)`
   flex-direction: row-reverse;
   padding: 0.6em;
   background: #f7f7f7;
-`;
+`
 
 const Home: NextPage = () => {
   return (
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
         </a>
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

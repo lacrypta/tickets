@@ -11,7 +11,7 @@ export const MenuItems = ({ items }: IMenuItemsProps) => {
   return (
     <Container>
       {items?.map((item) => (
-        <MenuItem key={item.id} item={item} />
+        <MenuItem key={item.id} item={item} qty={1} />
       ))}
     </Container>
   );

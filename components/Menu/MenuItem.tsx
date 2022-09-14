@@ -1,13 +1,14 @@
+import { useContext } from "react";
 import styled from "@emotion/styled";
 import { IconButton } from "@mui/material";
-import { IMenuItem } from "../../types/menu";
-
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
+import { IMenuItem } from "../../types/menu";
+
 import ItemPrice from "./ItemPrice";
-import { useContext } from "react";
-import { CartContext } from "../../providers/cart";
+
+import { CartContext } from "../../providers/Cart";
 
 const Container = styled.div`
   color: white;

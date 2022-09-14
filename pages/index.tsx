@@ -5,10 +5,14 @@ import { NextPage } from "next";
 import Head from "next/head";
 
 import { HeaderLogo } from "../components/HeaderLogo";
-import { MenuWidget } from "../components/Menu/MenuWidget";
+import { MenuWidget } from "../components/Widgets/MenuWidget";
 import { Footer } from "../components/Footer";
 
 import { Background } from "../components/Background";
+import { useContext } from "react";
+import { StepsContext } from "../providers/Steps";
+import { CartWidget } from "../components/Widgets/CartWidget";
+import { DoneWidget } from "../components/Widgets/DoneWidget";
 
 const TopBar = styled(AppBar)`
   flex-direction: row-reverse;
@@ -24,7 +28,15 @@ const MainBlock = styled.main`
   position: relative;
 `;
 
+const widgetSteps = [
+  <MenuWidget key='menu' />,
+  <CartWidget key='cart' />,
+  <DoneWidget key='done' />,
+];
+
 const Home: NextPage = () => {
+  const { step } = useContext(StepsContext);
+
   return (
     <div>
       <Head>
@@ -42,7 +54,7 @@ const Home: NextPage = () => {
       <MainBlock>
         <Background />
         <HeaderLogo />
-        <MenuWidget />
+        {widgetSteps[step]}
       </MainBlock>
 
       <Footer />

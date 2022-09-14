@@ -32,13 +32,11 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   const addItem = (itemIndex: string) => {
-    // const newCart = JSON.parse(JSON.stringify(cart));
     cart[itemIndex].qty++;
     setCart(cart);
   };
 
   const removeItem = (itemIndex: string) => {
-    // const newCart = JSON.parse(JSON.stringify(cart));
     cart[itemIndex].qty--;
     setCart(cart);
   };
@@ -47,10 +45,7 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
     setCart(generateCart(menu));
   }, [menu]);
 
-  useEffect(() => {
-    console.info("EL CARTOOOO!!");
-  }, [cart]);
-
+  console.warn("Check unnecessay toggle. Bind needed", toggle);
   return (
     <CartContext.Provider
       value={{

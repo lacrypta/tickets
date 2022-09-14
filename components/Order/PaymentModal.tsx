@@ -1,9 +1,17 @@
 import styled from "@emotion/styled";
-import { Backdrop, Box, Button, Fade, Modal } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Fade,
+  Modal,
+} from "@mui/material";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CartContext } from "../../providers/Cart";
 import { useAccount } from "wagmi";
+import useERC20Permit from "../../hooks/useERC20Permit";
 
 const BoxDiv = styled(Box)`
   position: absolute;
@@ -31,12 +39,29 @@ interface IPaymentModalProps {
 }
 
 const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
-  const handleClose = () => setOpen(false);
   const { address } = useAccount();
+  const [isSignatureLoading, setSignatureLoading] = useState(false);
 
-  const contractAddress = "0xMierda";
+  const contractAddress = "0xPeronioERC20";
+  const gatewayAddress = "0xGateway";
+
+  const { requestSignature } = useERC20Permit({
+    name: "Peronio",
+    contract: contractAddress,
+    spender: gatewayAddress,
+    value: "1000",
+    deadline: 999999999,
+  });
+
+  const handleClose = () => setOpen(false);
 
   const { cart } = useContext(CartContext);
+
+  const handlePay = async () => {
+    setSignatureLoading(true);
+    await requestSignature();
+    setSignatureLoading(false);
+  };
 
   return (
     <Modal
@@ -59,13 +84,23 @@ const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
           <div>Tu cuenta: {address}</div>
           <div>Contrato: {contractAddress}</div>
           <ButtonDiv>
-            <Button
-              size='large'
-              variant='contained'
-              endIcon={<AssignmentTurnedInIcon />}
-            >
-              PAGAR
-            </Button>
+            {isSignatureLoading ? (
+              <CircularProgress
+                variant='indeterminate'
+                size={40}
+                thickness={4}
+                value={100}
+              />
+            ) : (
+              <Button
+                size='large'
+                variant='contained'
+                onClick={handlePay}
+                endIcon={<AssignmentTurnedInIcon />}
+              >
+                PAGAR
+              </Button>
+            )}
           </ButtonDiv>
         </BoxDiv>
       </Fade>

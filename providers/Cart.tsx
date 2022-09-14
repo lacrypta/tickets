@@ -54,7 +54,7 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   };
 
   const removeItem = (itemIndex: string) => {
-    cart.items[itemIndex].qty--;
+    cart.items[itemIndex].qty = Math.max(cart.items[itemIndex].qty - 1, 0);
     refreshSum(cart);
     setCart(cart);
   };

@@ -12,6 +12,9 @@ import { publicProvider } from "wagmi/providers/public";
 import { ThemeProvider } from "@mui/material";
 
 import { themeOptions } from "../styles/theme";
+import { CartProvider } from "../providers/cart";
+
+import menuItems from "../data/menu.json";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -47,7 +50,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={themeOptions}>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider theme={darkTheme()} chains={chains}>
-          <Component {...pageProps} />
+          <CartProvider menu={menuItems}>
+            <Component {...pageProps} />
+          </CartProvider>
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>

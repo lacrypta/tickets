@@ -8,9 +8,7 @@ const Container = styled.div``;
 
 export const MenuItems = () => {
   const { cart } = useContext(CartContext);
-  console.info("Update Cart:");
-  console.dir(cart);
-  const cartItems = cart ? Object.values(cart) : [];
+  const cartItems = cart?.items ? Object.values(cart.items) : [];
   return (
     <Container>
       {cartItems.map((cartItem: ICartItem) => (

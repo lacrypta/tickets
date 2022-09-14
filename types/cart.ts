@@ -1,7 +1,8 @@
 import { IMenuItem } from "./menu";
 
 export interface ICart {
-  [index: string]: ICartItem;
+  total: number;
+  items: { [index: string]: ICartItem };
 }
 
 export interface ICartItem {

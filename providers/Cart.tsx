@@ -17,14 +17,23 @@ interface ICartProviderProps {
 }
 
 const generateCart = (menuItems: IMenuItem[]): ICart => {
-  const cart: ICart = {};
+  const cart: ICart = { items: {}, total: 0 };
   menuItems.map((item) => {
-    cart[item.id] = {
+    cart.items[item.id] = {
       item,
       qty: 0,
     };
   });
+
   return cart;
+};
+
+const refreshSum = (cart: ICart) => {
+  let total = 0;
+  Object.values(cart.items).map((item) => {
+    total += item.qty * item.item.price;
+  });
+  cart.total = total;
 };
 
 export const CartProvider = ({ menu, children }: ICartProviderProps) => {
@@ -32,12 +41,14 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   const addItem = (itemIndex: string) => {
-    cart[itemIndex].qty++;
+    cart.items[itemIndex].qty++;
+    refreshSum(cart);
     setCart(cart);
   };
 
   const removeItem = (itemIndex: string) => {
-    cart[itemIndex].qty--;
+    cart.items[itemIndex].qty--;
+    refreshSum(cart);
     setCart(cart);
   };
 
@@ -45,7 +56,7 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
     setCart(generateCart(menu));
   }, [menu]);
 
-  console.warn("Check unnecessay toggle. Bind needed", toggle);
+  console.warn("Check unnecessary toggle. Bind needed", toggle);
   return (
     <CartContext.Provider
       value={{

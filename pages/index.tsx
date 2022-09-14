@@ -1,17 +1,15 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
+import { useAccount } from "wagmi";
 
 import { HeaderLogo } from "../components/HeaderLogo";
-import { MenuWidget } from "../components/Widgets/MenuWidget";
 import { Footer } from "../components/Footer";
-
 import { Background } from "../components/Background";
-import { useContext } from "react";
-import { StepsContext } from "../providers/Steps";
-import { CartWidget } from "../components/Widgets/OrderWidget";
-import { DoneWidget } from "../components/Widgets/DoneWidget";
 import Header from "../components/Header";
+
+import DisconnectedWidget from "../components/Widgets/DisconnectedWidget";
+import MainWidget from "../components/Widgets/MainWidget";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -22,14 +20,8 @@ const MainBlock = styled.main`
   position: relative;
 `;
 
-const widgetSteps = [
-  <MenuWidget key='menu' />,
-  <CartWidget key='cart' />,
-  <DoneWidget key='done' />,
-];
-
 const Home: NextPage = () => {
-  const { step } = useContext(StepsContext);
+  const { isDisconnected } = useAccount();
 
   return (
     <div>
@@ -39,12 +31,12 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <Header />
+      {!isDisconnected ? <Header /> : ""}
 
       <MainBlock>
         <Background />
         <HeaderLogo />
-        {widgetSteps[step]}
+        {isDisconnected ? <DisconnectedWidget /> : <MainWidget />}
       </MainBlock>
 
       <Footer />

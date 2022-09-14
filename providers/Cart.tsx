@@ -3,13 +3,18 @@ import { ICart } from "../types/cart";
 import { IMenuProduct } from "../types/menu";
 
 interface ICartContext {
-  cart?: ICart;
+  cart: ICart;
   addItem?: (arg0: any) => void;
   removeItem?: (arg0: any) => void;
   setToggle?: (arg0: any) => void;
 }
 
-export const CartContext = createContext<ICartContext>({});
+export const CartContext = createContext<ICartContext>({
+  cart: {
+    total: 0,
+    items: {},
+  },
+});
 
 interface ICartProviderProps {
   children: any;

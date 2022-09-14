@@ -8,7 +8,7 @@ const Container = styled.div``;
 
 export const MenuItems = () => {
   const { cart } = useContext(CartContext);
-  const cartItems = cart?.items ? Object.values(cart.items) : [];
+  const cartItems = cart.items ? Object.values(cart.items) : [];
   return (
     <Container>
       {cartItems.map((cartItem: ICartItem) => (

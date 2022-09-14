@@ -1,6 +1,4 @@
 import styled from "@emotion/styled";
-import { AppBar, Box } from "@mui/material";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { NextPage } from "next";
 import Head from "next/head";
 
@@ -13,11 +11,7 @@ import { useContext } from "react";
 import { StepsContext } from "../providers/Steps";
 import { CartWidget } from "../components/Widgets/CartWidget";
 import { DoneWidget } from "../components/Widgets/DoneWidget";
-
-const TopBar = styled(AppBar)`
-  flex-direction: row-reverse;
-  padding: 0.6em;
-`;
+import Header from "../components/Header";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -45,11 +39,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <Box sx={{ flexGrow: 1 }}>
-        <TopBar position='static' elevation={0}>
-          <ConnectButton label='Conectar Wallet' />
-        </TopBar>
-      </Box>
+      <Header />
 
       <MainBlock>
         <Background />

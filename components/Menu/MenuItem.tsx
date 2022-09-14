@@ -26,7 +26,14 @@ const Container = styled.div`
 
 const ZoomButton = styled(IconButton)`
   transition: transform 0.2s;
-  &:hover {
+  margin-right: 8px;
+  transform: scale(0);
+
+  &.active {
+    transform: scale(1);
+  }
+
+  &.active:hover {
     transform: scale(1.5);
   }
 `;
@@ -90,24 +97,21 @@ export const MenuItem = ({ item, qty }: IMenuProductProps) => {
         </NameAndPrice>
       </FirstColumn>
       <div>
-        {qty > 0 ? (
-          <ZoomButton
-            edge='end'
-            aria-label='remove'
-            color='primary'
-            onClick={handleRemove}
-          >
-            <RemoveCircleIcon />
-          </ZoomButton>
-        ) : (
-          ""
-        )}
-
+        <ZoomButton
+          edge='end'
+          aria-label='remove'
+          color='primary'
+          className={qty > 0 ? "active" : ""}
+          onClick={handleRemove}
+        >
+          <RemoveCircleIcon />
+        </ZoomButton>
         <ZoomButton
           edge='end'
           aria-label='add'
           color='secondary'
           onClick={handleAdd}
+          className='active'
         >
           <AddCircleIcon />
         </ZoomButton>

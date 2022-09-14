@@ -2,7 +2,16 @@ import { createContext, useEffect, useState } from "react";
 import { ICart } from "../types/cart";
 import { IMenuItem } from "../types/menu";
 
-export const CartContext = createContext({});
+interface ICartContext {
+  cart?: ICart;
+  menuItems: IMenuItem[];
+  addItem?: (arg0: any) => void;
+  removeItem?: (arg0: any) => void;
+}
+
+export const CartContext = createContext<ICartContext>({
+  menuItems: [],
+});
 
 interface ICartProviderProps {
   children: any;
@@ -22,6 +31,7 @@ const generateCart = (menuItems: IMenuItem[]): ICart => {
 
 export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   const [cart, setCart] = useState<ICart>({});
+  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 
   const addItem = (menuItem: IMenuItem) => {
     console.info("adding item");
@@ -36,10 +46,11 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
 
   useEffect(() => {
     setCart(generateCart(menu));
+    setMenuItems(menu);
   }, [menu]);
 
   return (
-    <CartContext.Provider value={[cart, addItem, removeItem]}>
+    <CartContext.Provider value={{ cart, menuItems, addItem, removeItem }}>
       {children}
     </CartContext.Provider>
   );

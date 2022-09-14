@@ -8,7 +8,6 @@ import { HeaderLogo } from "../components/HeaderLogo";
 import { MenuWidget } from "../components/Menu/MenuWidget";
 import { Footer } from "../components/Footer";
 
-import menuItems from "../data/menu.json";
 import { Background } from "../components/Background";
 
 const TopBar = styled(AppBar)`
@@ -43,7 +42,7 @@ const Home: NextPage = () => {
       <MainBlock>
         <Background />
         <HeaderLogo />
-        <MenuWidget menuItems={menuItems} />
+        <MenuWidget />
       </MainBlock>
 
       <Footer />

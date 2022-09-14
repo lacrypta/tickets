@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { MenuItems } from "./MenuItems";
 
-import { IMenuItem } from "../../types/menu";
 import PayButton from "./PayButton";
+import { useContext } from "react";
+import { CartContext } from "../../providers/cart";
 
 const Container = styled.div`
   width: 100%;
@@ -11,11 +12,11 @@ const Container = styled.div`
   z-index: 10;
 `;
 
-interface IMenuWidgetProps {
-  menuItems: IMenuItem[];
-}
+export const MenuWidget = () => {
+  const { menuItems } = useContext(CartContext);
 
-export const MenuWidget = ({ menuItems }: IMenuWidgetProps) => {
+  console.info("Menu Items!");
+  console.dir(menuItems);
   return (
     <Container>
       <MenuItems items={menuItems} />

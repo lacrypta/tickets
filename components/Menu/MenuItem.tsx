@@ -6,6 +6,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 import ItemPrice from "./ItemPrice";
+import { useContext } from "react";
+import { CartContext } from "../../providers/cart";
 
 const Container = styled.div`
   color: white;
@@ -31,12 +33,18 @@ const ZoomButton = styled(IconButton)`
 `;
 
 export const MenuItem = ({ item, qty }: IMenuItemProps) => {
+  const { addItem, removeItem } = useContext(CartContext);
+
   const handleAdd = () => {
-    console.info("Added!", item.id);
+    if (addItem) {
+      addItem(item.id);
+    }
   };
 
   const handleRemove = () => {
-    console.info("Added!", item.id);
+    if (removeItem) {
+      removeItem(item.id);
+    }
   };
 
   return (

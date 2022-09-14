@@ -1,4 +1,4 @@
-import { IMenuItem } from "./menu";
+import { IMenuProduct } from "./menu";
 
 export interface ICart {
   total: number;
@@ -6,6 +6,6 @@ export interface ICart {
 }
 
 export interface ICartItem {
-  item: IMenuItem;
+  product: IMenuProduct;
   qty: number;
 }

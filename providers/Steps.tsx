@@ -17,7 +17,6 @@ interface IStepsProviderProps {
 export const StepsProvider = ({ children }: IStepsProviderProps) => {
   const [step, setStep] = useState<number>(0);
 
-  console.info("Step", step);
   return (
     <StepsContext.Provider value={{ step, setStep }}>
       {children}

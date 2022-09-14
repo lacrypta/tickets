@@ -13,8 +13,8 @@ export const MenuItems = () => {
     <Container>
       {cartItems.map((cartItem: ICartItem) => (
         <MenuItem
-          key={cartItem.item.id}
-          item={cartItem.item}
+          key={cartItem.product.id}
+          item={cartItem.product}
           qty={cartItem.qty}
         />
       ))}

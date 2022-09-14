@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { ICart } from "../types/cart";
-import { IMenuItem } from "../types/menu";
+import { IMenuProduct } from "../types/menu";
 
 interface ICartContext {
   cart?: ICart;
@@ -13,14 +13,14 @@ export const CartContext = createContext<ICartContext>({});
 
 interface ICartProviderProps {
   children: any;
-  menu: IMenuItem[];
+  menu: IMenuProduct[];
 }
 
-const generateCart = (menuItems: IMenuItem[]): ICart => {
+const generateCart = (menuItems: IMenuProduct[]): ICart => {
   const cart: ICart = { items: {}, total: 0 };
-  menuItems.map((item) => {
-    cart.items[item.id] = {
-      item,
+  menuItems.map((product) => {
+    cart.items[product.id] = {
+      product,
       qty: 0,
     };
   });
@@ -31,7 +31,7 @@ const generateCart = (menuItems: IMenuItem[]): ICart => {
 const refreshSum = (cart: ICart) => {
   let total = 0;
   Object.values(cart.items).map((item) => {
-    total += item.qty * item.item.price;
+    total += item.qty * item.product.price;
   });
   cart.total = total;
 };

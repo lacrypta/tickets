@@ -1,4 +1,4 @@
-export interface IMenuItem {
+export interface IMenuProduct {
   id: string;
   name: string;
   price: number;

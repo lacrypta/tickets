@@ -4,7 +4,7 @@ import { IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
-import { IMenuItem } from "../../types/menu";
+import { IMenuProduct } from "../../types/menu";
 
 import ItemPrice from "./ItemPrice";
 
@@ -54,12 +54,12 @@ const QtyDiv = styled.div`
 
 const NameAndPrice = styled.div``;
 
-interface IMenuItemProps {
-  item: IMenuItem;
+interface IMenuProductProps {
+  item: IMenuProduct;
   qty: number;
 }
 
-export const MenuItem = ({ item, qty }: IMenuItemProps) => {
+export const MenuItem = ({ item, qty }: IMenuProductProps) => {
   const { addItem, removeItem, setToggle } = useContext(CartContext);
 
   const handleAdd = () => {

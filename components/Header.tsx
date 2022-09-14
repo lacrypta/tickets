@@ -1,7 +1,8 @@
+import { useContext } from "react";
 import styled from "@emotion/styled";
 import { AppBar, Box } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useContext } from "react";
+
 import { CartContext } from "../providers/Cart";
 
 const TopBar = styled(AppBar)`

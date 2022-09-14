@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useAccount } from "wagmi";
+import { Chain, useAccount, useNetwork } from "wagmi";
 
 import { HeaderLogo } from "../components/HeaderLogo";
 import { Footer } from "../components/Footer";
@@ -20,8 +20,13 @@ const MainBlock = styled.main`
   position: relative;
 `;
 
+const isPolygonChain = (chain?: Chain) => {
+  return chain?.id === 137;
+};
+
 const Home: NextPage = () => {
   const { isDisconnected } = useAccount();
+  const { chain } = useNetwork();
 
   return (
     <div>

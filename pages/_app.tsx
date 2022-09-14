@@ -51,7 +51,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <StepsProvider>
       <ThemeProvider theme={themeOptions}>
         <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider theme={darkTheme()} chains={chains}>
+          <RainbowKitProvider
+            modalSize='compact'
+            theme={darkTheme()}
+            chains={chains}
+          >
             <CartProvider menu={menuItems}>
               <Component {...pageProps} />
             </CartProvider>

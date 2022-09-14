@@ -44,7 +44,10 @@ const refreshSum = (cart: ICart) => {
 };
 
 export const CartProvider = ({ menu, children }: ICartProviderProps) => {
-  const [cart, setCart] = useState<ICart>({});
+  const [cart, setCart] = useState<ICart>({
+    total: 0,
+    items: {},
+  });
   const [toggle, setToggle] = useState<boolean>(false);
 
   const addItem = (itemIndex: string) => {

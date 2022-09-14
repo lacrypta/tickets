@@ -8,7 +8,7 @@ const ItemPrice = ({ price, qty = 0 }: IItemPriceProps) => {
   if (qty > 0) {
     return (
       <div>
-        {qty} x {priceDiv} = ${qty * price}
+        x {priceDiv} = ${qty * price}
       </div>
     );
   }

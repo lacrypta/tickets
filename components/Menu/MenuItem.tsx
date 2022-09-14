@@ -33,17 +33,23 @@ const ZoomButton = styled(IconButton)`
 `;
 
 export const MenuItem = ({ item, qty }: IMenuItemProps) => {
-  const { addItem, removeItem } = useContext(CartContext);
+  const { addItem, removeItem, setToggle } = useContext(CartContext);
 
   const handleAdd = () => {
     if (addItem) {
       addItem(item.id);
+      if (setToggle) {
+        setToggle((s: boolean) => !s);
+      }
     }
   };
 
   const handleRemove = () => {
     if (removeItem) {
       removeItem(item.id);
+      if (setToggle) {
+        setToggle((s: boolean) => !s);
+      }
     }
   };
 

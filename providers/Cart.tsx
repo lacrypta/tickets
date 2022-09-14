@@ -6,6 +6,7 @@ interface ICartContext {
   cart?: ICart;
   addItem?: (arg0: any) => void;
   removeItem?: (arg0: any) => void;
+  setToggle?: (arg0: any) => void;
 }
 
 export const CartContext = createContext<ICartContext>({});
@@ -28,28 +29,37 @@ const generateCart = (menuItems: IMenuItem[]): ICart => {
 
 export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   const [cart, setCart] = useState<ICart>({});
+  const [toggle, setToggle] = useState<boolean>(false);
 
   const addItem = (itemIndex: string) => {
-    console.info("adding item");
-    console.dir(itemIndex);
-    console.dir(cart[itemIndex]);
+    // const newCart = JSON.parse(JSON.stringify(cart));
     cart[itemIndex].qty++;
     setCart(cart);
-
-    console.dir(cart);
   };
 
-  const removeItem = (menuItem: string) => {
-    console.info("removing item");
-    console.dir(menuItem);
+  const removeItem = (itemIndex: string) => {
+    // const newCart = JSON.parse(JSON.stringify(cart));
+    cart[itemIndex].qty--;
+    setCart(cart);
   };
 
   useEffect(() => {
     setCart(generateCart(menu));
   }, [menu]);
 
+  useEffect(() => {
+    console.info("EL CARTOOOO!!");
+  }, [cart]);
+
   return (
-    <CartContext.Provider value={{ cart, addItem, removeItem }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addItem,
+        removeItem,
+        setToggle,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

@@ -9,7 +9,7 @@ import { Footer } from "../components/Footer";
 import { Background } from "../components/Background";
 import { useContext } from "react";
 import { StepsContext } from "../providers/Steps";
-import { CartWidget } from "../components/Widgets/CartWidget";
+import { CartWidget } from "../components/Widgets/OrderWidget";
 import { DoneWidget } from "../components/Widgets/DoneWidget";
 import Header from "../components/Header";
 

@@ -7,6 +7,7 @@ interface ICartContext {
   addItem?: (arg0: any) => void;
   removeItem?: (arg0: any) => void;
   setToggle?: (arg0: any) => void;
+  clear: () => void;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -14,6 +15,7 @@ export const CartContext = createContext<ICartContext>({
     total: 0,
     items: {},
   },
+  clear: () => {},
 });
 
 interface ICartProviderProps {
@@ -57,6 +59,10 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
     setCart(cart);
   };
 
+  function clear() {
+    setCart(generateCart(menu));
+  }
+
   useEffect(() => {
     setCart(generateCart(menu));
   }, [menu]);
@@ -68,7 +74,8 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
         cart,
         addItem,
         removeItem,
-        setToggle,
+        clear,
+        setToggle, // TODO: Remove this
       }}
     >
       {children}

@@ -12,14 +12,24 @@ const TopBar = styled(AppBar)`
 `;
 
 const TotalDiv = styled.div`
+  font-size: 15px;
   transition: all 0.3s;
   max-width: 0px;
   opacity: 0;
   overflow: hidden;
+  height: 40px;
 
   &.open {
     max-width: 50%;
     opacity: 1;
+  }
+
+  & div {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 9px;
+    font-size: 18px;
+    border-radius: 7px;
+    font-weight: bold;
   }
 `;
 
@@ -29,7 +39,7 @@ const Header = () => {
     <Box sx={{ flexGrow: 1 }}>
       <TopBar position='static' elevation={0}>
         <TotalDiv className={cart.total > 0 ? "open" : ""}>
-          $ {cart.total}
+          <div>$ {cart.total}</div>
         </TotalDiv>
         <ConnectButton label='Conectar Wallet' />
       </TopBar>

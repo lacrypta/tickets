@@ -4,14 +4,11 @@ import { IMenuItem } from "../types/menu";
 
 interface ICartContext {
   cart?: ICart;
-  menuItems: IMenuItem[];
   addItem?: (arg0: any) => void;
   removeItem?: (arg0: any) => void;
 }
 
-export const CartContext = createContext<ICartContext>({
-  menuItems: [],
-});
+export const CartContext = createContext<ICartContext>({});
 
 interface ICartProviderProps {
   children: any;
@@ -31,26 +28,28 @@ const generateCart = (menuItems: IMenuItem[]): ICart => {
 
 export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   const [cart, setCart] = useState<ICart>({});
-  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 
-  const addItem = (menuItem: IMenuItem) => {
+  const addItem = (itemIndex: string) => {
     console.info("adding item");
-    console.dir(menuItem);
+    console.dir(itemIndex);
+    console.dir(cart[itemIndex]);
+    cart[itemIndex].qty++;
+    setCart(cart);
+
     console.dir(cart);
   };
 
-  const removeItem = (menuItem: IMenuItem) => {
+  const removeItem = (menuItem: string) => {
     console.info("removing item");
     console.dir(menuItem);
   };
 
   useEffect(() => {
     setCart(generateCart(menu));
-    setMenuItems(menu);
   }, [menu]);
 
   return (
-    <CartContext.Provider value={{ cart, menuItems, addItem, removeItem }}>
+    <CartContext.Provider value={{ cart, addItem, removeItem }}>
       {children}
     </CartContext.Provider>
   );

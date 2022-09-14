@@ -2,8 +2,6 @@ import styled from "@emotion/styled";
 import { MenuItems } from "./MenuItems";
 
 import PayButton from "./PayButton";
-import { useContext } from "react";
-import { CartContext } from "../../providers/cart";
 
 const Container = styled.div`
   width: 100%;
@@ -13,13 +11,9 @@ const Container = styled.div`
 `;
 
 export const MenuWidget = () => {
-  const { menuItems } = useContext(CartContext);
-
-  console.info("Menu Items!");
-  console.dir(menuItems);
   return (
     <Container>
-      <MenuItems items={menuItems} />
+      <MenuItems />
       <PayButton />
     </Container>
   );

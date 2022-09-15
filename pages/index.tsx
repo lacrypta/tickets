@@ -13,6 +13,7 @@ import MainWidget from "../components/Widgets/MainWidget";
 import InvalidNetworkWidget from "../components/Widgets/InvalidNetworkWidget";
 import useUser from "../hooks/useUser";
 import SignupWidget from "../components/Widgets/SignupWidget";
+import { useEffect, useState } from "react";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -26,7 +27,12 @@ const MainBlock = styled.main`
 const Home: NextPage = () => {
   const { isDisconnected } = useAccount();
   const { chain } = useNetwork();
-  const { user, isRegistered } = useUser();
+  const [isMounted, setIsMounted] = useState(false); // Fix Hydration trouble
+  const { isRegistered } = useUser();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const ValidNetworkBlock = () => {
     return isRegistered ? <MainWidget /> : <SignupWidget />;
@@ -49,7 +55,15 @@ const Home: NextPage = () => {
       <MainBlock>
         <Background />
         <HeaderLogo />
-        {isDisconnected ? <DisconnectedWidget /> : <ConnectedBlock />}
+        {isMounted ? (
+          isDisconnected ? (
+            <DisconnectedWidget />
+          ) : (
+            <ConnectedBlock />
+          )
+        ) : (
+          "Cargando..."
+        )}
       </MainBlock>
 
       <Footer />

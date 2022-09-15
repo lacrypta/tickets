@@ -4,10 +4,10 @@ import { IMenuProduct } from "../types/menu";
 
 interface ICartContext {
   cart: ICart;
-  addItem?: (arg0: any) => void;
-  removeItem?: (arg0: any) => void;
-  setToggle?: (arg0: any) => void;
-  clear: () => void;
+  addItem(itemIndex: string): void;
+  removeItem(itemIndex: string): void;
+  setToggle(val: boolean): void;
+  clear(): void;
 }
 
 export const CartContext = createContext<ICartContext>({
@@ -15,6 +15,9 @@ export const CartContext = createContext<ICartContext>({
     total: 0,
     items: {},
   },
+  addItem: () => {},
+  removeItem: () => {},
+  setToggle: () => {},
   clear: () => {},
 });
 
@@ -50,11 +53,11 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
   });
   const [toggle, setToggle] = useState<boolean>(false);
 
-  const addItem = (itemIndex: string) => {
+  function addItem(itemIndex: string) {
     cart.items[itemIndex].qty++;
     refreshSum(cart);
     setCart(cart);
-  };
+  }
 
   const removeItem = (itemIndex: string) => {
     cart.items[itemIndex].qty = Math.max(cart.items[itemIndex].qty - 1, 0);

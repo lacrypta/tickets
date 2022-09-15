@@ -67,16 +67,14 @@ interface IMenuProductProps {
 }
 
 export const MenuItem = ({ item, qty }: IMenuProductProps) => {
-  const { addItem, removeItem, setToggle } = useContext(CartContext);
+  const { addItem, removeItem } = useContext(CartContext);
 
   const handleAdd = () => {
     addItem(item.id);
-    setToggle((s: boolean) => !s);
   };
 
   const handleRemove = () => {
     removeItem(item.id);
-    setToggle((s: boolean) => !s);
   };
 
   return (

@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 interface IStepsContext {
   step: number;
-  setStep(step: number): void;
+  setStep(_step: number): void;
 }
 
 export const StepsContext = createContext<IStepsContext>({

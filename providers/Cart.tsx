@@ -4,9 +4,8 @@ import { IMenuProduct } from "../types/menu";
 
 interface ICartContext {
   cart: ICart;
-  addItem(itemIndex: string): void;
-  removeItem(itemIndex: string): void;
-  setToggle(val: boolean): void;
+  addItem(_itemIndex: string): void;
+  removeItem(_itemIndex: string): void;
   clear(): void;
 }
 
@@ -17,7 +16,6 @@ export const CartContext = createContext<ICartContext>({
   },
   addItem: () => {},
   removeItem: () => {},
-  setToggle: () => {},
   clear: () => {},
 });
 
@@ -51,18 +49,24 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
     total: 0,
     items: {},
   });
-  const [toggle, setToggle] = useState<boolean>(false);
+
+  // eslint-disable-next-line no-unused-vars
+  const [toggle, setToggle] = useState<boolean>(false); // TODO: remove this
 
   function addItem(itemIndex: string) {
     cart.items[itemIndex].qty++;
     refreshSum(cart);
     setCart(cart);
+    // Forces re-render
+    setToggle((s: boolean) => !s);
   }
 
   const removeItem = (itemIndex: string) => {
     cart.items[itemIndex].qty = Math.max(cart.items[itemIndex].qty - 1, 0);
     refreshSum(cart);
     setCart(cart);
+    // Forces re-render
+    setToggle((s: boolean) => !s);
   };
 
   function clear() {
@@ -73,7 +77,6 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
     setCart(generateCart(menu));
   }, [menu]);
 
-  console.warn("Check unnecessary toggle. Bind needed", toggle);
   return (
     <CartContext.Provider
       value={{
@@ -81,7 +84,6 @@ export const CartProvider = ({ menu, children }: ICartProviderProps) => {
         addItem,
         removeItem,
         clear,
-        setToggle, // TODO: Remove this
       }}
     >
       {children}

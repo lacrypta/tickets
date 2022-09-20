@@ -29,8 +29,8 @@ interface IUsePermitProps {
 
 const generateTypedData = (
   name: string,
-  owner: string,
   contract: string,
+  owner: string,
   spender: string,
   value: string,
   deadline: number,
@@ -48,7 +48,7 @@ const generateTypedData = (
     message: {
       owner: owner?.toLocaleLowerCase(),
       spender: spender,
-      value: parseUnits(value, 6),
+      value,
       nonce,
       deadline: deadline,
     },

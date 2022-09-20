@@ -15,6 +15,7 @@ import React, { useContext, useState } from "react";
 import { CartContext } from "../../providers/Cart";
 import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
+import { formatUnits } from "ethers/lib/utils";
 
 const BoxDiv = styled(Box)`
   position: fixed;
@@ -51,9 +52,9 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
 
   const { requestSignature } = useERC20Permit({
     name: "Peronio",
-    contract: contractAddress,
-    spender: gatewayAddress,
-    value: "1000",
+    contract: contractAddress ?? "",
+    spender: gatewayAddress ?? "",
+    value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
     deadline: 999999999,
   });
 

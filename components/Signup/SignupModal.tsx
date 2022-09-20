@@ -45,29 +45,57 @@ interface IPaymentModalProps {
 
 const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   const { address } = useAccount();
+
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
+
   const [isSignatureLoading, setSignatureLoading] = useState(false);
 
   const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
   const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
 
-  const { requestSignature } = useERC20Permit({
+  const permitData = {
     name: "Peronio",
     contract: contractAddress ?? "",
     spender: gatewayAddress ?? "",
     value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
-    deadline: 999999999,
-  });
+    deadline:
+      Math.floor(Date.now() / 1000) +
+      parseInt(process.env.NEXT_PUBLIC_SIGNUP_TTL ?? "0"), // 12 hours
+  };
+
+  const { requestSignature } = useERC20Permit(permitData);
 
   const handleClose = () => setOpen(false);
 
   const { clear } = useContext(CartContext);
 
+  const ajaxSignup = async (signature: any) => {
+    console.info("Should send this info:");
+    const requestData = {
+      address: address,
+      username: username,
+      permitData: permitData,
+      signature: {
+        r: signature.r,
+        s: signature.s,
+        v: signature.v,
+      },
+    };
+    console.dir(requestData);
+  };
+
   const handleSignup = async () => {
     clear(); // Clear Cart
     setSignatureLoading(true);
     const signature = await requestSignature();
+    await ajaxSignup(signature);
     console.dir(signature);
     setSignatureLoading(false);
+  };
+
+  const handleInput = (event: { target: { value: any } }) => {
+    setUsername(event.target.value);
   };
 
   return (
@@ -91,8 +119,9 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
             <TextField
               required
               id='outlined-required'
-              label='Nickname'
-              defaultValue='Satoshi Nakamoto'
+              label='Nombre'
+              value={username}
+              onChange={handleInput}
             />
           </div>
           <Alert severity='info'>

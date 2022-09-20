@@ -65,7 +65,7 @@ const useERC20Permit = ({
   const { data: signer } = useSigner();
   const { address: owner } = useAccount();
 
-  const [signature, setSignature] = useState({});
+  const [signature, setSignature] = useState<any>({});
 
   const typedData = generateTypedData(
     name,
@@ -77,6 +77,7 @@ const useERC20Permit = ({
   );
 
   const requestSignature = async () => {
+    setSignature(null);
     try {
       const signature = await signer?.provider?.send("eth_signTypedData_v4", [
         owner,
@@ -84,7 +85,7 @@ const useERC20Permit = ({
       ]);
       const splittedSignature = splitSignature(signature);
       setSignature(splittedSignature);
-      return true;
+      return splittedSignature;
     } catch (e) {
       return false;
     }

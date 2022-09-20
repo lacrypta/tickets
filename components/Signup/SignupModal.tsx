@@ -9,6 +9,7 @@ import {
   Modal,
   TextField,
 } from "@mui/material";
+
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import React, { useContext, useState } from "react";
 import { CartContext } from "../../providers/Cart";
@@ -16,10 +17,10 @@ import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
 
 const BoxDiv = styled(Box)`
-  position: absolute;
-  top: 20%;
+  position: fixed;
+  top: 10%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
   width: 600px;
   max-width: 90%;
   background: white;
@@ -30,6 +31,7 @@ const BoxDiv = styled(Box)`
 `;
 
 const ButtonDiv = styled.div`
+  margin-top: 20px;
   display: flex;
   justify-content: center;
 `;
@@ -57,11 +59,13 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
 
   const handleClose = () => setOpen(false);
 
-  const { cart } = useContext(CartContext);
+  const { clear } = useContext(CartContext);
 
-  const handlePay = async () => {
+  const handleSignup = async () => {
+    clear(); // Clear Cart
     setSignatureLoading(true);
-    await requestSignature();
+    const signature = await requestSignature();
+    console.dir(signature);
     setSignatureLoading(false);
   };
 
@@ -93,7 +97,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
           <Alert severity='info'>
             Van a llamarte con ese nombre cuando esté tu pedido
           </Alert>
-          <div>Avatar: Pendiente</div>
+
           <ButtonDiv>
             {isSignatureLoading ? (
               <CircularProgress
@@ -106,7 +110,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
               <Button
                 size='large'
                 variant='contained'
-                onClick={handlePay}
+                onClick={handleSignup}
                 endIcon={<AssignmentTurnedInIcon />}
               >
                 Registrarse

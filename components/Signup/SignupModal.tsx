@@ -44,8 +44,8 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   const { address } = useAccount();
   const [isSignatureLoading, setSignatureLoading] = useState(false);
 
-  const contractAddress = "0xPeronioERC20";
-  const gatewayAddress = "0xGateway";
+  const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
+  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
 
   const { requestSignature } = useERC20Permit({
     name: "Peronio",

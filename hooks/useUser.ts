@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAccount } from "wagmi";
 import { ISignupRequestBody } from "../types/request";
 
 export interface IUser {
@@ -13,9 +12,19 @@ export interface IUseUserResponse {
 }
 
 const ajaxSignup = async (requestData: ISignupRequestBody) => {
-  console.info("Should send this info:");
-  console.info("Request to send...");
+  console.info("Initiating request");
   console.dir(requestData);
+
+  const data = await fetch("/api/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestData),
+  });
+
+  console.info(data);
+  console.dir(data);
 };
 
 const useUser = (): IUseUserResponse => {

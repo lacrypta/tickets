@@ -1,3 +1,4 @@
+import { IPermit } from "./../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
@@ -17,7 +18,7 @@ const db = getFirestore();
  * @param {String} word
  * @returns
  */
-const log = async (type: string, data: any) => {
+export const log = async (type: string, data: any) => {
   return await db.collection("log").add({
     time: FieldValue.serverTimestamp(),
     type: type,
@@ -30,7 +31,7 @@ const log = async (type: string, data: any) => {
  * @param {String} word Word
  * @returns
  */
-exports.isClaimable = async (word: string) => {
+export const isClaimable = async (word: string) => {
   const wordRef = db.collection("words").doc(word);
   const doc = await wordRef.get();
   if (!doc.exists) {
@@ -47,7 +48,11 @@ exports.isClaimable = async (word: string) => {
  * @param {String} tx
  * @returns
  */
-exports.setWordClaimed = async (word: string, address: string, tx: any) => {
+export const setWordClaimed = async (
+  word: string,
+  address: string,
+  tx: any
+) => {
   const doc = await db.collection("words").doc(word);
   return doc.update({
     claimed: true,
@@ -57,13 +62,20 @@ exports.setWordClaimed = async (word: string, address: string, tx: any) => {
 };
 
 /**
- * Adds new word to dictionary
- * @param {String} word
+ * Adds new user to the database
+ * @param {String} user
+ * @param {String} address
+ * @param {IPermit} permit
  * @returns
  */
-exports.addWord = async (word: string) => {
-  return await db.collection("words").doc(word).set({
-    claimed: false,
+export const addUser = async (
+  username: string,
+  address: string,
+  permit: IPermit
+) => {
+  return await db.collection("users").doc(address).set({
+    username,
+    permit,
   });
 };
 

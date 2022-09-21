@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAccount, useSigner } from "wagmi";
-import { splitSignature } from "@ethersproject/bytes";
-import { parseUnits } from "ethers/lib/utils";
+import { Signature, splitSignature } from "@ethersproject/bytes";
 
 const types = {
   EIP712Domain: [
@@ -19,7 +18,7 @@ const types = {
   ],
 };
 
-interface IUsePermitProps {
+interface IRequestSignatureArgs {
   name: string;
   contract: string;
   spender: string;
@@ -55,40 +54,37 @@ const generateTypedData = (
   };
 };
 
-const useERC20Permit = ({
-  name,
-  contract,
-  spender,
-  value,
-  deadline,
-}: IUsePermitProps) => {
+const useERC20Permit = () => {
   const { data: signer } = useSigner();
   const { address: owner } = useAccount();
 
   const [signature, setSignature] = useState<any>({});
 
-  const typedData = generateTypedData(
+  const requestSignature = async ({
     name,
-    owner ?? "",
     contract,
     spender,
     value,
-    deadline
-  );
+    deadline,
+  }: IRequestSignatureArgs): Promise<Signature> => {
+    const typedData = generateTypedData(
+      name,
+      owner ?? "",
+      contract,
+      spender,
+      value,
+      deadline
+    );
 
-  const requestSignature = async () => {
     setSignature(null);
-    try {
-      const signature = await signer?.provider?.send("eth_signTypedData_v4", [
-        owner,
-        JSON.stringify(typedData),
-      ]);
-      const splittedSignature = splitSignature(signature);
-      setSignature(splittedSignature);
-      return splittedSignature;
-    } catch (e) {
-      return false;
-    }
+    const signature = await signer?.provider?.send("eth_signTypedData_v4", [
+      owner,
+      JSON.stringify(typedData),
+    ]);
+    const splittedSignature = splitSignature(signature);
+    setSignature(splittedSignature);
+
+    return splittedSignature;
   };
 
   return { signature, requestSignature };

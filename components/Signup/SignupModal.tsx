@@ -16,6 +16,7 @@ import { CartContext } from "../../providers/Cart";
 import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
 import { formatUnits } from "ethers/lib/utils";
+import useUser from "../../hooks/useUser";
 
 const BoxDiv = styled(Box)`
   position: fixed;
@@ -44,54 +45,54 @@ interface IPaymentModalProps {
 }
 
 const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
+  // Contexts
   const { address } = useAccount();
-
-  const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
-
-  const [isSignatureLoading, setSignatureLoading] = useState(false);
-
-  const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
-  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
-
-  const permitData = {
-    name: "Peronio",
-    contract: contractAddress ?? "",
-    spender: gatewayAddress ?? "",
-    value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
-    deadline:
-      Math.floor(Date.now() / 1000) +
-      parseInt(process.env.NEXT_PUBLIC_SIGNUP_TTL ?? "0"), // 12 hours
-  };
-
-  const { requestSignature } = useERC20Permit(permitData);
-
-  const handleClose = () => setOpen(false);
-
+  const { signup } = useUser();
+  const { requestSignature } = useERC20Permit();
   const { clear } = useContext(CartContext);
 
-  const ajaxSignup = async (signature: any) => {
-    console.info("Should send this info:");
-    const requestData = {
-      address: address,
-      username: username,
-      permitData: permitData,
-      signature: {
-        r: signature.r,
-        s: signature.s,
-        v: signature.v,
-      },
+  // Local Hooks
+  const [username, setUsername] = useState("");
+  const [isSignatureLoading, setSignatureLoading] = useState(false);
+  const [error, setError] = useState(""); // TODO: Show error
+
+  // Environment variables
+  const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
+  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
+  const signupTTL = process.env.NEXT_PUBLIC_SIGNUP_TTL ?? "0";
+
+  const generatePermitData = () => {
+    return {
+      name: "Peronio",
+      contract: contractAddress ?? "",
+      spender: gatewayAddress ?? "",
+      value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
+      deadline: Math.floor(Date.now() / 1000) + parseInt(signupTTL), // 12 hours
     };
-    console.dir(requestData);
   };
+
+  const handleClose = () => setOpen(false);
 
   const handleSignup = async () => {
     clear(); // Clear Cart
     setSignatureLoading(true);
-    const signature = await requestSignature();
-    await ajaxSignup(signature);
-    console.dir(signature);
-    setSignatureLoading(false);
+    const permitData = generatePermitData();
+    try {
+      const signature = await requestSignature(permitData);
+      await signup({
+        address: address ?? "",
+        username,
+        permitData,
+        signature: {
+          r: signature.r,
+          s: signature.s,
+          v: signature.v,
+        },
+      });
+      setSignatureLoading(false);
+    } catch (e) {
+      console.error("No se pudo");
+    }
   };
 
   const handleInput = (event: { target: { value: any } }) => {

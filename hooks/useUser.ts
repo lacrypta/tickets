@@ -1,42 +1,38 @@
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { ISignupRequestBody } from "../types/request";
 
 export interface IUser {
-  name: string;
+  username: string;
   address: string;
-  avatar?: string;
 }
-
-export interface ISignupArgs {
-  name: string;
-  permit: any;
-}
-
 export interface IUseUserResponse {
   user?: IUser;
   isRegistered: boolean;
-  signUp(_args: ISignupArgs): void;
+  signup(_args: ISignupRequestBody): void;
 }
 
+const ajaxSignup = async (requestData: ISignupRequestBody) => {
+  console.info("Should send this info:");
+  console.info("Request to send...");
+  console.dir(requestData);
+};
+
 const useUser = (): IUseUserResponse => {
-  const { address } = useAccount();
   const [isRegistered, setIsRegistered] = useState(false);
   const [user, setUser] = useState<IUser>();
 
-  const signUp = ({ name, permit }: ISignupArgs) => {
-    console.info("Mock signup User...");
-    console.info("name", name);
-    console.info("permit:");
-    console.dir(permit);
+  const signup = (requestData: ISignupRequestBody) => {
+    const { username, address } = requestData;
+    ajaxSignup(requestData);
 
     setIsRegistered(true);
     setUser({
-      name,
-      address: address ?? "",
-      avatar: "nada",
+      username: username,
+      address: address,
     });
   };
-  return { user, isRegistered, signUp };
+  return { user, isRegistered, signup };
 };
 
 export default useUser;

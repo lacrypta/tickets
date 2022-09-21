@@ -7,6 +7,11 @@ import {
   SignupSchema,
 } from "../../types/request";
 
+// TODO: Validate Permit
+const isValidPermit = (permitData, signature): boolean => {
+  return true;
+};
+
 const request = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseDataType>
@@ -27,6 +32,11 @@ const request = async (
 
   const { address, username, permitData, signature }: ISignupRequestBody =
     req.body;
+
+  if (!isValidPermit(permitData, signature)) {
+    res.status(406).json({ success: false, message: "Invalid Permit" });
+    return;
+  }
 
   await addUser(username, address, {
     owner: address,

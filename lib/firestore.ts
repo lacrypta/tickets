@@ -6,9 +6,18 @@ const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
 // Initialize Firebase
-initializeApp({
-  credential: cert(serviceAccount),
-});
+try {
+  initializeApp({
+    credential: cert(serviceAccount),
+  });
+} catch (err: any) {
+  // we skip the "already exists" message which is
+  // not an actual error when we're hot-reloading
+  if (!/already exists/.test(err.message)) {
+    console.error("Firebase initialization error", err);
+  }
+}
+
 const db = getFirestore();
 
 // **** FUNCTIONS **** //

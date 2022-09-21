@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { AppBar, Box } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-import { CartContext } from "../providers/Cart";
+import { CartContext } from "../contexts/Cart";
 
 const TopBar = styled(AppBar)`
   flex-direction: row;

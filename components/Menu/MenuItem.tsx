@@ -8,7 +8,7 @@ import { IMenuProduct } from "../../types/menu";
 
 import ItemPrice from "./ItemPrice";
 
-import { CartContext } from "../../providers/Cart";
+import { CartContext } from "../../contexts/Cart";
 
 const Container = styled.div`
   color: white;

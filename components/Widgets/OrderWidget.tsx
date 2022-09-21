@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useContext, useState } from "react";
-import { CartContext } from "../../providers/Cart";
-import { StepsContext } from "../../providers/Steps";
+import { CartContext } from "../../contexts/Cart";
+import { StepsContext } from "../../contexts/Steps";
 import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 

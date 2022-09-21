@@ -12,10 +12,10 @@ import { publicProvider } from "wagmi/providers/public";
 import { ThemeProvider } from "@mui/material";
 
 import { themeOptions } from "../styles/theme";
-import { CartProvider } from "../providers/Cart";
+import { CartProvider } from "../contexts/Cart";
 
 import menuItems from "../data/menu.json";
-import { StepsProvider } from "../providers/Steps";
+import { StepsProvider } from "../contexts/Steps";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [

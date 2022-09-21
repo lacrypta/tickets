@@ -1,7 +1,7 @@
 import { Fab } from "@mui/material";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { MouseEventHandler, useContext } from "react";
-import { CartContext } from "../../providers/Cart";
+import { CartContext } from "../../contexts/Cart";
 
 interface IPayButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;

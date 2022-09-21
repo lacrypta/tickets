@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { StepsContext } from "../../providers/Steps";
+import { StepsContext } from "../../contexts/Steps";
 
 import { DoneWidget } from "./DoneWidget";
 import { MenuWidget } from "./MenuWidget";

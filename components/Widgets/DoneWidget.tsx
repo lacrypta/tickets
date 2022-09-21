@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { StepsContext } from "../../providers/Steps";
+import { StepsContext } from "../../contexts/Steps";
 import { useContext } from "react";
 import { useAccount } from "wagmi";
-import { CartContext } from "../../providers/Cart";
+import { CartContext } from "../../contexts/Cart";
 import CartList from "../Order/OrderList";
 import BackButton from "../BackButton";
 

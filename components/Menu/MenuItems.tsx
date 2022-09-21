@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useContext } from "react";
-import { CartContext } from "../../providers/Cart";
+import { CartContext } from "../../contexts/Cart";
 import { ICartItem } from "../../types/cart";
 import { MenuItem } from "./MenuItem";
 

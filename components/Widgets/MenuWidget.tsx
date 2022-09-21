@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useContext } from "react";
-import { StepsContext } from "../../providers/Steps";
+import { StepsContext } from "../../contexts/Steps";
 import { MenuItems } from "../Menu/MenuItems";
 
 import PayButton from "../Menu/PayButton";

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import React, { useContext, useState } from "react";
-import { CartContext } from "../../providers/Cart";
+import { CartContext } from "../../contexts/Cart";
 import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
 

@@ -1,6 +1,6 @@
 import { isAddress } from "ethers/lib/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getUser } from "../../../lib/firestore";
+import { getUser } from "../../../lib/private/firestore";
 
 import { ResponseDataType } from "../../../types/request";
 

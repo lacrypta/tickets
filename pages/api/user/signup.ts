@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { addUser } from "../../../lib/firestore";
+import { addUser } from "../../../lib/private/firestore";
 
 import {
   ISignupRequestBody,

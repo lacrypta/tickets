@@ -89,10 +89,10 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
           v: signature.v,
         },
       });
-      setSignatureLoading(false);
     } catch (e) {
       console.error("No se pudo");
     }
+    setSignatureLoading(false);
   };
 
   const handleInput = (event: { target: { value: any } }) => {

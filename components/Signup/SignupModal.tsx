@@ -11,12 +11,13 @@ import {
 } from "@mui/material";
 
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/Cart";
 import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
-import { formatUnits } from "ethers/lib/utils";
 import useUser from "../../hooks/useUser";
+
+import TermsCheckbox from "./TermsCheckbox";
 
 const BoxDiv = styled(Box)`
   position: fixed;
@@ -38,6 +39,16 @@ const ButtonDiv = styled.div`
   justify-content: center;
 `;
 
+const InputDiv = styled.div`
+  padding: 0px;
+  width: 100%;
+  & input,
+  div {
+    width: 100%;
+    font-size: 22px;
+  }
+`;
+
 interface IPaymentModalProps {
   open: boolean;
   // eslint-disable-next-line no-unused-vars
@@ -54,6 +65,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   // Local Hooks
   const [username, setUsername] = useState("");
   const [isSignatureLoading, setSignatureLoading] = useState(false);
+  const [checkedTerms, setCheckedTerms] = useState(false);
   const [error, setError] = useState(""); // TODO: Show error
 
   // Environment variables
@@ -61,6 +73,12 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
   const signupTTL = process.env.NEXT_PUBLIC_SIGNUP_TTL ?? "0";
 
+  useEffect(() => {
+    if (open) {
+      setUsername("");
+      setCheckedTerms(false);
+    }
+  }, [open]);
   const generatePermitData = () => {
     return {
       name: "Peronio",
@@ -116,18 +134,28 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
           <div>
             <h2>Ingresá tu Nickname</h2>
           </div>
-          <div>
-            <TextField
-              required
-              id='outlined-required'
-              label='Nombre'
-              value={username}
-              onChange={handleInput}
-            />
-          </div>
+
           <Alert severity='info'>
             Van a llamarte con ese nombre cuando esté tu pedido
           </Alert>
+
+          <div>
+            <InputDiv>
+              <TextField
+                required
+                size='medium'
+                label='Nombre'
+                value={username}
+                disabled={isSignatureLoading}
+                onChange={handleInput}
+              />
+            </InputDiv>
+            <TermsCheckbox
+              checked={checkedTerms}
+              disabled={isSignatureLoading}
+              onChange={(_e: any, v: boolean) => setCheckedTerms(v)}
+            />
+          </div>
 
           <ButtonDiv>
             {isSignatureLoading ? (
@@ -142,6 +170,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
                 size='large'
                 variant='contained'
                 onClick={handleSignup}
+                disabled={!checkedTerms}
                 endIcon={<AssignmentTurnedInIcon />}
               >
                 Registrarse

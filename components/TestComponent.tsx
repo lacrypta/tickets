@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import { db, collection, getDocs } from "../lib/public/firebase";
+import { db, collection, onSnapshot } from "../lib/public/firebase";
 
 const TestComponent = () => {
   const [usersList, setUsersList] = useState<any>([]);
 
-  const usersCol = collection(db, "users");
-
   useEffect(() => {
-    getDocs(usersCol).then((usersSnapshot) => {
-      setUsersList(usersSnapshot.docs.map((doc) => doc.data()));
+    const usersCol = collection(db, "users");
+    onSnapshot(usersCol, {
+      next: (snapshot) => {
+        setUsersList(snapshot.docs.map((doc) => doc.data()));
+        console.dir(snapshot.docs[0].data());
+      },
     });
   }, []);
 

@@ -18,7 +18,7 @@ const TermsCheckbox = ({
       control={<Checkbox checked={checked} onChange={onChange} />}
       label={
         <div>
-          Acepto darle permiso a mis Peronios al contrato{" "}
+          * Acepto darle permiso a mis Peronios al contrato{" "}
           <Link
             href={
               "https://polygonscan.com/address/" +
@@ -27,7 +27,8 @@ const TermsCheckbox = ({
             underline='hover'
           >
             <a>Gateway</a>
-          </Link>
+          </Link>{" "}
+          <i>(Requerido)</i>
         </div>
       }
     />

@@ -46,6 +46,7 @@ const InputDiv = styled.div`
   div {
     width: 100%;
     font-size: 22px;
+    font-variant-caps: all-petite-caps;
   }
 `;
 
@@ -132,11 +133,11 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
       <Fade in={open}>
         <BoxDiv>
           <div>
-            <h2>Ingresá tu Nickname</h2>
+            <h2>Ingresá tu Sobrenombre</h2>
           </div>
 
           <Alert severity='info'>
-            Van a llamarte con ese nombre cuando esté tu pedido
+            Van a llamarte con este nombre cuando esté listo tu pedido
           </Alert>
 
           <div>

@@ -36,38 +36,18 @@ export const log = async (type: string, data: any) => {
 };
 
 /**
- * Checks if word already claimed
- * @param {String} word Word
+ * Get user by Address
+ * @param {address} address Address
  * @returns
  */
-export const isClaimable = async (word: string) => {
-  const wordRef = db.collection("words").doc(word);
-  const doc = await wordRef.get();
+export const getUser = async (address: string) => {
+  const userRef = db.collection("users").doc(address);
+  const doc = await userRef.get();
   if (!doc.exists) {
-    log("not doc.exists", { word });
+    log("not doc.exists", { address });
     return false;
   }
-  return await !doc.data().claimed;
-};
-
-/**
- * Set word as claimed
- * @param {String} word
- * @param {String} address
- * @param {String} tx
- * @returns
- */
-export const setWordClaimed = async (
-  word: string,
-  address: string,
-  tx: any
-) => {
-  const doc = await db.collection("words").doc(word);
-  return doc.update({
-    claimed: true,
-    address,
-    tx,
-  });
+  return doc.data();
 };
 
 /**

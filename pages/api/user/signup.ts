@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { addUser } from "../../lib/firestore";
+import { addUser } from "../../../lib/firestore";
 
 import {
   ISignupRequestBody,
   ResponseDataType,
   SignupSchema,
-} from "../../types/request";
+} from "../../../types/request";
 
 // TODO: Validate Permit
 const isValidPermit = (permitData, signature): boolean => {
@@ -16,7 +16,6 @@ const request = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseDataType>
 ) => {
-  console.info("Llega el request?");
   if (req.method !== "POST") {
     res
       .status(405)

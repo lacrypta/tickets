@@ -15,7 +15,7 @@ const ajaxSignup = async (requestData: ISignupRequestBody) => {
   console.info("Initiating request");
   console.dir(requestData);
 
-  const data = await fetch("/api/signup", {
+  const data = await fetch("/api/user/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

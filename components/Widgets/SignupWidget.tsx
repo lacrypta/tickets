@@ -4,7 +4,6 @@ import { useState } from "react";
 import SignupModal from "../Signup/SignupModal";
 
 import PanToolAltRoundedIcon from "@mui/icons-material/PanToolAltRounded";
-import TestComponent from "../TestComponent";
 
 const Container = styled.div`
   color: white;
@@ -55,9 +54,6 @@ const SignupWidget = () => {
       <div>
         <h1>Bienvenido!</h1>
       </div>
-
-      <TestComponent />
-
       <div>Para ingresar necesitamos tu nombre y que autorizes la App.</div>
       <div>
         Hacé click en Registrarse. Te va a llevar menos de <b>20 segundos</b>.

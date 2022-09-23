@@ -1,6 +1,4 @@
 import { BigNumber } from "ethers";
-import _BN from "bn.js";
-import BN = _BN.BN;
 
 import { useAccount, useBalance, useContract, useContractRead } from "wagmi";
 import { IPermit } from "../types/crypto";
@@ -15,10 +13,10 @@ const ZERO = BigNumber.from(0);
 const PERONIO_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_PERONIO_CONTRACT ?? "";
 const GATEWAY_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT ?? "";
 
-interface IUseChargeableProps {
+interface IUseSpendableProps {
   permit?: IPermit;
 }
-const useChargeable = ({ permit }: IUseChargeableProps): BigNumber => {
+const useSpendable = ({ permit }: IUseSpendableProps): BigNumber => {
   const { address } = useAccount();
   const [permitAmount, setPermitAmount] = useState<BigNumber>(ZERO);
 
@@ -73,4 +71,4 @@ const useChargeable = ({ permit }: IUseChargeableProps): BigNumber => {
   return ZERO;
 };
 
-export default useChargeable;
+export default useSpendable;

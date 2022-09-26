@@ -20,7 +20,7 @@ interface IUseSpendableProps {
 interface ISpendableResult {
   balance: BigNumber;
   allowance: BigNumber;
-  permit: BigNumber;
+  permit?: BigNumber;
   max: BigNumber;
   nonce: BigNumber;
 }
@@ -82,8 +82,8 @@ const useSpendable = ({ permit }: IUseSpendableProps): ISpendableResult => {
 
   // Parse results
   const balance: BigNumber = balanceRes?.value || ZERO;
-  const allowance: BigNumber = allowanceRes?.at(0) || ZERO;
-  const nonce: BigNumber = nonceRes?.at(0) || ZERO;
+  const allowance: BigNumber = allowanceRes?.value || ZERO;
+  const nonce: BigNumber = nonceRes?.value || ZERO;
 
   const minValue =
     [balance, allowance, permitAmount]

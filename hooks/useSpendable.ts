@@ -16,7 +16,16 @@ const GATEWAY_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT ?? "";
 interface IUseSpendableProps {
   permit?: IPermit;
 }
-const useSpendable = ({ permit }: IUseSpendableProps): BigNumber => {
+
+interface ISpendableResult {
+  balance: BigNumber;
+  allowance: BigNumber;
+  permit: BigNumber;
+  max: BigNumber;
+  nonce: BigNumber;
+}
+
+const useSpendable = ({ permit }: IUseSpendableProps): ISpendableResult => {
   const { address } = useAccount();
   const [permitAmount, setPermitAmount] = useState<BigNumber>(ZERO);
 
@@ -32,7 +41,9 @@ const useSpendable = ({ permit }: IUseSpendableProps): BigNumber => {
     );
     if (res) {
       setPermitAmount(res);
+      return true;
     }
+    return false;
   };
 
   const permitContract = useContract({
@@ -40,13 +51,14 @@ const useSpendable = ({ permit }: IUseSpendableProps): BigNumber => {
     contractInterface: PeronioABI,
   });
 
-  const { data: balance } = useBalance({
+  // Fetch Data
+  const { data: balanceRes } = useBalance({
     addressOrName: address,
     token: PERONIO_CONTRACT_ADDRESS,
     watch: true,
   });
 
-  const { data: allowance } = useContractRead({
+  const { data: allowanceRes } = useContractRead({
     addressOrName: PERONIO_CONTRACT_ADDRESS,
     contractInterface: PeronioABI,
     functionName: "allowance",
@@ -54,7 +66,7 @@ const useSpendable = ({ permit }: IUseSpendableProps): BigNumber => {
     watch: true, // refresh on every block
   });
 
-  const { data: nonces } = useContractRead({
+  const { data: nonceRes } = useContractRead({
     // Refreshes permit check
     addressOrName: PERONIO_CONTRACT_ADDRESS,
     contractInterface: ERC20PermitABI,
@@ -67,8 +79,24 @@ const useSpendable = ({ permit }: IUseSpendableProps): BigNumber => {
   if (permit) {
     validatePermit(permit);
   }
-  // TODO: Minimal number (BigNumber.min?) between [balance, allowance, permitAmount]
-  return ZERO;
+
+  // Parse results
+  const balance: BigNumber = balanceRes?.value || ZERO;
+  const allowance: BigNumber = allowanceRes?.at(0) || ZERO;
+  const nonce: BigNumber = nonceRes?.at(0) || ZERO;
+
+  const minValue =
+    [balance, allowance, permitAmount]
+      .sort((a, b) => (a.gt(b) ? 1 : -1))
+      .pop() || ZERO;
+
+  return {
+    balance,
+    allowance,
+    permit: permitAmount,
+    max: minValue,
+    nonce,
+  };
 };
 
 export default useSpendable;

@@ -15,7 +15,12 @@ const request = async (
     return;
   }
 
-  const address = req.query.pid ?? "";
+  if (typeof req.query.pid !== "string") {
+    res.status(400).json({ success: false, data: "Invalid address" });
+    return;
+  }
+
+  const address: string = req.query.pid ?? "";
   if (!isAddress(address)) {
     res.status(400).json({ success: false, data: "Invalid address" });
     return;

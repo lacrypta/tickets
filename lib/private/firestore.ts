@@ -1,4 +1,4 @@
-import { IPermit } from "./../types/crypto";
+import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");

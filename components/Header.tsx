@@ -1,15 +1,19 @@
 import { useContext } from "react";
 import styled from "@emotion/styled";
 import { AppBar, Box } from "@mui/material";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { CartContext } from "../contexts/Cart";
+import { ConnectButton } from "./common/ConnectButton";
 
 const TopBar = styled(AppBar)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 0.6em;
+  position: fixed;
+  top: 0;
+  z-index: 999999;
+  width: 100%;
 `;
 
 const TotalDiv = styled.div`
@@ -42,7 +46,7 @@ const Header = () => {
         <TotalDiv className={cart.total > 0 ? "open" : ""}>
           <div>$ {cart.total}</div>
         </TotalDiv>
-        <ConnectButton label='Conectar Wallet' />
+        <ConnectButton />
       </TopBar>
     </Box>
   );

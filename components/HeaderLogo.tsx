@@ -6,6 +6,7 @@ const Container = styled.div`
   max-width: 200px;
   margin-bottom: 2em;
   z-index: 10;
+  margin-top: 5em;
 `;
 
 export const HeaderLogo = () => {

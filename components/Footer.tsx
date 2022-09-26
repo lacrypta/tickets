@@ -9,6 +9,7 @@ const FooterBlock = styled.footer`
   align-items: center;
   color: black;
   position: relative;
+  background: white;
 
   & a {
     display: flex;

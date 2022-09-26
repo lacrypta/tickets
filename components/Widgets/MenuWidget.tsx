@@ -8,7 +8,7 @@ import PayButton from "../Menu/PayButton";
 const Container = styled.div`
   width: 100%;
   max-width: 500px;
-  min-height: 100vh;
+  min-height: 60vh;
   z-index: 10;
 `;
 

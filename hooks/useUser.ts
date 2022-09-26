@@ -9,10 +9,10 @@ export interface IUser {
   username: string;
   address: string;
 }
-export interface IUseUserResponse {
+export interface IUseUserResult {
   user?: IUser;
   isRegistered: boolean;
-  permit: IPermit;
+  permit?: IPermit;
   signup(_args: ISignupRequestBody): void;
 }
 
@@ -32,12 +32,11 @@ const ajaxSignup = async (requestData: ISignupRequestBody) => {
   console.dir(data);
 };
 
-const useUser = (): IUseUserResponse => {
+const useUser = (): IUseUserResult => {
   const [isRegistered, setIsRegistered] = useState(false);
   const { address } = useAccount();
   const [user, setUser] = useState<IUser | undefined>();
   const [permit, setPermit] = useState<IPermit | undefined>();
-  const [validPermit, isValidPermit] = useState<false>();
 
   // Address
   useEffect(() => {
@@ -54,6 +53,7 @@ const useUser = (): IUseUserResponse => {
         if (!data) {
           setUser(undefined);
           setPermit(undefined);
+          setIsRegistered(false);
           return;
         }
         setUser({
@@ -61,6 +61,7 @@ const useUser = (): IUseUserResponse => {
           address,
         });
         setPermit(data.permit);
+        setIsRegistered(true);
       },
     });
   }, [address]);

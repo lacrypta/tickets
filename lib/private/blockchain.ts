@@ -111,6 +111,7 @@ function sendSigned(tx) {
         // respond with the result
         resolve(hash);
       })
+      // eslint-disable-next-line no-unused-vars
       .then((out: any) => {
         // console.log(out);
       })

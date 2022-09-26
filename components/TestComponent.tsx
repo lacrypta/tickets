@@ -3,7 +3,7 @@ import { db, collection, onSnapshot, doc } from "../lib/public/firebase";
 
 const User = ({ user }: any) => {
   if (!user) {
-    return "";
+    return <></>;
   }
   return (
     <div key={user.id}>

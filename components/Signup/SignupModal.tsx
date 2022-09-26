@@ -60,14 +60,16 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   // Contexts
   const { address } = useAccount();
   const { signup } = useUser();
-  const { requestSignature } = useERC20Permit();
+  const { signature, isSuccess, isLoading, requestSignature } =
+    useERC20Permit();
   const { clear } = useContext(CartContext);
 
   // Local Hooks
   const [username, setUsername] = useState("");
+  const [permitData, setPermitData] = useState<any>();
   const [isSignatureLoading, setSignatureLoading] = useState(false);
   const [checkedTerms, setCheckedTerms] = useState(false);
-  const [error, setError] = useState(""); // TODO: Show error
+  // const [error, setError] = useState(""); // TODO: Show error
 
   // Environment variables
   const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
@@ -80,6 +82,26 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
       setCheckedTerms(false);
     }
   }, [open]);
+
+  useEffect(() => {
+    console.info("Efectoteeee");
+    console.info("isLoading", isLoading);
+    console.info("isSuccess", isSuccess);
+    console.info("signature", signature);
+
+    if (!isLoading && isSuccess && signature) {
+      console.info("Entra aca?");
+      signup({
+        address: address ?? "",
+        username,
+        permitData,
+        signature,
+      });
+      setSignatureLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signature, isLoading, isSuccess]);
+
   const generatePermitData = () => {
     return {
       name: "Peronio",
@@ -96,22 +118,8 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     clear(); // Clear Cart
     setSignatureLoading(true);
     const permitData = generatePermitData();
-    try {
-      const signature = await requestSignature(permitData);
-      await signup({
-        address: address ?? "",
-        username,
-        permitData,
-        signature: {
-          r: signature.r,
-          s: signature.s,
-          v: signature.v,
-        },
-      });
-    } catch (e) {
-      console.error("No se pudo");
-    }
-    setSignatureLoading(false);
+    setPermitData(permitData);
+    requestSignature(permitData);
   };
 
   const handleInput = (event: { target: { value: any } }) => {

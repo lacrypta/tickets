@@ -42,16 +42,10 @@ const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
   const { address } = useAccount();
   const [isSignatureLoading, setSignatureLoading] = useState(false);
 
-  const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
-  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
+  const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT || "";
+  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "";
 
-  const { requestSignature } = useERC20Permit({
-    name: "Peronio",
-    contract: contractAddress,
-    spender: gatewayAddress,
-    value: "1000",
-    deadline: 999999999,
-  });
+  const { requestSignature } = useERC20Permit();
 
   const handleClose = () => setOpen(false);
 
@@ -59,7 +53,13 @@ const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
 
   const handlePay = async () => {
     setSignatureLoading(true);
-    await requestSignature();
+    await requestSignature({
+      name: "Peronio",
+      contract: contractAddress,
+      spender: gatewayAddress,
+      value: "1000",
+      deadline: 999999999,
+    });
     setSignatureLoading(false);
   };
 

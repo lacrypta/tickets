@@ -8,7 +8,8 @@ import {
 } from "../../../types/request";
 
 // TODO: Validate Permit
-const isValidPermit = (permitData, signature): boolean => {
+// eslint-disable-next-line no-unused-vars
+const isValidPermit = (permitData: any, signature: any): boolean => {
   return true;
 };
 

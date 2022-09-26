@@ -1,14 +1,9 @@
-import { useState } from "react";
-import { useAccount, useSigner } from "wagmi";
-import { Signature, splitSignature } from "@ethersproject/bytes";
+import { useEffect, useState } from "react";
+import { useAccount, useSignTypedData } from "wagmi";
+import { splitSignature } from "@ethersproject/bytes";
+import { ISignature } from "../types/crypto";
 
 const types = {
-  EIP712Domain: [
-    { name: "name", type: "string" },
-    { name: "version", type: "string" },
-    { name: "chainId", type: "uint256" },
-    { name: "verifyingContract", type: "address" },
-  ],
   Permit: [
     { name: "owner", type: "address" },
     { name: "spender", type: "address" },
@@ -26,39 +21,21 @@ interface IRequestSignatureArgs {
   deadline: number;
 }
 
-const generateTypedData = (
-  name: string,
-  contract: string,
-  owner: string,
-  spender: string,
-  value: string,
-  deadline: number,
-  nonce: string = "0x0000000000000000000000000000000000000000000000000000000000000000"
-) => {
-  return {
-    types,
-    primaryType: "Permit",
-    domain: {
-      name: name,
-      version: "1",
-      chainId: 137,
-      verifyingContract: contract,
-    },
-    message: {
-      owner: owner?.toLocaleLowerCase(),
-      spender: spender,
-      value,
-      nonce,
-      deadline: deadline,
-    },
-  };
-};
+interface IUseERC20PermitResult {
+  signature?: ISignature;
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  requestSignature: (_args: IRequestSignatureArgs) => void;
+}
 
-const useERC20Permit = () => {
-  const { data: signer } = useSigner();
+const useERC20Permit = (): IUseERC20PermitResult => {
   const { address: owner } = useAccount();
 
-  const [signature, setSignature] = useState<any>({});
+  const [signature, setSignature] = useState<ISignature>();
+
+  const { data, isError, isLoading, isSuccess, signTypedData } =
+    useSignTypedData();
 
   const requestSignature = async ({
     name,
@@ -66,28 +43,42 @@ const useERC20Permit = () => {
     spender,
     value,
     deadline,
-  }: IRequestSignatureArgs): Promise<Signature> => {
-    const typedData = generateTypedData(
-      name,
-      owner ?? "",
-      contract,
-      spender,
-      value,
-      deadline
-    );
+  }: IRequestSignatureArgs) => {
+    const nonce =
+      "0x0000000000000000000000000000000000000000000000000000000000000000"; // TODO: Look for nonce
 
-    setSignature(null);
-    const signature = await signer?.provider?.send("eth_signTypedData_v4", [
-      owner,
-      JSON.stringify(typedData),
-    ]);
-    const splittedSignature = splitSignature(signature);
-    setSignature(splittedSignature);
+    setSignature(undefined);
 
-    return splittedSignature;
+    signTypedData({
+      domain: {
+        name: name,
+        version: "1",
+        chainId: 137,
+        verifyingContract: contract,
+      },
+      types,
+      value: {
+        owner: owner?.toLocaleLowerCase(),
+        spender: spender,
+        value,
+        nonce,
+        deadline: deadline,
+      },
+    });
   };
 
-  return { signature, requestSignature };
+  useEffect(() => {
+    if (!isLoading && isSuccess && data) {
+      console.info("data:");
+      console.dir(data);
+
+      const { r, s, v } = splitSignature(data);
+      console.info("setting signature");
+      setSignature({ r, s, v });
+    }
+  }, [data, isLoading, isSuccess]);
+
+  return { signature, isError, isLoading, isSuccess, requestSignature };
 };
 
 export default useERC20Permit;

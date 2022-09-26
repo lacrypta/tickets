@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
-import { Chain, useAccount, useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 import { HeaderLogo } from "../components/HeaderLogo";
 import { Footer } from "../components/Footer";

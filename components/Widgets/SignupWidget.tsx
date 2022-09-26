@@ -9,6 +9,10 @@ import useUser from "../../hooks/useUser";
 const Container = styled.div`
   color: white;
   z-index: 10;
+
+  h1 {
+    text-align: center;
+  }
 `;
 
 const Center = styled.div`
@@ -16,10 +20,19 @@ const Center = styled.div`
   margin-top: 20px;
 `;
 
+const YouNeed = styled.div`
+  font-size: 22px;
+
+  ul li {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+`;
+
 const ClickHere = styled(PanToolAltRoundedIcon)`
   width: 80px;
   height: 80px;
-  positoin: absolute;
   top: 1px;
 
   -webkit-animation: mover 0.5s infinite alternate;
@@ -56,13 +69,16 @@ const SignupWidget = () => {
   return (
     <Container>
       <div>
-        <h1>Bienvenido!</h1>
+        <h1>Primero, registrate!</h1>
       </div>
 
-      <div>Para ingresar necesitamos tu nombre y que autorizes la App.</div>
-      <div>
-        Hacé click en Registrarse. Te va a llevar menos de <b>20 segundos</b>.
-      </div>
+      <YouNeed>
+        Necesitas:
+        <ul>
+          <li>20 segundos</li>
+          <li>1 dedo</li>
+        </ul>
+      </YouNeed>
       <Center>
         <Button onClick={handleOpen}>Registrarse</Button>
         <div>

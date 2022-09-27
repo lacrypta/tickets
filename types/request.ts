@@ -30,3 +30,13 @@ export const SignupSchema = z.object({
   permitData: PermitSchema,
   signature: SignatureSchema,
 });
+
+export const OrderSchema = z.object({
+  address: z.string(),
+  items: z.array(
+    z.object({
+      id: z.string(),
+      qty: z.number(),
+    })
+  ),
+});

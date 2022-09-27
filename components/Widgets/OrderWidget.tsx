@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/Cart";
 import { StepsContext } from "../../contexts/Steps";
 import BackButton from "../BackButton";
@@ -7,6 +7,7 @@ import CartList from "../Order/OrderList";
 
 import PayButton from "../Menu/PayButton";
 import PaymentModal from "../Order/PaymentModal";
+import useOrder from "../../hooks/useOrder";
 
 const Container = styled.div`
   width: 100%;
@@ -22,8 +23,14 @@ const OrderID = styled.div`
 export const CartWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
+  const { isLoading, orderId, createOrder } = useOrder();
 
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    createOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePay = () => {
     setOpen(true);
@@ -38,7 +45,8 @@ export const CartWidget = () => {
     <Container>
       <div>
         <h1>La Cuenta</h1>
-        <OrderID>(Generando Order...)</OrderID>
+
+        <OrderID>{isLoading ? "(Generando Order...)" : orderId}</OrderID>
       </div>
 
       <CartList cart={cart} />

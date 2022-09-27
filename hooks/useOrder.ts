@@ -11,7 +11,7 @@ export interface IUseUserResult {
   isLoading?: boolean;
   isSuccess?: boolean;
   isError?: boolean;
-  error?: boolean;
+  error?: string;
   createOrder: () => void;
 }
 
@@ -21,7 +21,7 @@ const ajaxCreateOrder = async (
   console.info("Initiating request");
   console.dir(requestData);
 
-  const data = await fetch("/api/order/create", {
+  const res = await fetch("/api/order/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,12 +29,7 @@ const ajaxCreateOrder = async (
     body: JSON.stringify(requestData),
   });
 
-  console.info(data);
-  console.dir(data);
-
-  return {
-    success: false,
-  };
+  return await res.json();
 };
 
 const generateRequest = (
@@ -63,6 +58,11 @@ const useOrder = (): IUseUserResult => {
   const [error, setError] = useState<string>();
 
   const createOrder = async () => {
+    console.info("Creating Order");
+    if (isLoading) {
+      return;
+    }
+
     setIsLoading(true);
     setIsSuccess(false);
     setOrderId(undefined);
@@ -76,12 +76,11 @@ const useOrder = (): IUseUserResult => {
     }
     const orderRequest = generateRequest(address, cart);
 
-    // HTTP Request
+    // Ajax Request
     const res = await ajaxCreateOrder(orderRequest);
 
     // Parse Data
-
-    // Parse Data
+    setOrderId(res.data.id);
     setIsLoading(false);
   };
 

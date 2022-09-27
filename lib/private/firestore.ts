@@ -1,5 +1,6 @@
 import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
+import { IOrderItem } from "../../types/cart";
 
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 
@@ -36,6 +37,20 @@ export const log = async (type: string, data: any) => {
 };
 
 /**
+ * Get config
+ * @returns
+ */
+export const getConfig = async () => {
+  const configRef = db.collection("config").doc("main");
+  const doc = await configRef.get();
+  if (!doc.exists) {
+    log("Config", "Does not exist");
+    return false;
+  }
+  return doc.data();
+};
+
+/**
  * Get user by Address
  * @param {address} address Address
  * @returns
@@ -62,10 +77,20 @@ export const addUser = async (
   address: string,
   permit: IPermit
 ) => {
-  return await db.collection("users").doc(address).set({
+  return db.collection("users").doc(address).set({
     username,
     permit,
   });
+};
+
+export const addOrder = async (address: string, items: IOrderItem[]) => {
+  // TODO: Complete this
+  const order = {
+    items,
+    total: 1000,
+  };
+
+  return (await db.collection("orders").add(order)).id;
 };
 
 exports.log = log;

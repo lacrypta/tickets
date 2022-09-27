@@ -15,6 +15,10 @@ const Container = styled.div`
   z-index: 10;
 `;
 
+const OrderID = styled.div`
+  margin: 10px 0px 10px 0px;
+`;
+
 export const CartWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
@@ -34,10 +38,12 @@ export const CartWidget = () => {
     <Container>
       <div>
         <h1>La Cuenta</h1>
+        <OrderID>(Generando Order...)</OrderID>
       </div>
 
       <CartList cart={cart} />
       <BackButton onClick={handleBack} />
+
       <PayButton onClick={handlePay} />
 
       <PaymentModal open={open} setOpen={setOpen} />

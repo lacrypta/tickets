@@ -1,4 +1,5 @@
 import z from "zod";
+import { IOrderItem } from "./cart";
 import {
   IPermitData,
   ISignature,
@@ -10,6 +11,11 @@ export interface ISignupRequestBody {
   username: string;
   permitData: IPermitData;
   signature: ISignature;
+}
+
+export interface ICreateOrderRequestBody {
+  address: string;
+  items: IOrderItem[];
 }
 
 export type ResponseDataType = {

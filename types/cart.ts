@@ -9,3 +9,8 @@ export interface ICartItem {
   product: IMenuProduct;
   qty: number;
 }
+
+export interface IOrderItem {
+  id: string;
+  qty: number;
+}

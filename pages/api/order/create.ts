@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ChainDoesNotSupportMulticallError } from "wagmi";
 import { addOrder } from "../../../lib/private/firestore";
 
 import {
@@ -12,6 +11,9 @@ const request = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseDataType>
 ) => {
+  console.info("Calling server side...");
+
+  // TODO: Limit user order creation by time
   if (req.method !== "POST") {
     res
       .status(405)

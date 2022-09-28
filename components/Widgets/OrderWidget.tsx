@@ -20,17 +20,12 @@ const OrderID = styled.div`
   margin: 10px 0px 10px 0px;
 `;
 
-export const CartWidget = () => {
+export const OrderWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
-  const { isLoading, orderId, createOrder } = useOrder();
+  const { isLoading, orderId } = useOrder();
 
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    createOrder();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handlePay = () => {
     setOpen(true);
@@ -46,7 +41,9 @@ export const CartWidget = () => {
       <div>
         <h1>La Cuenta</h1>
 
-        <OrderID>{isLoading ? "(Generando Order...)" : orderId}</OrderID>
+        <OrderID>
+          {isLoading ? "(Generando Order...)" : "Orden #" + orderId}
+        </OrderID>
       </div>
 
       <CartList cart={cart} />

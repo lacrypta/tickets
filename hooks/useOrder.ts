@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
+import { OrderContext } from "../contexts/Order";
 import { ICart } from "../types/cart";
 import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
@@ -18,9 +19,6 @@ export interface IUseUserResult {
 const ajaxCreateOrder = async (
   requestData: ICreateOrderRequestBody
 ): Promise<ResponseDataType> => {
-  console.info("Initiating request");
-  console.dir(requestData);
-
   const res = await fetch("/api/order/create", {
     method: "POST",
     headers: {
@@ -50,22 +48,27 @@ const generateRequest = (
 const useOrder = (): IUseUserResult => {
   const { address } = useAccount();
   const { cart } = useContext(CartContext);
-
-  const [orderId, setOrderId] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>();
-  const [isSuccess, setIsSuccess] = useState<boolean>();
-  const [isError, setIsError] = useState<boolean>();
-  const [error, setError] = useState<string>();
+  const {
+    orderId,
+    setOrderId,
+    isLoading,
+    setIsLoading,
+    isSuccess,
+    setIsSuccess,
+    isError,
+    setIsError,
+    error,
+    setError,
+  } = useContext(OrderContext);
 
   const createOrder = async () => {
-    console.info("Creating Order");
     if (isLoading) {
       return;
     }
 
     setIsLoading(true);
     setIsSuccess(false);
-    setOrderId(undefined);
+    setOrderId("");
 
     //  Return null on empty address or cart
     if (!address || !cart) {
@@ -75,7 +78,6 @@ const useOrder = (): IUseUserResult => {
       return null;
     }
     const orderRequest = generateRequest(address, cart);
-
     // Ajax Request
     const res = await ajaxCreateOrder(orderRequest);
 

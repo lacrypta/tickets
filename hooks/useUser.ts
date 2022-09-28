@@ -17,9 +17,6 @@ export interface IUseUserResult {
 }
 
 const ajaxSignup = async (requestData: ISignupRequestBody) => {
-  console.info("Initiating request");
-  console.dir(requestData);
-
   const data = await fetch("/api/user/signup", {
     method: "POST",
     headers: {
@@ -47,8 +44,8 @@ const useUser = (): IUseUserResult => {
     const userRef = doc(db, "users", address);
     onSnapshot(userRef, {
       next: (snapshot) => {
-        console.info("User updated");
-        console.dir(snapshot.data());
+        // console.info("User updated");
+        // console.dir(snapshot.data());
         const data = snapshot.data();
         if (!data) {
           setUser(undefined);

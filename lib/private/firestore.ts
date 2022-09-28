@@ -2,7 +2,11 @@ import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 import { IOrderItem } from "../../types/cart";
 
-const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+import {
+  getFirestore,
+  FieldValue,
+  Transaction,
+} from "firebase-admin/firestore";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -83,14 +87,46 @@ export const addUser = async (
   });
 };
 
-export const addOrder = async (address: string, items: IOrderItem[]) => {
-  // TODO: Complete this
-  const order = {
-    items,
-    total: 1000,
-  };
+/**
+ * Adds new Order
+ * @param {String} address User's Address
+ * @param {IOrderItem[]} items Orders item list
+ * @returns {Number} Order Id
+ */
+export const addOrder = async (
+  address: string,
+  items: IOrderItem[]
+): Promise<number | undefined> => {
+  let orderId;
+  await db.runTransaction(async (t) => {
+    orderId = await _getNewOrderId(t);
+    const orderRef = db.collection("orders").doc(String(orderId));
 
-  return (await db.collection("orders").add(order)).id;
+    await t.create(orderRef, {
+      items,
+      total: 1000,
+    });
+  });
+
+  return orderId;
 };
 
+// Private Functions
+const _getNewOrderId = async (t: Transaction): Promise<number> => {
+  const configRef = db.collection("config").doc("main");
+  let newOrderId = 1;
+
+  const currentConfig: any = await t.get(configRef);
+
+  if (!currentConfig) {
+    console.info("No Config Found", "Creating one...");
+    t.create(configRef, { lastOrderId: 0 });
+  } else {
+    newOrderId = currentConfig.data().lastOrderId + 1;
+    // update lastOrderId
+    t.update(configRef, { lastOrderId: newOrderId });
+  }
+
+  return newOrderId;
+};
 exports.log = log;

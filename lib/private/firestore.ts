@@ -68,4 +68,21 @@ export const addUser = async (
   });
 };
 
+/**
+ * Adds new payment to the database
+ * @param {String} orderId
+ * @param {ITransferVoucher} permit
+ * @returns
+ */
+export const addPayment = async (
+  username: string,
+  address: string,
+  permit: IPermit
+) => {
+  return await db.collection("users").doc(address).set({
+    username,
+    permit,
+  });
+};
+
 exports.log = log;

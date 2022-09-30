@@ -1,5 +1,5 @@
 import z from "zod";
-
+import { IOrderItem } from "./cart";
 import {
   IPermitData,
   ISignature,
@@ -19,6 +19,10 @@ export interface IPaymentRequestBody {
   order: string;
   voucher: ITransferVoucherSigned;
 }
+export interface ICreateOrderRequestBody {
+  address: string;
+  items: IOrderItem[];
+}
 
 export type ResponseDataType = {
   success: boolean;
@@ -36,4 +40,14 @@ export const SignupSchema = z.object({
 export const PaymentSchema = z.object({
   order: z.string(),
   voucher: TransferVoucherSchemaSigned,
+});
+
+export const OrderSchema = z.object({
+  address: z.string(),
+  items: z.array(
+    z.object({
+      id: z.string(),
+      qty: z.number(),
+    })
+  ),
 });

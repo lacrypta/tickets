@@ -58,10 +58,6 @@ const ClickHere = styled(PanToolAltRoundedIcon)`
 
 const SignupWidget = () => {
   const [open, setOpen] = useState(false);
-  const useUserData = useUser();
-
-  console.info("useUserData: ");
-  console.dir(useUserData);
   const handleOpen = () => {
     setOpen(true);
   };

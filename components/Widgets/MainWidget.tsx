@@ -3,11 +3,11 @@ import { StepsContext } from "../../contexts/Steps";
 
 import { DoneWidget } from "./DoneWidget";
 import { MenuWidget } from "./MenuWidget";
-import { CartWidget } from "./OrderWidget";
+import { OrderWidget } from "./OrderWidget";
 
 const widgetSteps = [
   <MenuWidget key='menu' />,
-  <CartWidget key='cart' />,
+  <OrderWidget key='cart' />,
   <DoneWidget key='done' />,
 ];
 

@@ -84,11 +84,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   }, [open]);
 
   useEffect(() => {
-    console.info("Efectoteeee");
-    console.info("isLoading", isLoading);
-    console.info("isSuccess", isSuccess);
-    console.info("signature", signature);
-
     if (!isLoading && isSuccess && signature) {
       console.info("Entra aca?");
       signup({

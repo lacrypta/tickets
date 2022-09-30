@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../contexts/Cart";
 import { StepsContext } from "../../contexts/Steps";
 import BackButton from "../BackButton";

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import styled from "@emotion/styled";
 import { Backdrop, Box, Fade, Modal as MaterialModal } from "@mui/material";
 

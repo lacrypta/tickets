@@ -4,7 +4,6 @@ import { useState } from "react";
 import SignupModal from "../Signup/SignupModal";
 
 import PanToolAltRoundedIcon from "@mui/icons-material/PanToolAltRounded";
-import useUser from "../../hooks/useUser";
 
 const Container = styled.div`
   color: white;

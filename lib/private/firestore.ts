@@ -88,6 +88,23 @@ export const addUser = async (
 };
 
 /**
+ * Adds new payment to the database
+ * @param {String} orderId
+ * @param {ITransferVoucher} permit
+ * @returns
+ */
+export const addPayment = async (
+  username: string,
+  address: string,
+  permit: IPermit
+) => {
+  return await db.collection("users").doc(address).set({
+    username,
+    permit,
+  });
+};
+
+/**
  * Adds new Order
  * @param {String} address User's Address
  * @param {IOrderItem[]} items Orders item list
@@ -129,4 +146,5 @@ const _getNewOrderId = async (t: Transaction): Promise<number> => {
 
   return newOrderId;
 };
+
 exports.log = log;

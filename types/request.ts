@@ -3,8 +3,10 @@ import { IOrderItem } from "./cart";
 import {
   IPermitData,
   ISignature,
+  ITransferVoucherSigned,
   PermitSchema,
   SignatureSchema,
+  TransferVoucherSchemaSigned,
 } from "./crypto";
 export interface ISignupRequestBody {
   address: string;
@@ -13,6 +15,10 @@ export interface ISignupRequestBody {
   signature: ISignature;
 }
 
+export interface IPaymentRequestBody {
+  order: string;
+  voucher: ITransferVoucherSigned;
+}
 export interface ICreateOrderRequestBody {
   address: string;
   items: IOrderItem[];
@@ -29,6 +35,11 @@ export const SignupSchema = z.object({
   username: z.string(),
   permitData: PermitSchema,
   signature: SignatureSchema,
+});
+
+export const PaymentSchema = z.object({
+  order: z.string(),
+  voucher: TransferVoucherSchemaSigned,
 });
 
 export const OrderSchema = z.object({

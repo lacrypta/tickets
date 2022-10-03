@@ -4,7 +4,6 @@ import { useState } from "react";
 import SignupModal from "../Signup/SignupModal";
 
 import PanToolAltRoundedIcon from "@mui/icons-material/PanToolAltRounded";
-import useUser from "../../hooks/useUser";
 
 const Container = styled.div`
   color: white;
@@ -58,10 +57,6 @@ const ClickHere = styled(PanToolAltRoundedIcon)`
 
 const SignupWidget = () => {
   const [open, setOpen] = useState(false);
-  const useUserData = useUser();
-
-  console.info("useUserData: ");
-  console.dir(useUserData);
   const handleOpen = () => {
     setOpen(true);
   };

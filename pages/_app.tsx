@@ -16,6 +16,7 @@ import { CartProvider } from "../contexts/Cart";
 
 import menuItems from "../data/menu.json";
 import { StepsProvider } from "../contexts/Steps";
+import { OrderProvider } from "../contexts/Order";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -57,7 +58,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             chains={chains}
           >
             <CartProvider menu={menuItems}>
-              <Component {...pageProps} />
+              <OrderProvider>
+                <Component {...pageProps} />
+              </OrderProvider>
             </CartProvider>
           </RainbowKitProvider>
         </WagmiConfig>

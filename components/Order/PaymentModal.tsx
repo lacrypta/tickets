@@ -1,21 +1,19 @@
+import React, { useContext } from "react";
 import styled from "@emotion/styled";
-import {
-  Backdrop,
-  Box,
-  Button,
-  CircularProgress,
-  Fade,
-  Modal,
-} from "@mui/material";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import React, { useContext, useState } from "react";
+import { Backdrop, Box, Fade, Modal as MaterialModal } from "@mui/material";
+
 import { CartContext } from "../../contexts/Cart";
-import { useAccount } from "wagmi";
-import useERC20Permit from "../../hooks/useERC20Permit";
+
+import PanToolAltTwoToneIcon from "@mui/icons-material/PanToolAltTwoTone";
+
+const Modal = styled(MaterialModal)`
+  position: fixed;
+  top: 20%;
+  z-index: 99999999;
+  left: 50%;
+`;
 
 const BoxDiv = styled(Box)`
-  position: absolute;
-  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 600px;
@@ -27,9 +25,36 @@ const BoxDiv = styled(Box)`
   color: black;
 `;
 
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: center;
+const Amount = styled.div`
+  font-size: 20px;
+`;
+
+const PointerWrapper = styled.div`
+  transform: rotate(180deg);
+  position: fixed;
+  top: 150%;
+`;
+
+const ClickHere = styled(PanToolAltTwoToneIcon)`
+  -webkit-animation: mover 0.5s infinite alternate;
+  animation: mover 0.5s infinite alternate;
+  font-size: 80px;
+  @-webkit-keyframes mover {
+    0% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(20px);
+    }
+  }
+  @keyframes mover {
+    0% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(20px);
+    }
+  }
 `;
 
 interface IPaymentModalProps {
@@ -39,29 +64,9 @@ interface IPaymentModalProps {
 }
 
 const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
-  const { address } = useAccount();
-  const [isSignatureLoading, setSignatureLoading] = useState(false);
-
-  const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT || "";
-  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "";
-
-  const { requestSignature } = useERC20Permit();
-
   const handleClose = () => setOpen(false);
 
   const { cart } = useContext(CartContext);
-
-  const handlePay = async () => {
-    setSignatureLoading(true);
-    await requestSignature({
-      name: "Peronio",
-      contract: contractAddress,
-      spender: gatewayAddress,
-      value: "1000",
-      deadline: 999999999,
-    });
-    setSignatureLoading(false);
-  };
 
   return (
     <Modal
@@ -78,30 +83,12 @@ const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
       <Fade in={open}>
         <BoxDiv>
           <div>
-            <h2>Necesitamos una firma tuya</h2>
+            <h2>Tocá Confirmar</h2>
           </div>
-          <div>Monto: {cart.total} PE</div>
-          <div>Tu cuenta: {address}</div>
-          <div>Contrato: {contractAddress}</div>
-          <ButtonDiv>
-            {isSignatureLoading ? (
-              <CircularProgress
-                variant='indeterminate'
-                size={40}
-                thickness={4}
-                value={100}
-              />
-            ) : (
-              <Button
-                size='large'
-                variant='contained'
-                onClick={handlePay}
-                endIcon={<AssignmentTurnedInIcon />}
-              >
-                PAGAR
-              </Button>
-            )}
-          </ButtonDiv>
+          <Amount>Monto: {cart.total} PE</Amount>
+          <PointerWrapper>
+            <ClickHere color='info' />
+          </PointerWrapper>
         </BoxDiv>
       </Fade>
     </Modal>

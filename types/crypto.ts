@@ -28,14 +28,14 @@ export interface IPermit {
 export interface ITransferVoucher {
   from: string;
   to: string;
-  amount: BigNumber;
-  deadline: BigNumber;
-  fee: BigNumber;
-  nonce: BigNumber;
+  amount: string;
+  deadline: string;
+  fee: string;
+  nonce: string;
 }
 
 export interface ITransferVoucherSigned {
-  voucher: ITransferVoucher;
+  payload: ITransferVoucher;
   signature: ISignature;
 }
 
@@ -63,6 +63,6 @@ export const TransferVoucherSchema = z.object({
 });
 
 export const TransferVoucherSchemaSigned = z.object({
-  voucher: z.string(),
+  payload: TransferVoucherSchema,
   signature: SignatureSchema,
 });

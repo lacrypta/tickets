@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
@@ -14,6 +14,7 @@ export interface IUseUserResult {
   isError?: boolean;
   error?: string;
   createOrder: () => void;
+  payOrder: (_signature: any) => void;
 }
 
 const ajaxCreateOrder = async (
@@ -86,7 +87,20 @@ const useOrder = (): IUseUserResult => {
     setIsLoading(false);
   };
 
-  return { orderId, isLoading, isSuccess, isError, error, createOrder };
+  const payOrder = async (permit: any) => {
+    console.info("permit:");
+    console.dir(permit);
+  };
+
+  return {
+    orderId,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+    createOrder,
+    payOrder,
+  };
 };
 
 export default useOrder;

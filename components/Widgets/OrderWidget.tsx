@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/Cart";
 import { StepsContext } from "../../contexts/Steps";
 import BackButton from "../BackButton";
@@ -29,12 +29,29 @@ const OrderID = styled.div`
 export const OrderWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
-  const { isLoading, orderId } = useOrder();
   const { address } = useAccount();
+  const { isLoading, orderId, payOrder } = useOrder();
+  const {
+    signature,
+    isLoading: isSignatureLoading,
+    isSuccess: isSignatureSuccess,
+    requestSignature,
+  } = useGateway();
 
   const [open, setOpen] = useState(false);
 
-  const { requestSignature } = useGateway();
+  useEffect(() => {
+    console.info("useEffect!");
+    console.info("isSignatureLoading", isSignatureLoading);
+    console.info("isSignatureSuccess", isSignatureSuccess);
+    console.info("signature", signature);
+
+    if (!isSignatureLoading && isSignatureSuccess && signature) {
+      payOrder(signature);
+    }
+    // setStep(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signature, isSignatureSuccess, isSignatureLoading]);
 
   const handlePay = () => {
     setOpen(true);
@@ -46,7 +63,6 @@ export const OrderWidget = () => {
       deadline: Math.floor(Date.now() / 1000) + parseInt(paymentTTL),
       fee: 100,
     });
-    // setStep(2);
   };
 
   const handleBack = () => {

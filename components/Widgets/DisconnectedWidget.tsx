@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Link from "next/link";
 
 const Container = styled.div`
   color: white;
@@ -33,8 +34,12 @@ const DisconnectedWidget = () => {
       </ConnectDiv>
       <Description>Si no tenes, descargate alguna de estas.</Description>
       <WalletsList>
-        <div>Alphawallet</div>
-        <div>Metamask</div>
+        <div>
+          <Link href='/api/download/alphawallet'>Alphawallet</Link>
+        </div>
+        <div>
+          <Link href='/api/download/metamask'>Metamask</Link>
+        </div>
       </WalletsList>
     </Container>
   );

@@ -75,7 +75,7 @@ export const OrderWidget = () => {
         <h1>La Cuenta</h1>
 
         <OrderID>
-          {isLoading ? "(Generando Order...)" : "Orden #" + orderId}
+          {isLoading ? "(Generando Orden...)" : "Orden #" + orderId}
         </OrderID>
       </div>
 

@@ -30,10 +30,9 @@ const Amount = styled.div`
 `;
 
 const PointerWrapper = styled.div`
-  transform: rotate(159deg);
+  transform: rotate(180deg);
   position: fixed;
-  top: 70vh;
-  right: 0;
+  top: 150%;
 `;
 
 const ClickHere = styled(PanToolAltTwoToneIcon)`

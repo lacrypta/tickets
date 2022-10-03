@@ -13,18 +13,25 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     res
       .status(405)
       .json({ success: false, message: "Only POST method is allowed" });
+    return;
   }
 
   try {
     PaymentSchema.parse(req.body);
   } catch (e) {
+    console.error(e);
     res.status(400).json({ success: false, message: "Malformed request" });
+    return;
   }
 
-  const payment: IPaymentRequestBody = req.body;
-  const paymentId = await addPayment(payment.order, payment.voucher);
-
-  res.status(200).json({ success: true, data: { paymentId } });
+  try {
+    const payment: IPaymentRequestBody = req.body;
+    const paymentId = await addPayment(payment.orderId, payment.voucher);
+    res.status(200).json({ success: true, data: { paymentId } });
+  } catch (e: any) {
+    console.error(e);
+    res.status(406).json({ success: false, message: e.message });
+  }
 };
 
 export default request;

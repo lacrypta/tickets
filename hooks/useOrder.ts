@@ -4,7 +4,12 @@ import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
 import { ICart } from "../types/cart";
-import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
+import { ITransferVoucherSigned } from "../types/crypto";
+import {
+  ICreateOrderRequestBody,
+  IPaymentRequestBody,
+  ResponseDataType,
+} from "../types/request";
 
 export interface IOrder {}
 export interface IUseUserResult {
@@ -17,18 +22,30 @@ export interface IUseUserResult {
   payOrder: (_signature: any) => void;
 }
 
-const ajaxCreateOrder = async (
-  requestData: ICreateOrderRequestBody
-): Promise<ResponseDataType> => {
-  const res = await fetch("/api/order/create", {
+const ajaxCall = async (path: string, data: any): Promise<ResponseDataType> => {
+  const res = await fetch("/api/" + path, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestData),
+    body: JSON.stringify(data),
   });
 
-  return await res.json();
+  return res.json();
+};
+
+const ajaxCreateOrder = async (
+  requestData: ICreateOrderRequestBody
+): Promise<ResponseDataType> => {
+  return ajaxCall("order/create", requestData);
+};
+
+const ajaxCreatePayment = async (
+  requestData: IPaymentRequestBody
+): Promise<ResponseDataType> => {
+  console.info("requestData:");
+  console.dir(requestData);
+  return ajaxCall("gateway/pay", requestData);
 };
 
 const generateRequest = (
@@ -83,13 +100,17 @@ const useOrder = (): IUseUserResult => {
     const res = await ajaxCreateOrder(orderRequest);
 
     // Parse Data
-    setOrderId(res.data.id);
+    setOrderId(String(res.data.id));
     setIsLoading(false);
   };
 
-  const payOrder = async (permit: any) => {
-    console.info("permit:");
-    console.dir(permit);
+  const payOrder = async (voucher: ITransferVoucherSigned) => {
+    console.info("Pay Order");
+    console.info(typeof orderId);
+    ajaxCreatePayment({
+      orderId,
+      voucher,
+    });
   };
 
   return {

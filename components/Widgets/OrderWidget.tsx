@@ -34,6 +34,7 @@ export const OrderWidget = () => {
   const { address } = useAccount();
   const { isLoading, orderId, payOrder } = useOrder();
   const {
+    payload,
     signature,
     isLoading: isSignatureLoading,
     isSuccess: isSignatureSuccess,
@@ -43,15 +44,13 @@ export const OrderWidget = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.info("useEffect!");
-    console.info("isSignatureLoading", isSignatureLoading);
-    console.info("isSignatureSuccess", isSignatureSuccess);
-    console.info("signature", signature);
-
     if (!isSignatureLoading && isSignatureSuccess && signature) {
-      payOrder(signature);
+      payOrder({
+        payload,
+        signature,
+      });
     }
-    setStep(2);
+    // setStep(2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signature, isSignatureSuccess, isSignatureLoading]);
 

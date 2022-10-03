@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAccount, useSignTypedData } from "wagmi";
+import { useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
-import { ISignature } from "../types/crypto";
+import { ISignature, ITransferVoucher } from "../types/crypto";
 
 // struct TransferVoucher {
 //     address from;
@@ -16,7 +16,7 @@ import { ISignature } from "../types/crypto";
 // TYPEHASH
 // execute(TransferVoucher{address,address,uint256,uint256,uint256,uint256})
 const types = {
-  Permit: [
+  Execute: [
     { name: "from", type: "address" },
     { name: "to", type: "address" },
     { name: "amount", type: "uint256" },
@@ -40,19 +40,22 @@ interface IUseGatewayResult {
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
+  payload?: ITransferVoucher;
   requestSignature: (_args: IRequestSignatureArgs) => void;
 }
 
 const useGateway = (
   contractName: string,
-  contractAddress: string
+  contractAddress: string,
+  onSuccess?: (_args: any) => void
 ): IUseGatewayResult => {
-  const { address: owner } = useAccount();
-
   const [signature, setSignature] = useState<ISignature>();
+  const [payload, setPayload] = useState<ITransferVoucher>();
 
   const { data, isError, isLoading, isSuccess, signTypedData } =
-    useSignTypedData();
+    useSignTypedData({
+      onSuccess,
+    });
 
   const requestSignature = async ({
     from,
@@ -66,6 +69,17 @@ const useGateway = (
 
     setSignature(undefined);
 
+    const _payload: ITransferVoucher = {
+      from,
+      to,
+      amount,
+      deadline: String(deadline),
+      fee: String(fee),
+      nonce,
+    };
+
+    setPayload(_payload);
+
     signTypedData({
       domain: {
         name: contractName,
@@ -74,29 +88,25 @@ const useGateway = (
         verifyingContract: contractAddress,
       },
       types,
-      value: {
-        from: owner?.toLocaleLowerCase(),
-        to: to,
-        amount: amount,
-        deadline: deadline,
-        fee,
-        nonce,
-      },
+      value: _payload,
     });
   };
 
   useEffect(() => {
     if (!isLoading && isSuccess && data) {
-      console.info("data:");
-      console.dir(data);
-
       const { r, s, v } = splitSignature(data);
-      console.info("setting signature");
       setSignature({ r, s, v });
     }
   }, [data, isLoading, isSuccess]);
 
-  return { signature, isError, isLoading, isSuccess, requestSignature };
+  return {
+    payload,
+    signature,
+    isError,
+    isLoading,
+    isSuccess,
+    requestSignature,
+  };
 };
 
 export default useGateway;

@@ -16,7 +16,7 @@ export interface ISignupRequestBody {
 }
 
 export interface IPaymentRequestBody {
-  order: string;
+  orderId: string;
   voucher: ITransferVoucherSigned;
 }
 export interface ICreateOrderRequestBody {
@@ -38,7 +38,7 @@ export const SignupSchema = z.object({
 });
 
 export const PaymentSchema = z.object({
-  order: z.string(),
+  orderId: z.string(),
   voucher: TransferVoucherSchemaSigned,
 });
 

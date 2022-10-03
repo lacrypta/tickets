@@ -1,3 +1,4 @@
+import { ITransferVoucherSigned } from "./../../types/crypto";
 import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 import { IOrderItem } from "../../types/cart";
@@ -94,14 +95,40 @@ export const addUser = async (
  * @returns
  */
 export const addPayment = async (
-  username: string,
-  address: string,
-  permit: IPermit
-) => {
-  return await db.collection("users").doc(address).set({
-    username,
-    permit,
+  orderId: string,
+  voucher: ITransferVoucherSigned
+): Promise<String> => {
+  const paymentRef = db.collection("payments").doc();
+
+  await db.runTransaction(async (t) => {
+    const orderRef = db.collection("orders").doc(String(orderId));
+    const order = (await t.get(orderRef)).data();
+
+    switch (order?.status) {
+      case "processing":
+        throw new Error("Order is already being processed");
+      case "completed":
+        throw new Error("Order already payed");
+      case "cancelled":
+        throw new Error("The order has been cancelled");
+    }
+
+    // Update Order
+    t.update(orderRef, {
+      status: "processing",
+      paymentId: paymentRef.id,
+    });
+
+    // Create Payment
+    t.create(paymentRef, {
+      orderId,
+      address: voucher.payload.from,
+      voucher,
+      status: "unpublished",
+    });
   });
+
+  return paymentRef.id;
 };
 
 /**
@@ -122,13 +149,15 @@ export const addOrder = async (
     await t.create(orderRef, {
       items,
       total: 1000,
+      status: "pending",
     });
   });
 
   return orderId;
 };
 
-// Private Functions
+//------------- PRIVATE FUNCTIONS -------------//
+
 const _getNewOrderId = async (t: Transaction): Promise<number> => {
   const configRef = db.collection("config").doc("main");
   let newOrderId = 1;

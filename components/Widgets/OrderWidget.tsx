@@ -19,8 +19,10 @@ const Container = styled.div`
   z-index: 10;
 `;
 
-const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
-const paymentTTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
+const CONTRACT_NAME = "Peronio Gateway";
+const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
+const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
+const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
 
 const OrderID = styled.div`
   margin: 10px 0px 10px 0px;
@@ -36,7 +38,7 @@ export const OrderWidget = () => {
     isLoading: isSignatureLoading,
     isSuccess: isSignatureSuccess,
     requestSignature,
-  } = useGateway();
+  } = useGateway(CONTRACT_NAME, GATEWAY_ADDRESS);
 
   const [open, setOpen] = useState(false);
 
@@ -49,18 +51,17 @@ export const OrderWidget = () => {
     if (!isSignatureLoading && isSignatureSuccess && signature) {
       payOrder(signature);
     }
-    // setStep(2);
+    setStep(2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signature, isSignatureSuccess, isSignatureLoading]);
 
   const handlePay = () => {
     setOpen(true);
     requestSignature({
-      contract: gatewayAddress,
-      name: "Peronio Gateway",
-      spender: address || "",
-      value: parseUnits(String(cart.total), 6).toString(),
-      deadline: Math.floor(Date.now() / 1000) + parseInt(paymentTTL),
+      from: address || "",
+      to: BAR_ADDRESS,
+      amount: parseUnits(String(cart.total), 6).toString(),
+      deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
       fee: 100,
     });
   };

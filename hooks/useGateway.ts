@@ -28,12 +28,11 @@ const types = {
 };
 
 interface IRequestSignatureArgs {
-  name: string;
-  contract: string;
-  spender: string;
-  value: string;
-  fee: number;
+  from: string;
+  to: string;
+  amount: string;
   deadline: number;
+  fee: number;
 }
 
 interface IUseGatewayResult {
@@ -44,7 +43,10 @@ interface IUseGatewayResult {
   requestSignature: (_args: IRequestSignatureArgs) => void;
 }
 
-const useGateway = (): IUseGatewayResult => {
+const useGateway = (
+  contractName: string,
+  contractAddress: string
+): IUseGatewayResult => {
   const { address: owner } = useAccount();
 
   const [signature, setSignature] = useState<ISignature>();
@@ -53,12 +55,11 @@ const useGateway = (): IUseGatewayResult => {
     useSignTypedData();
 
   const requestSignature = async ({
-    name,
-    contract,
-    spender,
-    value,
-    fee,
+    from,
+    to,
+    amount,
     deadline,
+    fee,
   }: IRequestSignatureArgs) => {
     const nonce =
       "0x0000000000000000000000000000000000000000000000000000000000000000"; // TODO: Look for nonce
@@ -67,16 +68,16 @@ const useGateway = (): IUseGatewayResult => {
 
     signTypedData({
       domain: {
-        name: name,
+        name: contractName,
         version: "1",
         chainId: 137,
-        verifyingContract: contract,
+        verifyingContract: contractAddress,
       },
       types,
       value: {
         from: owner?.toLocaleLowerCase(),
-        to: spender,
-        amount: value,
+        to: to,
+        amount: amount,
         deadline: deadline,
         fee,
         nonce,

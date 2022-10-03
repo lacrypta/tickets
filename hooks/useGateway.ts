@@ -16,14 +16,19 @@ import { ISignature, ITransferVoucher } from "../types/crypto";
 // TYPEHASH
 // execute(TransferVoucher{address,address,uint256,uint256,uint256,uint256})
 const types = {
-  Execute: [
+  Payload: [
     { name: "from", type: "address" },
     { name: "to", type: "address" },
     { name: "amount", type: "uint256" },
-    { name: "deadline", type: "uint256" },
-
-    { name: "fee", type: "uint256" },
+  ],
+  Voucher: [
+    { name: "tag", type: "uint32" },
+    //
     { name: "nonce", type: "uint256" },
+    { name: "deadline", type: "uint256" },
+    { name: "payload", type: "Payload" },
+    //
+    { name: "metadata", type: "uint256" },
   ],
 };
 
@@ -88,7 +93,19 @@ const useGateway = (
         verifyingContract: contractAddress,
       },
       types,
-      value: _payload,
+      value: {
+        tag: "12312",
+        //
+        nonce,
+        deadline: String(deadline),
+        payload: {
+          from,
+          to,
+          amount,
+        },
+        //
+        metadata: "123123", // TODO: Get real order ID
+      },
     });
   };
 

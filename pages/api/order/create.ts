@@ -26,13 +26,15 @@ const request = async (
   }
 
   const { address, items }: ICreateOrderRequestBody = req.body;
+  const total = "100000000"; // TODO: Generate value
 
-  const orderId = await addOrder(address, items);
+  const orderId = await addOrder(address, items, total);
 
   res.status(200).json({
     success: true,
     data: {
       id: orderId,
+      total,
     },
   });
 };

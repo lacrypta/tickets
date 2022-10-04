@@ -8,8 +8,6 @@ import { useAccount } from "wagmi";
 import useGateway from "../../hooks/useGateway";
 import useOrder from "../../hooks/useOrder";
 
-import { parseUnits } from "ethers/lib/utils";
-
 import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 
@@ -36,7 +34,8 @@ export const OrderWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
   const { address } = useAccount();
-  const { isLoading, orderId, payOrder } = useOrder();
+  const { isLoading, orderId, orderTotal, payOrder } = useOrder();
+
   const {
     voucher,
     signature,
@@ -63,7 +62,7 @@ export const OrderWidget = () => {
     requestSignature({
       from: address || "",
       to: BAR_ADDRESS,
-      amount: parseUnits(String(cart.total), 6).toString(),
+      amount: orderTotal,
       deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
       orderId: orderId || "",
     });

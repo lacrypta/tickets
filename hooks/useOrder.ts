@@ -14,6 +14,7 @@ import {
 export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
+  orderTotal: string;
   isLoading?: boolean;
   isSuccess?: boolean;
   isError?: boolean;
@@ -52,14 +53,18 @@ const generateRequest = (
   address: string,
   cart: ICart
 ): ICreateOrderRequestBody => {
-  return {
-    address,
-    items: Object.values(cart.items).map((item) => {
+  const items = Object.values(cart.items)
+    .map((item) => {
       return {
         id: item.product.id,
         qty: item.qty,
       };
-    }),
+    })
+    .filter((e) => e.qty > 0);
+
+  return {
+    address,
+    items,
   };
 };
 
@@ -69,6 +74,8 @@ const useOrder = (): IUseUserResult => {
   const {
     orderId,
     setOrderId,
+    orderTotal,
+    setOrderTotal,
     isLoading,
     setIsLoading,
     isSuccess,
@@ -79,7 +86,7 @@ const useOrder = (): IUseUserResult => {
     setError,
   } = useContext(OrderContext);
 
-  const createOrder = async () => {
+  async function createOrder() {
     if (isLoading) {
       return;
     }
@@ -101,8 +108,12 @@ const useOrder = (): IUseUserResult => {
 
     // Parse Data
     setOrderId(String(res.data.id));
+
+    console.info("res.data.total:", res.data.total);
+
+    setOrderTotal(String(res.data.total));
     setIsLoading(false);
-  };
+  }
 
   const payOrder = async (voucher: ITransferVoucherSigned) => {
     console.info("Pay Order");
@@ -119,7 +130,8 @@ const useOrder = (): IUseUserResult => {
     isSuccess,
     isError,
     error,
-    createOrder,
+    orderTotal,
+    createOrder: createOrder.bind(this),
     payOrder,
   };
 };

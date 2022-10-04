@@ -21,11 +21,6 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   try {
     PaymentSchema.parse(req.body);
   } catch (e) {
-    console.info("THIS:");
-    console.dir(req.body);
-
-    console.dir(req.body.voucher.voucher.payload);
-    console.info("---------");
     console.error(e);
     res.status(400).json({ success: false, message: "Malformed request" });
     return;

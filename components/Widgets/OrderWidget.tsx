@@ -1,16 +1,20 @@
 import styled from "@emotion/styled";
-import { useContext, useEffect, useState } from "react";
+
 import { CartContext } from "../../contexts/Cart";
 import { StepsContext } from "../../contexts/Steps";
+
+import { useContext, useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import useGateway from "../../hooks/useGateway";
+import useOrder from "../../hooks/useOrder";
+
+import { parseUnits } from "ethers/lib/utils";
+
 import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 
 import PayButton from "../Menu/PayButton";
 import PaymentModal from "../Order/PaymentModal";
-import useGateway from "../../hooks/useGateway";
-import { useAccount } from "wagmi";
-import { parseUnits } from "ethers/lib/utils";
-import useOrder from "../../hooks/useOrder";
 
 const Container = styled.div`
   width: 100%;
@@ -34,7 +38,7 @@ export const OrderWidget = () => {
   const { address } = useAccount();
   const { isLoading, orderId, payOrder } = useOrder();
   const {
-    payload,
+    voucher,
     signature,
     isLoading: isSignatureLoading,
     isSuccess: isSignatureSuccess,
@@ -46,7 +50,7 @@ export const OrderWidget = () => {
   useEffect(() => {
     if (!isSignatureLoading && isSignatureSuccess && signature) {
       payOrder({
-        payload,
+        voucher,
         signature,
       });
     }
@@ -61,7 +65,7 @@ export const OrderWidget = () => {
       to: BAR_ADDRESS,
       amount: parseUnits(String(cart.total), 6).toString(),
       deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
-      fee: 100,
+      orderId: orderId || "",
     });
   };
 

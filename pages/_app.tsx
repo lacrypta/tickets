@@ -14,9 +14,11 @@ import { ThemeProvider } from "@mui/material";
 import { themeOptions } from "../styles/theme";
 import { CartProvider } from "../contexts/Cart";
 
-import menuItems from "../data/menu.json";
 import { StepsProvider } from "../contexts/Steps";
 import { OrderProvider } from "../contexts/Order";
+import { getMenuItems } from "../lib/public/menu";
+
+const menuItems = getMenuItems();
 
 const { chains, provider, webSocketProvider } = configureChains(
   [

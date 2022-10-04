@@ -3,18 +3,8 @@ import { useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature, ITransferVoucher } from "../types/crypto";
 
-// struct TransferVoucher {
-//     address from;
-//     address to;
-//     uint256 amount;
-//     uint256 deadline;
-//     //
-//     uint256 fee;
-//     uint256 nonce;
-// }
+const TRANSFER_FROM_TAG = "123123";
 
-// TYPEHASH
-// execute(TransferVoucher{address,address,uint256,uint256,uint256,uint256})
 const types = {
   Payload: [
     { name: "from", type: "address" },
@@ -37,7 +27,7 @@ interface IRequestSignatureArgs {
   to: string;
   amount: string;
   deadline: number;
-  fee: number;
+  orderId: string;
 }
 
 interface IUseGatewayResult {
@@ -45,7 +35,7 @@ interface IUseGatewayResult {
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
-  payload?: ITransferVoucher;
+  voucher?: ITransferVoucher;
   requestSignature: (_args: IRequestSignatureArgs) => void;
 }
 
@@ -55,7 +45,7 @@ const useGateway = (
   onSuccess?: (_args: any) => void
 ): IUseGatewayResult => {
   const [signature, setSignature] = useState<ISignature>();
-  const [payload, setPayload] = useState<ITransferVoucher>();
+  const [voucher, setVoucher] = useState<ITransferVoucher>();
 
   const { data, isError, isLoading, isSuccess, signTypedData } =
     useSignTypedData({
@@ -67,23 +57,28 @@ const useGateway = (
     to,
     amount,
     deadline,
-    fee,
+    orderId,
   }: IRequestSignatureArgs) => {
     const nonce =
       "0x0000000000000000000000000000000000000000000000000000000000000000"; // TODO: Look for nonce
 
     setSignature(undefined);
 
-    const _payload: ITransferVoucher = {
-      from,
-      to,
-      amount,
-      deadline: String(deadline),
-      fee: String(fee),
+    const _voucher: ITransferVoucher = {
+      tag: TRANSFER_FROM_TAG,
+      //
       nonce,
+      deadline: String(deadline),
+      payload: {
+        from,
+        to,
+        amount,
+      },
+      //
+      metadata: orderId,
     };
 
-    setPayload(_payload);
+    setVoucher(_voucher);
 
     signTypedData({
       domain: {
@@ -93,19 +88,7 @@ const useGateway = (
         verifyingContract: contractAddress,
       },
       types,
-      value: {
-        tag: "12312",
-        //
-        nonce,
-        deadline: String(deadline),
-        payload: {
-          from,
-          to,
-          amount,
-        },
-        //
-        metadata: "123123", // TODO: Get real order ID
-      },
+      value: _voucher,
     });
   };
 
@@ -117,7 +100,7 @@ const useGateway = (
   }, [data, isLoading, isSuccess]);
 
   return {
-    payload,
+    voucher,
     signature,
     isError,
     isLoading,

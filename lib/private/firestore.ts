@@ -104,6 +104,7 @@ export const addPayment = async (
     const orderRef = db.collection("orders").doc(String(orderId));
     const order = (await t.get(orderRef)).data();
 
+    // Validate status
     switch (order?.status) {
       case "processing":
         throw new Error("Order is already being processed");
@@ -111,6 +112,13 @@ export const addPayment = async (
         throw new Error("Order already payed");
       case "cancelled":
         throw new Error("The order has been cancelled");
+    }
+
+    // Validate amount
+    if (order?.total !== voucher.voucher.payload.amount) {
+      console.warn("Payment and order mount don't match");
+      console.warn("Order Amount:", order?.total);
+      console.warn("Voucher:", voucher.voucher.payload.amount);
     }
 
     // Update Order
@@ -122,7 +130,7 @@ export const addPayment = async (
     // Create Payment
     t.create(paymentRef, {
       orderId,
-      address: voucher.payload.from,
+      address: voucher.voucher.payload.from,
       voucher,
       status: "unpublished",
     });

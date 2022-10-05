@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAccount, useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature } from "../types/crypto";
+import { ethers } from "ethers";
 
 const types = {
   Permit: [
@@ -44,8 +45,9 @@ const useERC20Permit = (): IUseERC20PermitResult => {
     value,
     deadline,
   }: IRequestSignatureArgs) => {
-    const nonce =
-      "0x0000000000000000000000000000000000000000000000000000000000000000"; // TODO: Look for nonce
+    const nonce = ethers.BigNumber.from(
+      ethers.utils.randomBytes(32)
+    ).toHexString();
 
     setSignature(undefined);
 

@@ -3,6 +3,7 @@ import { useSignMessage } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature, ITransferVoucher } from "../types/crypto";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { ethers } from "ethers";
 
 const TRANSFER_FROM_TAG =
   process.env.NEXT_PUBLIC_GATEWAY_TRANSFER_FROM_TAG || "";
@@ -64,8 +65,9 @@ const useGateway = (
     deadline,
     orderId,
   }: IRequestSignatureArgs) => {
-    const nonce =
-      "0x0000000000000000000000000000000000000000000000000000000000000000"; // TODO: Look for nonce
+    const nonce = ethers.BigNumber.from(
+      ethers.utils.randomBytes(32)
+    ).toHexString();
 
     setSignature(undefined);
 

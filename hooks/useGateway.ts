@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSignMessage } from "wagmi";
+import { useContract, useSignMessage } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature, ITransferVoucher } from "../types/crypto";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { ethers } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
+import mockGatewayABI from "../abi/GatewayMock.json";
+import { BigNumber, ethers } from "ethers";
+import { encodeVoucher } from "../lib/public/utils";
 
 const TRANSFER_FROM_TAG =
   process.env.NEXT_PUBLIC_GATEWAY_TRANSFER_FROM_TAG || "";
@@ -33,29 +35,39 @@ const useGateway = (
   const [voucher, setVoucher] = useState<ITransferVoucher>();
   const [signatureMessage, setSignatureMessage] = useState<string>();
 
+  const gatewayContract = useContract({
+    addressOrName: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+    contractInterface: mockGatewayABI,
+  });
+
   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
     onSuccess,
   });
 
-  const domain: IDomain = {
-    name: contractName,
-    version: "1",
-    chainId: 137,
-    verifyingContract: contractAddress,
-  };
-
   const getSignatureMessage = async (
     voucher: ITransferVoucher
   ): Promise<string> => {
-    let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
-    message += "💲 Monto: " + formatUnits(voucher.payload.amount, 6) + " P\n";
-    message += "#️⃣ Order: " + voucher.metadata + "\n";
-    message += "🧑 Destino: " + voucher.payload.to + "\n";
-    message += "\n";
-    message += "🟰🟰🟰🟰🟰🟰🟰 DATA 🟰🟰🟰🟰🟰🟰🟰\n";
-    message +=
-      "3afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa47f6a5s4dfas6574453sd4a5f34as6533sd546f3sd786f5a7s9d86fsa87df5a7";
-    return message;
+    console.info("PEGANDO");
+
+    const test = {
+      hola: "holaaaa",
+      chau: "chauuuu",
+    };
+
+    const res = await gatewayContract.nothing("test");
+    // const res = await gatewayContract.test1(test);
+    console.info(res);
+
+    return "TODAVIA NO FUNCA!";
+    // let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
+    // message += "💲 Monto: " + formatUnits(voucher.payload.amount, 6) + " P\n";
+    // message += "#️⃣ Order: " + voucher.metadata + "\n";
+    // message += "🧑 Destino: " + voucher.payload.to + "\n";
+    // message += "\n";
+    // message += "🟰🟰🟰🟰🟰🟰🟰 DATA 🟰🟰🟰🟰🟰🟰🟰\n";
+    // message +=
+    //   "3afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa47f6a5s4dfas6574453sd4a5f34as6533sd546f3sd786f5a7s9d86fsa87df5a7";
+    // return message;
   };
 
   const requestSignature = async ({

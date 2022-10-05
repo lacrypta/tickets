@@ -13,6 +13,9 @@ interface IOrderContext {
   setIsError: Dispatch<SetStateAction<boolean>>;
   error: string;
   setError: Dispatch<SetStateAction<string>>;
+  isPayed: boolean;
+  setIsPayed: Dispatch<SetStateAction<boolean>>;
+  clear: () => void;
 }
 
 export const OrderContext = createContext<IOrderContext>({
@@ -28,6 +31,9 @@ export const OrderContext = createContext<IOrderContext>({
   setIsError: () => {},
   error: "",
   setError: () => {},
+  isPayed: false,
+  setIsPayed: () => {},
+  clear: () => {},
 });
 
 interface IOrderProviderProps {
@@ -42,6 +48,18 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [isPayed, setIsPayed] = useState<boolean>(false);
+
+  const clear = () => {
+    setIsPayed(false);
+    setOrderId("");
+
+    setIsLoading(false);
+    setIsSuccess(false);
+    setIsError(false);
+    setError("");
+  };
+
   return (
     <OrderContext.Provider
       value={{
@@ -57,6 +75,9 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
         setIsError,
         error,
         setError,
+        isPayed,
+        setIsPayed,
+        clear,
       }}
     >
       {children}

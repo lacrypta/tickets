@@ -17,9 +17,11 @@ export interface IUseUserResult {
   orderTotal: string;
   isLoading?: boolean;
   isSuccess?: boolean;
+  isPayed?: boolean;
   isError?: boolean;
   error?: string;
   createOrder: () => void;
+  clear: () => void;
   payOrder: (_signature: any) => void;
 }
 
@@ -44,8 +46,6 @@ const ajaxCreateOrder = async (
 const ajaxCreatePayment = async (
   requestData: IPaymentRequestBody
 ): Promise<ResponseDataType> => {
-  console.info("requestData:");
-  console.dir(requestData);
   return ajaxCall("gateway/pay", requestData);
 };
 
@@ -84,6 +84,9 @@ const useOrder = (): IUseUserResult => {
     setIsError,
     error,
     setError,
+    isPayed,
+    setIsPayed,
+    clear,
   } = useContext(OrderContext);
 
   async function createOrder() {
@@ -115,10 +118,16 @@ const useOrder = (): IUseUserResult => {
   const payOrder = async (voucher: ITransferVoucherSigned) => {
     console.info("Pay Order");
     console.info(typeof orderId);
-    ajaxCreatePayment({
+    const res = await ajaxCreatePayment({
       orderId,
       voucher,
     });
+
+    console.info("RETURN");
+    console.dir(res);
+    if (res.success) {
+      setIsPayed(true);
+    }
   };
 
   return {
@@ -128,8 +137,10 @@ const useOrder = (): IUseUserResult => {
     isError,
     error,
     orderTotal,
+    isPayed,
     createOrder: createOrder.bind(this),
     payOrder,
+    clear,
   };
 };
 

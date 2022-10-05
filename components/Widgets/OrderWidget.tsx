@@ -35,7 +35,7 @@ export const OrderWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
   const { address } = useAccount();
-  const { isLoading, orderId, orderTotal, payOrder } = useOrder();
+  const { isLoading, orderId, orderTotal, isPayed, payOrder } = useOrder();
 
   const {
     voucher,
@@ -57,6 +57,13 @@ export const OrderWidget = () => {
     // setStep(2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signature, isSignatureSuccess, isSignatureLoading]);
+
+  useEffect(() => {
+    if (isPayed) {
+      setStep(2);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPayed]);
 
   const handlePay = () => {
     setOpen(true);

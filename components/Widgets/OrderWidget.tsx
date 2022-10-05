@@ -21,7 +21,8 @@ const Container = styled.div`
   z-index: 10;
 `;
 
-const CONTRACT_NAME = "Peronio Gateway";
+const CONTRACT_NAME =
+  process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
 const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";

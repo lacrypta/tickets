@@ -9,6 +9,7 @@ import {
   Transaction,
 } from "firebase-admin/firestore";
 import { BigNumber } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -116,10 +117,12 @@ export const addPayment = async (
     }
 
     // Validate amount
-    if (order?.total !== voucher.voucher.payload.amount) {
-      console.warn("Payment and order mount don't match");
-      console.warn("Order Amount:", order?.total);
-      console.warn("Voucher:", voucher.voucher.payload.amount);
+    if (
+      !parseUnits(String(order?.total), 6).eq(
+        BigNumber.from(voucher.voucher.payload.amount)
+      )
+    ) {
+      throw new Error("The order and voucher amount don't match");
     }
 
     // Update Order

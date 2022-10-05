@@ -25,6 +25,13 @@ export interface IPermit {
   s: string;
 }
 
+export interface IDomain {
+  name: string;
+  version: string;
+  chainId: number;
+  verifyingContract: string;
+}
+
 export interface ITransferVoucherPayload {
   from: string;
   to: string;

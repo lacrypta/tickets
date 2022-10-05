@@ -1,27 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSignTypedData } from "wagmi";
+import { useSignMessage } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature, ITransferVoucher } from "../types/crypto";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 
-const TRANSFER_FROM_TAG = "123123";
-
-const types = {
-  Payload: [
-    { name: "from", type: "address" },
-    { name: "to", type: "address" },
-    { name: "amount", type: "uint256" },
-  ],
-  Voucher: [
-    { name: "tag", type: "uint32" },
-    //
-    { name: "nonce", type: "uint256" },
-    { name: "deadline", type: "uint256" },
-    { name: "payload", type: "Payload" },
-    //
-    { name: "metadata", type: "uint256" },
-  ],
-};
-
+const TRANSFER_FROM_TAG =
+  process.env.NEXT_PUBLIC_GATEWAY_TRANSFER_FROM_TAG || "";
 interface IRequestSignatureArgs {
   from: string;
   to: string;
@@ -46,11 +30,32 @@ const useGateway = (
 ): IUseGatewayResult => {
   const [signature, setSignature] = useState<ISignature>();
   const [voucher, setVoucher] = useState<ITransferVoucher>();
+  const [signatureMessage, setSignatureMessage] = useState<string>();
 
-  const { data, isError, isLoading, isSuccess, signTypedData } =
-    useSignTypedData({
-      onSuccess,
-    });
+  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+    onSuccess,
+  });
+
+  const domain: IDomain = {
+    name: contractName,
+    version: "1",
+    chainId: 137,
+    verifyingContract: contractAddress,
+  };
+
+  const getSignatureMessage = async (
+    voucher: ITransferVoucher
+  ): Promise<string> => {
+    let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
+    message += "💲 Monto: " + formatUnits(voucher.payload.amount, 6) + " P\n";
+    message += "#️⃣ Order: " + voucher.metadata + "\n";
+    message += "🧑 Destino: " + voucher.payload.to + "\n";
+    message += "\n";
+    message += "🟰🟰🟰🟰🟰🟰🟰 DATA 🟰🟰🟰🟰🟰🟰🟰\n";
+    message +=
+      "3afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa47f6a5s4dfas6574453sd4a5f34as6533sd546f3sd786f5a7s9d86fsa87df5a7";
+    return message;
+  };
 
   const requestSignature = async ({
     from,
@@ -72,7 +77,7 @@ const useGateway = (
       payload: {
         from,
         to,
-        amount,
+        amount: parseUnits(amount, 6).toString(),
       },
       //
       metadata: orderId,
@@ -80,15 +85,11 @@ const useGateway = (
 
     setVoucher(_voucher);
 
-    signTypedData({
-      domain: {
-        name: contractName,
-        version: "1",
-        chainId: 137,
-        verifyingContract: contractAddress,
-      },
-      types,
-      value: _voucher,
+    const _signatureMessage = await getSignatureMessage(_voucher);
+    setSignatureMessage(_signatureMessage);
+
+    signMessage({
+      message: _signatureMessage,
     });
   };
 

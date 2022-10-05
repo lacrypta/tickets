@@ -108,9 +108,6 @@ const useOrder = (): IUseUserResult => {
 
     // Parse Data
     setOrderId(String(res.data.id));
-
-    console.info("res.data.total:", res.data.total);
-
     setOrderTotal(String(res.data.total));
     setIsLoading(false);
   }

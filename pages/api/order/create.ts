@@ -1,5 +1,7 @@
+import { parseUnits } from "ethers/lib/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { addOrder } from "../../../lib/private/firestore";
+import { getTotal } from "../../../lib/public/menu";
 
 import {
   ICreateOrderRequestBody,
@@ -26,8 +28,7 @@ const request = async (
   }
 
   const { address, items }: ICreateOrderRequestBody = req.body;
-  const total = "100000000"; // TODO: Generate value
-
+  const total = getTotal(items);
   const orderId = await addOrder(address, items, total);
 
   res.status(200).json({

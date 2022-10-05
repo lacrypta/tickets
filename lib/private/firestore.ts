@@ -8,6 +8,7 @@ import {
   FieldValue,
   Transaction,
 } from "firebase-admin/firestore";
+import { BigNumber } from "ethers";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -148,7 +149,7 @@ export const addPayment = async (
 export const addOrder = async (
   address: string,
   items: IOrderItem[],
-  total: string
+  total: number
 ): Promise<number | undefined> => {
   let orderId;
   await db.runTransaction(async (t) => {

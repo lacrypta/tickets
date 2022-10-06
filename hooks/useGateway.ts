@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { splitSignature } from "@ethersproject/bytes";
 
 import { useContract, useProvider, useSignMessage } from "wagmi";
@@ -52,13 +52,23 @@ const useGateway = (
     onSuccess,
   });
 
+  const mockMessage = async (voucher: ITransferVoucher): Promise<string> => {
+    let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
+    message += "💲 Monto: " + formatUnits(voucher.payload.amount, 6) + " P\n";
+    message += "#️⃣ Order: " + voucher.metadata + "\n";
+    message += "🧑 Destino: " + voucher.payload.to + "\n";
+    message += "\n";
+    message += "🟰🟰🟰🟰🟰🟰🟰 DATA 🟰🟰🟰🟰🟰🟰🟰\n";
+    message +=
+      "3afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa47f6a5s4dfas6574453sd4a5f34as6533sd546f3sd786f5a7s9d86fsa87df5a7";
+    return message;
+  };
+
   const getSignatureMessage = async (
     voucher: ITransferVoucher
   ): Promise<string> => {
-    const message = await gatewayContract.getMessage(encodeVoucher(voucher));
-
-    console.info(message);
-
+    // const message = await gatewayContract.getMessage(encodeVoucher(voucher));
+    const message = mockMessage(voucher); // TODO: Remove this
     return message;
   };
 

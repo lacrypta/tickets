@@ -116,15 +116,12 @@ const useOrder = (): IUseUserResult => {
   }
 
   const payOrder = async (voucher: ITransferVoucherSigned) => {
-    console.info("Pay Order");
     console.info(typeof orderId);
     const res = await ajaxCreatePayment({
       orderId,
       voucher,
     });
 
-    console.info("RETURN");
-    console.dir(res);
     if (res.success) {
       setIsPayed(true);
     }

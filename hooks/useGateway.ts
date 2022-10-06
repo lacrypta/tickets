@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useContract, useSignMessage } from "wagmi";
-import { splitSignature } from "@ethersproject/bytes";
-import { ISignature, ITransferVoucher } from "../types/crypto";
+import { ethers } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
-import mockGatewayABI from "../abi/GatewayMock.json";
-import { BigNumber, ethers } from "ethers";
+import { splitSignature } from "@ethersproject/bytes";
+
+import { useContract, useProvider, useSignMessage } from "wagmi";
+
+import { ISignature, ITransferVoucher } from "../types/crypto";
 import { encodeVoucher } from "../lib/public/utils";
+
+import mockGatewayABI from "../abi/GatewayMock.json";
 
 const TRANSFER_FROM_TAG =
   process.env.NEXT_PUBLIC_GATEWAY_TRANSFER_FROM_TAG || "";
@@ -26,6 +29,8 @@ interface IUseGatewayResult {
   requestSignature: (_args: IRequestSignatureArgs) => void;
 }
 
+const MOCK_GATEWAY = "0x6d824682aA66da4e6738c6f3e16cC15fe9ce6F79";
+
 const useGateway = (
   contractName: string,
   contractAddress: string,
@@ -35,9 +40,12 @@ const useGateway = (
   const [voucher, setVoucher] = useState<ITransferVoucher>();
   const [signatureMessage, setSignatureMessage] = useState<string>();
 
+  const provider = useProvider();
+
   const gatewayContract = useContract({
-    addressOrName: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+    addressOrName: MOCK_GATEWAY,
     contractInterface: mockGatewayABI,
+    signerOrProvider: provider,
   });
 
   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
@@ -47,27 +55,11 @@ const useGateway = (
   const getSignatureMessage = async (
     voucher: ITransferVoucher
   ): Promise<string> => {
-    console.info("PEGANDO");
+    const message = await gatewayContract.getMessage(encodeVoucher(voucher));
 
-    const test = {
-      hola: "holaaaa",
-      chau: "chauuuu",
-    };
+    console.info(message);
 
-    const res = await gatewayContract.nothing("test");
-    // const res = await gatewayContract.test1(test);
-    console.info(res);
-
-    return "TODAVIA NO FUNCA!";
-    // let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
-    // message += "💲 Monto: " + formatUnits(voucher.payload.amount, 6) + " P\n";
-    // message += "#️⃣ Order: " + voucher.metadata + "\n";
-    // message += "🧑 Destino: " + voucher.payload.to + "\n";
-    // message += "\n";
-    // message += "🟰🟰🟰🟰🟰🟰🟰 DATA 🟰🟰🟰🟰🟰🟰🟰\n";
-    // message +=
-    //   "3afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa47f6a5s4dfas6574453sd4a5f34as6533sd546f3sd786f5a7s9d86fsa87df5a7";
-    // return message;
+    return message;
   };
 
   const requestSignature = async ({

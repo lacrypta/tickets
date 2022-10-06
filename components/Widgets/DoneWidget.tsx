@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { StepsContext } from "../../contexts/Steps";
 import { useContext } from "react";
-import { useAccount } from "wagmi";
 import { CartContext } from "../../contexts/Cart";
 import CartList from "../Order/OrderList";
 import BackButton from "../BackButton";
@@ -11,7 +10,7 @@ import useUser from "../../hooks/useUser";
 const Container = styled.div`
   width: 100%;
   max-width: 500px;
-  min-height: 100vh;
+  min-height: 50vh;
   z-index: 10;
   font-variant-caps: petite-caps;
 `;
@@ -44,6 +43,7 @@ export const DoneWidget = () => {
       <div>
         <h1>Pedido realizado!</h1>
       </div>
+      <div>Van a llamarte por el nombre cuando tu pedido esté listo</div>
       <OrderID>Orden : #{orderId}</OrderID>
       <Account>Nombre: {user?.username}</Account>
       <CartList cart={cart} />

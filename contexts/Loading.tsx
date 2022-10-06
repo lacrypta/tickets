@@ -1,17 +1,38 @@
+import { Backdrop } from "@mui/material";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
+import LoadingLogo from "../components/common/LoadingLogo";
 
 interface ILoadingContext {
   active: boolean;
+  text: string;
   setActive: Dispatch<SetStateAction<boolean>>;
+  setText: Dispatch<SetStateAction<string>>;
 }
 
 export const LoadingContext = createContext<ILoadingContext>({
   active: false,
+  text: "",
   setActive: () => {},
+  setText: () => {},
 });
 
-export const LoadingProvider = () => {
-  const [active, setActive] = useState<boolean>(false);
+interface ILoadingProviderProps {
+  children: any;
+}
 
-  return <LoadingContext.Provider value={{ active, setActive }} />;
+export const LoadingProvider = ({ children }: ILoadingProviderProps) => {
+  const [active, setActive] = useState<boolean>(false);
+  const [text, setText] = useState<string>("");
+
+  return (
+    <LoadingContext.Provider value={{ active, setActive, text, setText }}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <LoadingLogo />
+      </Backdrop>
+      {children}
+    </LoadingContext.Provider>
+  );
 };

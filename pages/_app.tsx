@@ -19,6 +19,7 @@ import { CartProvider } from "../contexts/Cart";
 import { StepsProvider } from "../contexts/Steps";
 import { OrderProvider } from "../contexts/Order";
 import { getMenuItems } from "../lib/public/menu";
+import { LoadingProvider } from "../contexts/Loading";
 
 const menuItems = getMenuItems();
 
@@ -60,19 +61,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <StepsProvider>
       <ThemeProvider theme={themeOptions}>
-        <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider
-            modalSize='compact'
-            theme={darkTheme()}
-            chains={chains}
-          >
-            <CartProvider menu={menuItems}>
-              <OrderProvider>
-                <Component {...pageProps} />
-              </OrderProvider>
-            </CartProvider>
-          </RainbowKitProvider>
-        </WagmiConfig>
+        <LoadingProvider>
+          <WagmiConfig client={wagmiClient}>
+            <RainbowKitProvider
+              modalSize='compact'
+              theme={darkTheme()}
+              chains={chains}
+            >
+              <CartProvider menu={menuItems}>
+                <OrderProvider>
+                  <Component {...pageProps} />
+                </OrderProvider>
+              </CartProvider>
+            </RainbowKitProvider>
+          </WagmiConfig>
+        </LoadingProvider>
       </ThemeProvider>
     </StepsProvider>
   );

@@ -14,6 +14,9 @@ import InvalidNetworkWidget from "../components/Widgets/InvalidNetworkWidget";
 import useUser from "../hooks/useUser";
 import SignupWidget from "../components/Widgets/SignupWidget";
 import { useEffect, useState } from "react";
+import LoadingLogo from "../components/common/LoadingLogo";
+import { FixedFormat } from "@ethersproject/bignumber";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -51,6 +54,13 @@ const Home: NextPage = () => {
       </Head>
 
       {!isDisconnected ? <Header /> : ""}
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <LoadingLogo />
+      </Backdrop>
 
       <MainBlock>
         <Background />

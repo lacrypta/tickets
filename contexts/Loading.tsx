@@ -1,17 +1,17 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
-interface IStepsContext {
+interface ILoadingContext {
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
 }
 
-export const StepsContext = createContext<IStepsContext>({
+export const LoadingContext = createContext<ILoadingContext>({
   active: false,
   setActive: () => {},
 });
 
-export const StepsProvider = () => {
+export const LoadingProvider = () => {
   const [active, setActive] = useState<boolean>(false);
 
-  return <StepsContext.Provider value={{ active, setActive }} />;
+  return <LoadingContext.Provider value={{ active, setActive }} />;
 };

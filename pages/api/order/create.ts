@@ -1,4 +1,3 @@
-import { parseUnits } from "ethers/lib/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { addOrder } from "../../../lib/private/firestore";
 import { getTotal } from "../../../lib/public/menu";

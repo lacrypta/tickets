@@ -23,7 +23,7 @@ const Image = styled(NextImage)`
 export const Background = () => {
   return (
     <BackgroundDiv>
-      <Image alt='skin' src={svgSkin} />
+      <Image priority={true} alt='skin' src={svgSkin} />
     </BackgroundDiv>
   );
 };

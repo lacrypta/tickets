@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useContext } from "react";
 import { StepsContext } from "../../contexts/Steps";
+import useLoading from "../../hooks/useLoading";
 import useOrder from "../../hooks/useOrder";
 import { MenuItems } from "../Menu/MenuItems";
 
@@ -16,10 +17,12 @@ const Container = styled.div`
 export const MenuWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { createOrder } = useOrder();
+  const { setActive } = useLoading();
 
   const handlePay = () => {
     createOrder();
     setStep(1);
+    setActive(true);
   };
 
   return (

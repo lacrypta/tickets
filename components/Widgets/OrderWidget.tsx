@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from "@emotion/styled";
 
 import { CartContext } from "../../contexts/Cart";
@@ -13,6 +14,7 @@ import CartList from "../Order/OrderList";
 
 import PayButton from "../Menu/PayButton";
 import PaymentModal from "../Order/PaymentModal";
+import useLoading from "../../hooks/useLoading";
 
 const Container = styled.div`
   width: 100%;
@@ -36,6 +38,7 @@ export const OrderWidget = () => {
   const { cart } = useContext(CartContext);
   const { address } = useAccount();
   const { isLoading, orderId, orderTotal, isPayed, payOrder } = useOrder();
+  const { setActive } = useLoading();
 
   const {
     voucher,
@@ -54,16 +57,19 @@ export const OrderWidget = () => {
         signature,
       });
     }
-    // setStep(2);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signature, isSignatureSuccess, isSignatureLoading]);
 
   useEffect(() => {
     if (isPayed) {
       setStep(2);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPayed]);
+
+  useEffect(() => {
+    if (orderId) {
+      setActive(false);
+    }
+  }, [orderId]);
 
   const handlePay = () => {
     setOpen(true);

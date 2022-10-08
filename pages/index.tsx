@@ -37,7 +37,6 @@ const Home: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    console.info("Is it loading?", isLoading);
     setActive(isLoading);
   }, [isLoading, setActive]);
 

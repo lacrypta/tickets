@@ -28,7 +28,7 @@ export const LoadingProvider = ({ children }: ILoadingProviderProps) => {
     <LoadingContext.Provider value={{ active, setActive, text, setText }}>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={true}
+        open={active}
       >
         <LoadingLogo />
       </Backdrop>

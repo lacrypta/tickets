@@ -1,6 +1,6 @@
-import { BigNumber } from "ethers";
 import { z } from "zod";
 
+// Interfaces
 export interface IPermitData {
   contract: string;
   name: string;
@@ -24,20 +24,28 @@ export interface IPermit {
   r: string;
   s: string;
 }
-
-export interface ITransferVoucher {
+export interface ITransferVoucherPayload {
   from: string;
   to: string;
-  amount: BigNumber;
-  deadline: BigNumber;
-  fee: BigNumber;
-  nonce: BigNumber;
+  amount: string;
+}
+
+export interface ITransferVoucher {
+  tag: string;
+
+  nonce: string;
+  deadline: string;
+  payload: ITransferVoucherPayload;
+
+  metadata: string;
 }
 
 export interface ITransferVoucherSigned {
   voucher: ITransferVoucher;
   signature: ISignature;
 }
+
+// SCHEMAS
 
 export const SignatureSchema = z.object({
   r: z.string(),
@@ -53,16 +61,23 @@ export const PermitSchema = z.object({
   deadline: z.number(),
 });
 
-export const TransferVoucherSchema = z.object({
+export const TransferVoucherPayloadSchema = z.object({
   from: z.string(),
   to: z.string(),
   amount: z.string(),
-  deadline: z.string(),
-  fee: z.string(),
+});
+
+export const TransferVoucherSchema = z.object({
+  tag: z.string(),
+
   nonce: z.string(),
+  deadline: z.string(),
+  payload: TransferVoucherPayloadSchema,
+
+  metadata: z.string(),
 });
 
 export const TransferVoucherSchemaSigned = z.object({
-  voucher: z.string(),
+  voucher: TransferVoucherSchema,
   signature: SignatureSchema,
 });

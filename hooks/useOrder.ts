@@ -4,45 +4,67 @@ import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
 import { ICart } from "../types/cart";
-import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
+import { ITransferVoucherSigned } from "../types/crypto";
+import {
+  ICreateOrderRequestBody,
+  IPaymentRequestBody,
+  ResponseDataType,
+} from "../types/request";
 
 export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
+  orderTotal: string;
   isLoading?: boolean;
   isSuccess?: boolean;
+  isPayed?: boolean;
   isError?: boolean;
   error?: string;
   createOrder: () => void;
+  clear: () => void;
   payOrder: (_signature: any) => void;
 }
 
-const ajaxCreateOrder = async (
-  requestData: ICreateOrderRequestBody
-): Promise<ResponseDataType> => {
-  const res = await fetch("/api/order/create", {
+const ajaxCall = async (path: string, data: any): Promise<ResponseDataType> => {
+  const res = await fetch("/api/" + path, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestData),
+    body: JSON.stringify(data),
   });
 
-  return await res.json();
+  return res.json();
+};
+
+const ajaxCreateOrder = async (
+  requestData: ICreateOrderRequestBody
+): Promise<ResponseDataType> => {
+  return ajaxCall("order/create", requestData);
+};
+
+const ajaxCreatePayment = async (
+  requestData: IPaymentRequestBody
+): Promise<ResponseDataType> => {
+  return ajaxCall("gateway/pay", requestData);
 };
 
 const generateRequest = (
   address: string,
   cart: ICart
 ): ICreateOrderRequestBody => {
-  return {
-    address,
-    items: Object.values(cart.items).map((item) => {
+  const items = Object.values(cart.items)
+    .map((item) => {
       return {
         id: item.product.id,
         qty: item.qty,
       };
-    }),
+    })
+    .filter((e) => e.qty > 0);
+
+  return {
+    address,
+    items,
   };
 };
 
@@ -52,6 +74,8 @@ const useOrder = (): IUseUserResult => {
   const {
     orderId,
     setOrderId,
+    orderTotal,
+    setOrderTotal,
     isLoading,
     setIsLoading,
     isSuccess,
@@ -60,9 +84,12 @@ const useOrder = (): IUseUserResult => {
     setIsError,
     error,
     setError,
+    isPayed,
+    setIsPayed,
+    clear,
   } = useContext(OrderContext);
 
-  const createOrder = async () => {
+  async function createOrder() {
     if (isLoading) {
       return;
     }
@@ -83,13 +110,21 @@ const useOrder = (): IUseUserResult => {
     const res = await ajaxCreateOrder(orderRequest);
 
     // Parse Data
-    setOrderId(res.data.id);
+    setOrderId(String(res.data.id));
+    setOrderTotal(String(res.data.total));
     setIsLoading(false);
-  };
+  }
 
-  const payOrder = async (permit: any) => {
-    console.info("permit:");
-    console.dir(permit);
+  const payOrder = async (voucher: ITransferVoucherSigned) => {
+    console.info(typeof orderId);
+    const res = await ajaxCreatePayment({
+      orderId,
+      voucher,
+    });
+
+    if (res.success) {
+      setIsPayed(true);
+    }
   };
 
   return {
@@ -98,8 +133,11 @@ const useOrder = (): IUseUserResult => {
     isSuccess,
     isError,
     error,
-    createOrder,
+    orderTotal,
+    isPayed,
+    createOrder: createOrder.bind(this),
     payOrder,
+    clear,
   };
 };
 

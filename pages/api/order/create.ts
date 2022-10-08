@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { addOrder } from "../../../lib/private/firestore";
+import { getTotal } from "../../../lib/public/menu";
 
 import {
   ICreateOrderRequestBody,
@@ -11,8 +12,6 @@ const request = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseDataType>
 ) => {
-  console.info("Calling server side...");
-
   // TODO: Limit user order creation by time
   if (req.method !== "POST") {
     res
@@ -28,14 +27,14 @@ const request = async (
   }
 
   const { address, items }: ICreateOrderRequestBody = req.body;
-
-  const orderId = await addOrder(address, items);
-  console.dir(orderId);
+  const total = getTotal(items);
+  const orderId = await addOrder(address, items, total);
 
   res.status(200).json({
     success: true,
     data: {
       id: orderId,
+      total,
     },
   });
 };

@@ -1,39 +1,23 @@
 import { useEffect, useState } from "react";
-import { useAccount, useSignTypedData } from "wagmi";
+import { ethers } from "ethers";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { splitSignature } from "@ethersproject/bytes";
-import { ISignature } from "../types/crypto";
 
-// struct TransferVoucher {
-//     address from;
-//     address to;
-//     uint256 amount;
-//     uint256 deadline;
-//     //
-//     uint256 fee;
-//     uint256 nonce;
-// }
+import { useContract, useProvider, useSignMessage } from "wagmi";
 
-// TYPEHASH
-// execute(TransferVoucher{address,address,uint256,uint256,uint256,uint256})
-const types = {
-  Permit: [
-    { name: "from", type: "address" },
-    { name: "to", type: "address" },
-    { name: "amount", type: "uint256" },
-    { name: "deadline", type: "uint256" },
+import { ISignature, ITransferVoucher } from "../types/crypto";
+import { encodeVoucher } from "../lib/public/utils";
 
-    { name: "fee", type: "uint256" },
-    { name: "nonce", type: "uint256" },
-  ],
-};
+import mockGatewayABI from "../abi/GatewayMock.json";
 
+const TRANSFER_FROM_TAG =
+  process.env.NEXT_PUBLIC_GATEWAY_TRANSFER_FROM_TAG || "";
 interface IRequestSignatureArgs {
-  name: string;
-  contract: string;
-  spender: string;
-  value: string;
-  fee: number;
+  from: string;
+  to: string;
+  amount: string;
   deadline: number;
+  orderId: string;
 }
 
 interface IUseGatewayResult {
@@ -41,61 +25,105 @@ interface IUseGatewayResult {
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
+  voucher?: ITransferVoucher;
   requestSignature: (_args: IRequestSignatureArgs) => void;
 }
 
-const useGateway = (): IUseGatewayResult => {
-  const { address: owner } = useAccount();
+const MOCK_GATEWAY = "0x6d824682aA66da4e6738c6f3e16cC15fe9ce6F79";
 
+const useGateway = (
+  contractName: string,
+  contractAddress: string,
+  onSuccess?: (_args: any) => void
+): IUseGatewayResult => {
   const [signature, setSignature] = useState<ISignature>();
+  const [voucher, setVoucher] = useState<ITransferVoucher>();
+  const [signatureMessage, setSignatureMessage] = useState<string>();
 
-  const { data, isError, isLoading, isSuccess, signTypedData } =
-    useSignTypedData();
+  const provider = useProvider();
+
+  const gatewayContract = useContract({
+    addressOrName: MOCK_GATEWAY,
+    contractInterface: mockGatewayABI,
+    signerOrProvider: provider,
+  });
+
+  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+    onSuccess,
+  });
+
+  const mockMessage = async (voucher: ITransferVoucher): Promise<string> => {
+    let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
+    message += "💲 Monto: " + formatUnits(voucher.payload.amount, 6) + " P\n";
+    message += "#️⃣ Order: " + voucher.metadata + "\n";
+    message += "🧑 Destino: " + voucher.payload.to + "\n";
+    message += "\n";
+    message += "🟰🟰🟰🟰🟰🟰🟰 DATA 🟰🟰🟰🟰🟰🟰🟰\n";
+    message +=
+      "3afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa43afs5df67sd6f75a7684ds67f87sa47f6a5s4dfas6574453sd4a5f34as6533sd546f3sd786f5a7s9d86fsa87df5a7";
+    return message;
+  };
+
+  const getSignatureMessage = async (
+    voucher: ITransferVoucher
+  ): Promise<string> => {
+    // const message = await gatewayContract.getMessage(encodeVoucher(voucher));
+    const message = mockMessage(voucher); // TODO: Remove this
+    return message;
+  };
 
   const requestSignature = async ({
-    name,
-    contract,
-    spender,
-    value,
-    fee,
+    from,
+    to,
+    amount,
     deadline,
+    orderId,
   }: IRequestSignatureArgs) => {
-    const nonce =
-      "0x0000000000000000000000000000000000000000000000000000000000000000"; // TODO: Look for nonce
+    const nonce = ethers.BigNumber.from(
+      ethers.utils.randomBytes(32)
+    ).toHexString();
 
     setSignature(undefined);
 
-    signTypedData({
-      domain: {
-        name: name,
-        version: "1",
-        chainId: 137,
-        verifyingContract: contract,
+    const _voucher: ITransferVoucher = {
+      tag: TRANSFER_FROM_TAG,
+      //
+      nonce,
+      deadline: String(deadline),
+      payload: {
+        from,
+        to,
+        amount: parseUnits(amount, 6).toString(),
       },
-      types,
-      value: {
-        from: owner?.toLocaleLowerCase(),
-        to: spender,
-        amount: value,
-        deadline: deadline,
-        fee,
-        nonce,
-      },
+      //
+      metadata: orderId,
+    };
+
+    setVoucher(_voucher);
+
+    const _signatureMessage = await getSignatureMessage(_voucher);
+    setSignatureMessage(_signatureMessage);
+
+    signMessage({
+      message: _signatureMessage,
     });
   };
 
   useEffect(() => {
     if (!isLoading && isSuccess && data) {
-      console.info("data:");
-      console.dir(data);
-
       const { r, s, v } = splitSignature(data);
-      console.info("setting signature");
       setSignature({ r, s, v });
     }
   }, [data, isLoading, isSuccess]);
 
-  return { signature, isError, isLoading, isSuccess, requestSignature };
+  return {
+    voucher,
+    signature,
+    isError,
+    isLoading,
+    isSuccess,
+    requestSignature,
+  };
 };
 
 export default useGateway;

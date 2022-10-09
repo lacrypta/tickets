@@ -26,7 +26,7 @@ const TermsCheckbox = ({
             }
             underline='hover'
           >
-            <a>Gateway</a>
+            Gateway
           </Link>{" "}
           <i>(Requerido)</i>
         </div>

@@ -24,7 +24,6 @@ interface IRequestSignatureArgs {
 
 interface IUseERC20PermitResult {
   signature?: ISignature;
-  isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
   requestSignature: (_args: IRequestSignatureArgs) => void;
@@ -35,8 +34,7 @@ const useERC20Permit = (): IUseERC20PermitResult => {
 
   const [signature, setSignature] = useState<ISignature>();
 
-  const { data, isError, isLoading, isSuccess, signTypedData } =
-    useSignTypedData();
+  const { data, isLoading, isSuccess, signTypedData } = useSignTypedData();
 
   const requestSignature = async ({
     name,
@@ -51,36 +49,36 @@ const useERC20Permit = (): IUseERC20PermitResult => {
 
     setSignature(undefined);
 
-    signTypedData({
-      domain: {
-        name: name,
-        version: "1",
-        chainId: 137,
-        verifyingContract: contract,
-      },
-      types,
-      value: {
-        owner: owner?.toLocaleLowerCase(),
-        spender: spender,
-        value,
-        nonce,
-        deadline: deadline,
-      },
-    });
+    try {
+      signTypedData({
+        domain: {
+          name: name,
+          version: "1",
+          chainId: 137,
+          verifyingContract: contract,
+        },
+        types,
+        value: {
+          owner: owner?.toLocaleLowerCase(),
+          spender: spender,
+          value,
+          nonce,
+          deadline,
+        },
+      });
+    } catch (e) {
+      console.dir(e);
+    }
   };
 
   useEffect(() => {
     if (!isLoading && isSuccess && data) {
-      console.info("data:");
-      console.dir(data);
-
       const { r, s, v } = splitSignature(data);
-      console.info("setting signature");
       setSignature({ r, s, v });
     }
   }, [data, isLoading, isSuccess]);
 
-  return { signature, isError, isLoading, isSuccess, requestSignature };
+  return { signature, isLoading, isSuccess, requestSignature };
 };
 
 export default useERC20Permit;

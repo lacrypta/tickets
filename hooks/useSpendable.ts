@@ -4,7 +4,6 @@ import { useAccount, useBalance, useContract, useContractRead } from "wagmi";
 import { IPermit } from "../types/crypto";
 
 import PeronioABI from "../abi/Peronio.json";
-import ERC20PermitABI from "../abi/ERC20Permit.json";
 
 import { useState } from "react";
 
@@ -22,7 +21,6 @@ interface ISpendableResult {
   allowance: BigNumber;
   permit?: BigNumber;
   max: BigNumber;
-  nonce: BigNumber;
 }
 
 const useSpendable = ({ permit }: IUseSpendableProps): ISpendableResult => {
@@ -66,15 +64,6 @@ const useSpendable = ({ permit }: IUseSpendableProps): ISpendableResult => {
     watch: true, // refresh on every block
   });
 
-  const { data: nonceRes } = useContractRead({
-    // Refreshes permit check
-    addressOrName: PERONIO_CONTRACT_ADDRESS,
-    contractInterface: ERC20PermitABI,
-    functionName: "nonces",
-    args: [address],
-    watch: true, // refresh on every block
-  });
-
   // Validate Permit
   if (permit) {
     validatePermit(permit);
@@ -83,7 +72,6 @@ const useSpendable = ({ permit }: IUseSpendableProps): ISpendableResult => {
   // Parse results
   const balance: BigNumber = balanceRes?.value || ZERO;
   const allowance: BigNumber = allowanceRes?.value || ZERO;
-  const nonce: BigNumber = nonceRes?.value || ZERO;
 
   const minValue =
     [balance, allowance, permitAmount]
@@ -95,7 +83,6 @@ const useSpendable = ({ permit }: IUseSpendableProps): ISpendableResult => {
     allowance,
     permit: permitAmount,
     max: minValue,
-    nonce,
   };
 };
 

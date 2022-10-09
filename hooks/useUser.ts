@@ -13,6 +13,7 @@ export interface IUseUserResult {
   user?: IUser;
   isRegistered: boolean;
   permit?: IPermit;
+  isLoading: boolean;
   signup(_args: ISignupRequestBody): void;
 }
 
@@ -24,13 +25,11 @@ const ajaxSignup = async (requestData: ISignupRequestBody) => {
     },
     body: JSON.stringify(requestData),
   });
-
-  console.info(data);
-  console.dir(data);
 };
 
 const useUser = (): IUseUserResult => {
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { address } = useAccount();
   const [user, setUser] = useState<IUser | undefined>();
   const [permit, setPermit] = useState<IPermit | undefined>();
@@ -41,16 +40,16 @@ const useUser = (): IUseUserResult => {
       return;
     }
 
+    setIsLoading(true);
     const userRef = doc(db, "users", address);
     onSnapshot(userRef, {
       next: (snapshot) => {
-        // console.info("User updated");
-        // console.dir(snapshot.data());
         const data = snapshot.data();
         if (!data) {
           setUser(undefined);
           setPermit(undefined);
           setIsRegistered(false);
+          setIsLoading(false);
           return;
         }
         setUser({
@@ -59,6 +58,7 @@ const useUser = (): IUseUserResult => {
         });
         setPermit(data.permit);
         setIsRegistered(true);
+        setIsLoading(false);
       },
     });
   }, [address]);
@@ -73,7 +73,7 @@ const useUser = (): IUseUserResult => {
       address: address,
     });
   };
-  return { user, isRegistered, permit, signup };
+  return { user, isRegistered, permit, isLoading, signup };
 };
 
 export default useUser;

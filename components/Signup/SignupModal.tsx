@@ -85,7 +85,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
 
   useEffect(() => {
     if (!isLoading && isSuccess && signature) {
-      console.info("Entra aca?");
       signup({
         address: address ?? "",
         username,
@@ -107,7 +106,9 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     };
   };
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSignup = async () => {
     clear(); // Clear Cart

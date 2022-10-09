@@ -18,7 +18,6 @@ import useERC20Permit from "../../hooks/useERC20Permit";
 import useUser from "../../hooks/useUser";
 
 import TermsCheckbox from "./TermsCheckbox";
-import useLoading from "../../hooks/useLoading";
 
 const BoxDiv = styled(Box)`
   position: fixed;
@@ -64,7 +63,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   const { signature, isSuccess, isLoading, requestSignature } =
     useERC20Permit();
   const { clear } = useContext(CartContext);
-  const { setActive } = useLoading();
 
   // Local Hooks
   const [username, setUsername] = useState("");
@@ -87,7 +85,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
 
   useEffect(() => {
     if (!isLoading && isSuccess && signature) {
-      console.info("Entra aca?");
       signup({
         address: address ?? "",
         username,
@@ -99,11 +96,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signature, isLoading, isSuccess]);
 
-  useEffect(() => {
-    setActive(isLoading);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
-
   const generatePermitData = () => {
     return {
       name: "Peronio",
@@ -114,7 +106,9 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     };
   };
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSignup = async () => {
     clear(); // Clear Cart

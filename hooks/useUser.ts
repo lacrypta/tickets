@@ -25,9 +25,6 @@ const ajaxSignup = async (requestData: ISignupRequestBody) => {
     },
     body: JSON.stringify(requestData),
   });
-
-  console.info(data);
-  console.dir(data);
 };
 
 const useUser = (): IUseUserResult => {

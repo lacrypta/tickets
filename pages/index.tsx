@@ -6,8 +6,10 @@ import { HeaderLogo } from "../components/HeaderLogo";
 import { Footer } from "../components/Footer";
 import { Background } from "../components/Background";
 
-import { useEffect, useState } from "react";
-import { MainForm } from "../components/MainForm";
+import { ReactElement, useContext, useEffect, useState } from "react";
+import { MainForm } from "../components/Steps/MainForm";
+import { StepsContext } from "../contexts/Steps";
+import { Checkout } from "../components/Steps/Checkout";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -24,8 +26,14 @@ const Container = styled.div`
   z-index: 10;
 `;
 
+const stepsComponents: ReactElement<any, any>[] = [
+  <MainForm key='main' />,
+  <Checkout key='checkout' />,
+];
+
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false); // Fix Hydration trouble
+  const { step } = useContext(StepsContext);
 
   useEffect(() => {
     setIsMounted(true);
@@ -43,7 +51,7 @@ const Home: NextPage = () => {
         <Background />
         <Container>
           <HeaderLogo />
-          {isMounted ? <MainForm /> : "Cargando..."}
+          {isMounted ? stepsComponents[step] : "Cargando..."}
         </Container>
       </MainBlock>
 

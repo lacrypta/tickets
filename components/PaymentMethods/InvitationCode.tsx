@@ -1,15 +1,14 @@
 import styled from "@emotion/styled";
-import { FormControl } from "@mui/material";
-
 const Container = styled.div`
   width: 100%;
   margin-bottom: 2em;
 `;
 
-export const MainForm = () => {
+export const InvitationCode = () => {
   return (
     <Container>
-      <FormControl>Main Form</FormControl>
+      <h1>Invitation Code!!</h1>
+      <h1>Acá va la opción de invitación!</h1>
     </Container>
   );
 };

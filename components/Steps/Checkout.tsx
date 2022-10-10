@@ -9,8 +9,9 @@ const Container = styled.div`
   width: 100%;
   margin-bottom: 2em;
   padding: 1em;
-  background: #888888;
+  background: rgba(80, 80, 80, 0.3);
   border-radius: 5px;
+  backdrop-filter: blur(4px);
 `;
 
 const MethodDiv = styled.div`

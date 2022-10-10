@@ -20,14 +20,32 @@ export const MercadoPago = () => {
   useEffect(() => {
     if (mercadopago && !mounted) {
       setMounted(true);
-      mercadopago.checkout({
+
+      const checkout = mercadopago.checkout({
         preference: {
-          id: "770826081-6174eaec-958a-495c-9ce5-02279182527c",
+          id: "220859620-164ceb81-ff4b-4db6-90cf-7a312c449fe8",
         },
-        render: {
-          container: "#mercadopago-container",
-          label: "Pagar",
+
+        callbacks: {
+          onSubmit: (algo: any) => {
+            console.dir(algo);
+          },
+          onReady: () => {
+            console.info("onReady!!");
+            // handle form ready
+          },
+          onError: (error: any) => {
+            console.dir(error);
+            // handle error
+          },
         },
+      });
+
+      console.info("Checkout: ");
+      console.dir(checkout);
+      checkout.render({
+        container: "#mercadopago-container",
+        label: "Pagar",
       });
     }
   }, [mercadopago, mounted]);

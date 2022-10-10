@@ -42,7 +42,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>La Crypta - Bar</title>
+        <title>La Crypta - Entradas</title>
         <meta name='description' content='Feeless implementation for ERC20' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

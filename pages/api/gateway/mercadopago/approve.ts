@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getOrder, updateOrder } from "./../../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";
+import { sendEmail } from "../../../../lib/private/email";
 
 function extractOrderId(payment: any) {
   return payment.additional_info.items[0].id;
@@ -21,8 +22,8 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
 
+    // Gets Order
     const orderId = extractOrderId(payment);
-
     const order = await getOrder(orderId);
 
     if (!order) {
@@ -30,6 +31,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
 
+    // If still pending
     if (order.status === "pending") {
       updateOrder(orderId, {
         status: "completed",
@@ -37,9 +39,12 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       // **************** SEND Email **************** //
-      // TODO: Send Email
+      await sendEmail({
+        fullname: order.fullname,
+        email: order.email,
+        url: "https://eventos.lacrypta.com.ar/entrada/" + orderId,
+      });
     }
-
     res.redirect(307, "/entrada/" + orderId);
   } catch (e) {
     console.error(e);

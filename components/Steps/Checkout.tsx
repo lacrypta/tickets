@@ -37,8 +37,8 @@ export const Checkout = () => {
       return;
     }
     createOrder({
-      email: "testo@pupio.com",
-      fullname: "Roberto lopucio",
+      email: "webmaster@masize.com",
+      fullname: "Agustin Kassis",
       paymentMethod: method,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

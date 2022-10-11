@@ -19,9 +19,6 @@ import { StepsProvider } from "../contexts/Steps";
 import { OrderProvider } from "../contexts/Order";
 import { LoadingProvider } from "../contexts/Loading";
 
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-
 const { chains, provider, webSocketProvider } = configureChains(
   [
     chain.polygon,
@@ -57,17 +54,6 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-
-  // Detecting MercadoPago
-  useEffect(() => {
-    if (router.query.status === "approved" && router.query.payment_id) {
-      router.replace(
-        "/api/gateway/mercadopago/approve/?payment_id=" +
-          router.query.payment_id
-      );
-    }
-  }, [router]);
   return (
     <StepsProvider>
       <ThemeProvider theme={themeOptions}>

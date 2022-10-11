@@ -4,7 +4,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import mercadopago from "mercadopago";
 import { PreferenceItem } from "mercadopago/models";
 import { ConfigTokenOption } from "mercadopago/configuration";
-import { addOrder } from "../../../../lib/private/firestore";
+import { getOrder } from "../../../../lib/private/firestore";
+import { CreatePaymentRequestSchema } from "../../../../types/request";
 
 const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME || "http://localhost:3000/";
 
@@ -28,13 +29,17 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  // TODO: Encapsulate using zod
-  const orderId = await addOrder({
-    fullname: req.body.fullname || "",
-    email: req.body.email || "",
-    payment_method: "mercadopago",
-    status: "pending",
-  });
+  try {
+    CreatePaymentRequestSchema.parse(req.body);
+  } catch (e) {
+    res.status(400).json({ success: false, message: "Malformed request" });
+  }
+
+  const { orderId } = req.body;
+
+  if (!(await getOrder(orderId))) {
+    res.status(406).json({ success: false, message: "Order doesnt exist" });
+  }
 
   mercadopago.configure(config);
 
@@ -45,7 +50,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
         success: HOSTNAME + "/api/gateway/approve",
       },
       additional_info: String(orderId),
-      auto_return: "approved",
+      auto_return: "all",
     })
   ).body;
 

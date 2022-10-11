@@ -1,9 +1,12 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MercadoPago } from "../PaymentMethods/MercadoPago";
 import { InvitationCode } from "../PaymentMethods/InvitationCode";
 import { Crypto } from "../PaymentMethods/Crypto";
+import useOrder from "../../hooks/useOrder";
+import { ICreateOrderRequestBody } from "../../types/request";
+import { PaymentMethod } from "../../types/order";
 
 const Container = styled.div`
   width: 100%;
@@ -20,13 +23,26 @@ const MethodDiv = styled.div`
 `;
 
 const paymentMethods: { [_key: string]: any } = {
-  mercadoPago: <MercadoPago />,
+  mercadopago: <MercadoPago />,
   crypto: <Crypto />,
-  invitationCode: <InvitationCode />,
+  invitation: <InvitationCode />,
 };
 
 export const Checkout = () => {
-  const [method, setMethod] = useState<string>();
+  const [method, setMethod] = useState<PaymentMethod>();
+  const { orderId, createOrder } = useOrder();
+
+  useEffect(() => {
+    if (orderId || !method) {
+      return;
+    }
+    createOrder({
+      email: "testo@pupio.com",
+      fullname: "Roberto lopucio",
+      paymentMethod: method,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId, method]);
 
   return (
     <Container>
@@ -37,7 +53,7 @@ export const Checkout = () => {
       {!method ? (
         <>
           <MethodDiv>
-            <Button onClick={() => setMethod("mercadoPago")}>
+            <Button onClick={() => setMethod("mercadopago")}>
               MercadoPago
             </Button>
           </MethodDiv>
@@ -45,7 +61,7 @@ export const Checkout = () => {
             <Button onClick={() => setMethod("crypto")}>Crypto</Button>
           </MethodDiv>
           <MethodDiv>
-            <Button onClick={() => setMethod("invitationCode")}>Código</Button>
+            <Button onClick={() => setMethod("invitation")}>Código</Button>
           </MethodDiv>
         </>
       ) : (

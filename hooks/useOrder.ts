@@ -3,13 +3,7 @@ import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
-import { ICart } from "../types/order";
-import { ITransferVoucherSigned } from "../types/crypto";
-import {
-  ICreateOrderRequestBody,
-  IPaymentRequestBody,
-  ResponseDataType,
-} from "../types/request";
+import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
 export interface IOrder {}
 export interface IUseUserResult {
@@ -20,9 +14,8 @@ export interface IUseUserResult {
   isPayed?: boolean;
   isError?: boolean;
   error?: string;
-  createOrder: () => void;
+  createOrder: (_order: ICreateOrderRequestBody) => void;
   clear: () => void;
-  payOrder: (_signature: any) => void;
 }
 
 const ajaxCall = async (path: string, data: any): Promise<ResponseDataType> => {
@@ -41,31 +34,6 @@ const ajaxCreateOrder = async (
   requestData: ICreateOrderRequestBody
 ): Promise<ResponseDataType> => {
   return ajaxCall("order/create", requestData);
-};
-
-const ajaxCreatePayment = async (
-  requestData: IPaymentRequestBody
-): Promise<ResponseDataType> => {
-  return ajaxCall("gateway/pay", requestData);
-};
-
-const generateRequest = (
-  address: string,
-  cart: ICart
-): ICreateOrderRequestBody => {
-  const items = Object.values(cart.items)
-    .map((item) => {
-      return {
-        id: item.product.id,
-        qty: item.qty,
-      };
-    })
-    .filter((e) => e.qty > 0);
-
-  return {
-    address,
-    items,
-  };
 };
 
 const useOrder = (): IUseUserResult => {
@@ -89,7 +57,7 @@ const useOrder = (): IUseUserResult => {
     clear,
   } = useContext(OrderContext);
 
-  async function createOrder() {
+  async function createOrder(order: ICreateOrderRequestBody) {
     if (isLoading) {
       return;
     }
@@ -105,26 +73,14 @@ const useOrder = (): IUseUserResult => {
       setIsLoading(false);
       return null;
     }
-    const orderRequest = generateRequest(address, cart);
     // Ajax Request
-    const res = await ajaxCreateOrder(orderRequest);
+    const res = await ajaxCreateOrder(order);
 
     // Parse Data
     setOrderId(String(res.data.id));
     setOrderTotal(String(res.data.total));
     setIsLoading(false);
   }
-
-  const payOrder = async (voucher: ITransferVoucherSigned) => {
-    const res = await ajaxCreatePayment({
-      orderId,
-      voucher,
-    });
-
-    if (res.success) {
-      setIsPayed(true);
-    }
-  };
 
   return {
     orderId,
@@ -135,7 +91,6 @@ const useOrder = (): IUseUserResult => {
     orderTotal,
     isPayed,
     createOrder: createOrder.bind(this),
-    payOrder,
     clear,
   };
 };

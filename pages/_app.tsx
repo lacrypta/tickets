@@ -8,8 +8,8 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 // import { alchemyProvider } from "wagmi/providers/alchemy";
-// import { publicProvider } from "wagmi/providers/public";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
+// import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import { ThemeProvider } from "@mui/material";
 
@@ -22,6 +22,9 @@ import { getMenuItems } from "../lib/public/menu";
 import { LoadingProvider } from "../contexts/Loading";
 
 const menuItems = getMenuItems();
+
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -36,12 +39,12 @@ const { chains, provider, webSocketProvider } = configureChains(
     //   // You can get your own at https://dashboard.alchemyapi.io
     //   apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
     // }),
-    // publicProvider(),
-    jsonRpcProvider({
-      rpc: () => ({
-        http: process.env.NEXT_PUBLIC_RPC_ADDRESS || `http://127.0.0.1:8545/`,
-      }),
-    }),
+    publicProvider(),
+    // jsonRpcProvider({
+    //   rpc: () => ({
+    //     http: process.env.NEXT_PUBLIC_RPC_ADDRESS || `http://127.0.0.1:8545/`,
+    //   }),
+    // }),
   ]
 );
 
@@ -58,6 +61,17 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  // Detecting MercadoPago
+  useEffect(() => {
+    if (router.query.status === "approved" && router.query.payment_id) {
+      router.replace(
+        "/api/gateway/mercadopago/approve/?payment_id=" +
+          router.query.payment_id
+      );
+    }
+  }, [router]);
   return (
     <StepsProvider>
       <ThemeProvider theme={themeOptions}>

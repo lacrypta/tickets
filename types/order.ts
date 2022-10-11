@@ -1,6 +1,6 @@
 export interface IOrder {
-  fullname?: string;
-  email?: string;
+  fullname: string;
+  email: string;
   address?: string;
   payment_id?: number;
   payment_method: PaymentMethod;
@@ -9,4 +9,4 @@ export interface IOrder {
 }
 
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
-export type PaymentMethod = "crypto" | "mercadopago";
+export type PaymentMethod = "crypto" | "mercadopago" | "invitation";

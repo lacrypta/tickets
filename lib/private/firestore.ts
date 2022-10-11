@@ -54,16 +54,15 @@ export const getConfig = async () => {
 };
 
 /**
- * Get user by Address
- * @param {address} address Address
+ * Get order by ID
+ * @param {string} orderId Order ID
  * @returns
  */
-export const getUser = async (address: string) => {
-  const userRef = db.collection("users").doc(address);
-  const doc = await userRef.get();
+export const getOrder = async (orderId: string) => {
+  const orderRef = db.collection("orders").doc(orderId);
+  const doc = await orderRef.get();
   if (!doc.exists) {
-    log("not doc.exists", { address });
-    return false;
+    return undefined;
   }
   return doc.data();
 };
@@ -147,7 +146,16 @@ export const addPayment = async (
  */
 export const addOrder = async (order: IOrder): Promise<string | undefined> => {
   let orderRef = db.collection("orders").doc();
-  await orderRef.set(order);
+  await orderRef.set({
+    fullname: order.fullname,
+    email: order.email,
+    address: order.address || "",
+    payment_id: order.payment_id || "",
+    payment_method: order.payment_method,
+    preference_id: order.payment_id || "",
+    status: order.status || "pending",
+  });
+
   return orderRef.id;
 };
 

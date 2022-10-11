@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";
 
-import { getOrder } from "../../../../lib/private/firestore";
+import { getOrder, updateOrder } from "../../../../lib/private/firestore";
 import { CreatePaymentRequestSchema } from "../../../../types/request";
 import { PreferenceItem } from "../../../../types/mercadopago";
 
@@ -39,7 +39,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { orderId } = req.body;
 
-  // Order exists
+  // Checek Order existance
   if (!(await getOrder(orderId))) {
     res.status(406).json({ success: false, message: "Order doesnt exist" });
   }
@@ -50,14 +50,20 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   const preference = (
     await mercadopago.preferences.create({
       items: [orderItem],
-      // back_urls: {
-      //   success: HOSTNAME + "/api/gateway/approve",
-      // },
+      back_urls: {
+        success: "http://localhost:3000/api/gateway/mercadopago/approve",
+      },
       additional_info: String(orderId),
       statement_descriptor: "La Crypta - Halloween",
       auto_return: "all",
+      notification_url: "https://entradas.lacrypta.com.ar/api/log",
     })
   ).body;
+
+  // Updates order
+  updateOrder(orderId, {
+    preference_id: preference.id,
+  });
 
   res.status(200).json({
     success: true,

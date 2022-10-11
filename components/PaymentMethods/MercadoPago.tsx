@@ -11,7 +11,7 @@ const Container = styled.div`
 export const MercadoPago = () => {
   const [mounted, setMounted] = useState<boolean>(false);
   const mercadopago = useMercadopago.v2(
-    "TEST-0218a410-c8cf-42d7-8430-bcfb8e38b094",
+    process.env.NEXT_PUBLIC_MP_ACCESS_TOKEN || "",
     {
       locale: "es-AR",
     }
@@ -23,7 +23,7 @@ export const MercadoPago = () => {
 
       const checkout = mercadopago.checkout({
         preference: {
-          id: "220859620-164ceb81-ff4b-4db6-90cf-7a312c449fe8",
+          id: "1214914114-7e934c06-06de-4a35-8663-b0b9935b8b2d",
         },
 
         callbacks: {

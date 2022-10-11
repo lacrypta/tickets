@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
-import { ICart } from "../types/cart";
+import { ICart } from "../types/order";
 import { ITransferVoucherSigned } from "../types/crypto";
 import {
   ICreateOrderRequestBody,

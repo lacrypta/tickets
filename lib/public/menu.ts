@@ -1,7 +1,7 @@
 // Menu functions
 
 import menuItems from "../../data/menu.json";
-import { IOrderItem } from "../../types/cart";
+import { IOrderItem } from "../../types/order";
 
 const indexedMenuPrices: { [index: string]: number } = {};
 

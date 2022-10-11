@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { ICart } from "../types/cart";
+import { ICart } from "../types/order";
 import { IMenuProduct } from "../types/menu";
 
 interface ICartContext {

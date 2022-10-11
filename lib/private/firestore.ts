@@ -1,13 +1,9 @@
 import { ITransferVoucherSigned } from "./../../types/crypto";
 import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
-import { IOrderItem } from "../../types/cart";
+import { IOrder } from "../../types/order";
 
-import {
-  getFirestore,
-  FieldValue,
-  Transaction,
-} from "firebase-admin/firestore";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 
@@ -149,44 +145,10 @@ export const addPayment = async (
  * @param {IOrderItem[]} items Orders item list
  * @returns {Number} Order Id
  */
-export const addOrder = async (
-  address: string,
-  items: IOrderItem[],
-  total: number
-): Promise<number | undefined> => {
-  let orderId;
-  await db.runTransaction(async (t) => {
-    orderId = await _getNewOrderId(t);
-    const orderRef = db.collection("orders").doc(String(orderId));
-
-    await t.create(orderRef, {
-      items,
-      total,
-      status: "pending",
-    });
-  });
-
-  return orderId;
-};
-
-//------------- PRIVATE FUNCTIONS -------------//
-
-const _getNewOrderId = async (t: Transaction): Promise<number> => {
-  const configRef = db.collection("config").doc("main");
-  let newOrderId = 1;
-
-  const currentConfig: any = await t.get(configRef);
-
-  if (!currentConfig) {
-    console.info("No Config Found", "Creating one...");
-    t.create(configRef, { lastOrderId: 0 });
-  } else {
-    newOrderId = currentConfig.data().lastOrderId + 1;
-    // update lastOrderId
-    t.update(configRef, { lastOrderId: newOrderId });
-  }
-
-  return newOrderId;
+export const addOrder = async (order: IOrder): Promise<string | undefined> => {
+  let orderRef = db.collection("orders").doc();
+  await orderRef.set(order);
+  return orderRef.id;
 };
 
 exports.log = log;

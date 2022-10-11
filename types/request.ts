@@ -1,5 +1,5 @@
 import z from "zod";
-import { IOrderItem } from "./cart";
+import { IOrderItem } from "./order";
 import {
   IPermitData,
   ISignature,

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 
 import { useAccount } from "wagmi";
-import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
 import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
@@ -38,7 +37,6 @@ const ajaxCreateOrder = async (
 
 const useOrder = (): IUseUserResult => {
   const { address } = useAccount();
-  const { cart } = useContext(CartContext);
   const {
     orderId,
     setOrderId,
@@ -66,13 +64,6 @@ const useOrder = (): IUseUserResult => {
     setIsSuccess(false);
     setOrderId("");
 
-    //  Return null on empty address or cart
-    if (!address || !cart) {
-      setIsError(true);
-      setError("No address or cart");
-      setIsLoading(false);
-      return null;
-    }
     // Ajax Request
     const res = await ajaxCreateOrder(order);
 

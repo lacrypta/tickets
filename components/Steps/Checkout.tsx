@@ -5,7 +5,7 @@ import { MercadoPago } from "../PaymentMethods/MercadoPago";
 import { InvitationCode } from "../PaymentMethods/InvitationCode";
 import { Crypto } from "../PaymentMethods/Crypto";
 import useOrder from "../../hooks/useOrder";
-import { ICreateOrderRequestBody } from "../../types/request";
+// import { ICreateOrderRequestBody } from "../../types/request";
 import { PaymentMethod } from "../../types/order";
 
 const Container = styled.div`

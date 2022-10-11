@@ -2,12 +2,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 // import { addOrder } from "../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";
-import { PreferenceItem } from "mercadopago/models";
 import { ConfigTokenOption } from "mercadopago/configuration";
+
 import { getOrder } from "../../../../lib/private/firestore";
 import { CreatePaymentRequestSchema } from "../../../../types/request";
+import { PreferenceItem } from "../../../../types/mercadopago";
 
-const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME || "http://localhost:3000/";
+// const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME || "http://localhost:3000/";
 
 const orderItem: PreferenceItem = {
   title: "La Crypta - Halloween",
@@ -29,6 +30,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
+  // Validation
   try {
     CreatePaymentRequestSchema.parse(req.body);
   } catch (e) {
@@ -37,19 +39,22 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { orderId } = req.body;
 
+  // Order exists
   if (!(await getOrder(orderId))) {
     res.status(406).json({ success: false, message: "Order doesnt exist" });
   }
 
+  // Setup MercadoPago
   mercadopago.configure(config);
 
   const preference = (
     await mercadopago.preferences.create({
       items: [orderItem],
-      back_urls: {
-        success: HOSTNAME + "/api/gateway/approve",
-      },
+      // back_urls: {
+      //   success: HOSTNAME + "/api/gateway/approve",
+      // },
       additional_info: String(orderId),
+      statement_descriptor: "La Crypta - Halloween",
       auto_return: "all",
     })
   ).body;

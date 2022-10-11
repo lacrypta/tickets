@@ -14,14 +14,10 @@ import { publicProvider } from "wagmi/providers/public";
 import { ThemeProvider } from "@mui/material";
 
 import { themeOptions } from "../styles/theme";
-import { CartProvider } from "../contexts/Cart";
 
 import { StepsProvider } from "../contexts/Steps";
 import { OrderProvider } from "../contexts/Order";
-import { getMenuItems } from "../lib/public/menu";
 import { LoadingProvider } from "../contexts/Loading";
-
-const menuItems = getMenuItems();
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -82,11 +78,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               theme={darkTheme()}
               chains={chains}
             >
-              <CartProvider menu={menuItems}>
-                <OrderProvider>
-                  <Component {...pageProps} />
-                </OrderProvider>
-              </CartProvider>
+              <OrderProvider>
+                <Component {...pageProps} />
+              </OrderProvider>
             </RainbowKitProvider>
           </WagmiConfig>
         </LoadingProvider>

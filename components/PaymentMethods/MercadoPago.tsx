@@ -66,7 +66,7 @@ export const MercadoPago = () => {
 
       const checkout = mercadopago.checkout({
         preference: {
-          id: "1214914114-7e934c06-06de-4a35-8663-b0b9935b8b2d",
+          id: preferenceId,
         },
 
         callbacks: {

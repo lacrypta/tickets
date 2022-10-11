@@ -12,6 +12,8 @@ const config: ConfigTokenOption = {
   access_token: process.env.NEXT_PUBLIC_MP_SECRET_TOKEN || "",
 };
 
+const TICKET_PRICE = process.env.NEXT_PUBLIC_TICKET_PRICE || "2000";
+
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // TODO: Limit user order creation by time
   if (req.method !== "POST") {
@@ -45,7 +47,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
           title: "La Crypta - Halloween",
           quantity: 1,
           currency_id: "ARS",
-          unit_price: 2000,
+          unit_price: parseInt(TICKET_PRICE),
           id: orderId,
         },
       ],

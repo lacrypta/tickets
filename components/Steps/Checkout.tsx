@@ -22,6 +22,8 @@ const MethodDiv = styled.div`
   margin-bottom: 2em;
 `;
 
+const TICKET_PRICE = process.env.NEXT_PUBLIC_TICKET_PRICE || "2000";
+
 const paymentMethods: { [_key: string]: any } = {
   mercadopago: <MercadoPago />,
   crypto: <Crypto />,
@@ -48,7 +50,7 @@ export const Checkout = () => {
     <Container>
       <h1>Elegí el medio de pago</h1>
 
-      <div>Sale $2000</div>
+      <div>Sale ${TICKET_PRICE}</div>
 
       {!method ? (
         <>

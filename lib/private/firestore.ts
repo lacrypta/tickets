@@ -159,4 +159,15 @@ export const addOrder = async (order: IOrder): Promise<string | undefined> => {
   return orderRef.id;
 };
 
+export const updateOrder = async (orderId: string, data: any) => {
+  const orderRef = db.collection("orders").doc(orderId);
+  const doc = await orderRef.get();
+
+  if (!doc.exists) {
+    return undefined;
+  }
+  orderRef.update(data);
+  return doc.data();
+};
+
 exports.log = log;

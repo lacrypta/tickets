@@ -7,6 +7,8 @@ import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
+  fullname: string;
+  email: string;
   orderTotal: string;
   isLoading?: boolean;
   isSuccess?: boolean;
@@ -14,6 +16,8 @@ export interface IUseUserResult {
   isError?: boolean;
   error?: string;
   createOrder: (_order: ICreateOrderRequestBody) => void;
+  setFullname: (_str: string) => void;
+  setEmail: (_str: string) => void;
   clear: () => void;
 }
 
@@ -40,6 +44,10 @@ const useOrder = (): IUseUserResult => {
   const {
     orderId,
     setOrderId,
+    fullname,
+    setFullname,
+    email,
+    setEmail,
     orderTotal,
     setOrderTotal,
     isLoading,
@@ -75,12 +83,16 @@ const useOrder = (): IUseUserResult => {
 
   return {
     orderId,
+    fullname,
+    email,
     isLoading,
     isSuccess,
     isError,
     error,
     orderTotal,
     isPayed,
+    setFullname,
+    setEmail,
     createOrder: createOrder.bind(this),
     clear,
   };

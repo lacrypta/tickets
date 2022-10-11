@@ -30,15 +30,15 @@ const paymentMethods: { [_key: string]: any } = {
 
 export const Checkout = () => {
   const [method, setMethod] = useState<PaymentMethod>();
-  const { orderId, createOrder } = useOrder();
+  const { orderId, createOrder, fullname, email } = useOrder();
 
   useEffect(() => {
     if (orderId || !method) {
       return;
     }
     createOrder({
-      email: "webmaster@masize.com",
-      fullname: "Agustin Kassis",
+      fullname,
+      email,
       paymentMethod: method,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +48,7 @@ export const Checkout = () => {
     <Container>
       <h1>Elegí el medio de pago</h1>
 
-      <div>Sale $5000</div>
+      <div>Sale $2000</div>
 
       {!method ? (
         <>

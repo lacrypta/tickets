@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import { useContext } from "react";
 import { StepsContext } from "../../contexts/Steps";
+import useOrder from "../../hooks/useOrder";
 import TextField from "../common/TextField";
 
 const Container = styled.div`
@@ -20,6 +21,7 @@ const SubmitButton = styled(Button)`
 
 export const MainForm = () => {
   const { setStep } = useContext(StepsContext);
+  const { fullname, setFullname, email, setEmail } = useOrder();
 
   function handleSubmit(event: any) {
     setStep(1);
@@ -30,8 +32,19 @@ export const MainForm = () => {
     <Container>
       <h1>Conseguí tu entrada!</h1>
       <form onSubmit={handleSubmit}>
-        <TextField label='Nombre Completo' variant='outlined' />
-        <TextField label='E-mail' variant='outlined' />
+        <TextField
+          label='Nombre Completo'
+          onChange={(e) => setFullname(e.target.value)}
+          variant='outlined'
+          value={fullname}
+        />
+        <TextField
+          label='E-mail'
+          onChange={(e) => setEmail(e.target.value)}
+          type='email'
+          variant='outlined'
+          value={email}
+        />
         <SubmitButton type='submit'>Manda</SubmitButton>
       </form>
     </Container>

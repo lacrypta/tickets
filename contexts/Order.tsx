@@ -3,6 +3,10 @@ import { createContext, Dispatch, SetStateAction, useState } from "react";
 interface IOrderContext {
   orderId: string;
   setOrderId: Dispatch<SetStateAction<string>>;
+  fullname: string;
+  setFullname: Dispatch<SetStateAction<string>>;
+  email: string;
+  setEmail: Dispatch<SetStateAction<string>>;
   orderTotal: string;
   setOrderTotal: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
@@ -21,6 +25,10 @@ interface IOrderContext {
 export const OrderContext = createContext<IOrderContext>({
   orderId: "",
   setOrderId: () => {},
+  fullname: "",
+  setFullname: () => {},
+  email: "",
+  setEmail: () => {},
   orderTotal: "0",
   setOrderTotal: () => {},
   isLoading: false,
@@ -42,6 +50,8 @@ interface IOrderProviderProps {
 }
 
 export const OrderProvider = ({ children }: IOrderProviderProps) => {
+  const [fullname, setFullname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [orderId, setOrderId] = useState<string>("");
   const [orderTotal, setOrderTotal] = useState<string>("0");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -65,6 +75,10 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
       value={{
         orderId,
         setOrderId,
+        fullname,
+        setFullname,
+        email,
+        setEmail,
         orderTotal,
         setOrderTotal,
         isLoading,

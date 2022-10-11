@@ -39,10 +39,10 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       // **************** SEND Email **************** //
-      await sendEmail({
+      sendEmail({
         fullname: order.fullname,
         email: order.email,
-        url: "https://eventos.lacrypta.com.ar/entrada/" + orderId,
+        url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
       });
     }
     res.redirect(307, "/entrada/" + orderId);

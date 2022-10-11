@@ -68,20 +68,6 @@ export const MercadoPago = () => {
         preference: {
           id: preferenceId,
         },
-
-        callbacks: {
-          onSubmit: (algo: any) => {
-            console.dir(algo);
-          },
-          onReady: () => {
-            console.info("onReady!!");
-            // handle form ready
-          },
-          onError: (error: any) => {
-            console.dir(error);
-            // handle error
-          },
-        },
       });
 
       checkout.render({

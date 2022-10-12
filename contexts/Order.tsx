@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { IOrder } from "../types/order";
 
 interface IOrderContext {
   orderId: string;
@@ -7,6 +8,8 @@ interface IOrderContext {
   setFullname: Dispatch<SetStateAction<string>>;
   email: string;
   setEmail: Dispatch<SetStateAction<string>>;
+  order?: IOrder;
+  setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
   orderTotal: string;
   setOrderTotal: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
@@ -29,6 +32,8 @@ export const OrderContext = createContext<IOrderContext>({
   setFullname: () => {},
   email: "",
   setEmail: () => {},
+  order: undefined,
+  setOrder: (_) => {},
   orderTotal: "0",
   setOrderTotal: () => {},
   isLoading: false,
@@ -52,6 +57,9 @@ interface IOrderProviderProps {
 export const OrderProvider = ({ children }: IOrderProviderProps) => {
   const [fullname, setFullname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+
+  const [order, setOrder] = useState<IOrder>();
+
   const [orderId, setOrderId] = useState<string>("");
   const [orderTotal, setOrderTotal] = useState<string>("0");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -63,7 +71,6 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
   const clear = () => {
     setIsPayed(false);
     setOrderId("");
-
     setIsLoading(false);
     setIsSuccess(false);
     setIsError(false);
@@ -79,6 +86,8 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
         setFullname,
         email,
         setEmail,
+        order,
+        setOrder,
         orderTotal,
         setOrderTotal,
         isLoading,

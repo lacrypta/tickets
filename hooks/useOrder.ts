@@ -9,7 +9,7 @@ export interface IUseUserResult {
   orderId?: string;
   fullname: string;
   email: string;
-  orderTotal: string;
+  order?: IOrder;
   isLoading?: boolean;
   isSuccess?: boolean;
   isPayed?: boolean;
@@ -48,8 +48,8 @@ const useOrder = (): IUseUserResult => {
     setFullname,
     email,
     setEmail,
-    orderTotal,
-    setOrderTotal,
+    order,
+    setOrder,
     isLoading,
     setIsLoading,
     isSuccess,
@@ -77,7 +77,7 @@ const useOrder = (): IUseUserResult => {
 
     // Parse Data
     setOrderId(String(res.data.id));
-    setOrderTotal(String(res.data.total));
+    setOrder(res.data);
     setIsLoading(false);
   }
 
@@ -85,11 +85,11 @@ const useOrder = (): IUseUserResult => {
     orderId,
     fullname,
     email,
+    order,
     isLoading,
     isSuccess,
     isError,
     error,
-    orderTotal,
     isPayed,
     setFullname,
     setEmail,

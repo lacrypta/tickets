@@ -23,6 +23,8 @@ const request = async (
     OrderSchema.parse(req.body);
   } catch (e) {
     res.status(400).json({ success: false, message: "Malformed request" });
+    console.error(e);
+    return;
   }
 
   const {

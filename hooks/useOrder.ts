@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { OrderContext } from "../contexts/Order";
+import { IOrder } from "../types/order";
 import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
-export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
   fullname: string;

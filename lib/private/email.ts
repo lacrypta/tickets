@@ -2,8 +2,6 @@ import nodemailer from "nodemailer";
 import { MailParams } from "../../types/email";
 
 export const sendEmail = async ({ fullname, email, url }: MailParams) => {
-  console.info("Sending Email...");
-
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: process.env.NEXT_PUBLIC_SMTP_HOST,
@@ -68,9 +66,9 @@ const generateMailHTML = ({ fullname, email, url }: MailParams) => {
   html += "";
   html += "</div>";
 
-  html = html.replaceAll("%FULLNAME%", fullname);
-  html = html.replaceAll("%EMAIL%", email);
-  html = html.replaceAll("%URL%", url);
+  html = html.replace(/%FULLNAME%/g, fullname);
+  html = html.replace(/%EMAIL%/g, email);
+  html = html.replace(/%URL%/g, url);
 
   return html;
 };

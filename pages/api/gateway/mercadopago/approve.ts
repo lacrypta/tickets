@@ -33,16 +33,16 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // If still pending
     if (order.status === "pending") {
-      updateOrder(orderId, {
-        status: "completed",
-        payment_id: paymentId,
-      });
-
       // **************** SEND Email **************** //
       sendEmail({
         fullname: order.fullname,
         email: order.email,
         url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
+      });
+
+      updateOrder(orderId, {
+        status: "completed",
+        payment_id: paymentId,
       });
     }
     res.redirect(307, "/entrada/" + orderId);

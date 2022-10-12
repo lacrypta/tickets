@@ -45,6 +45,14 @@ export interface ITransferVoucherSigned {
   signature: ISignature;
 }
 
+export interface ITokenTransferEvent {
+  hash: string;
+  contractAddress: string;
+  from: string;
+  to: string;
+  value: number;
+}
+
 // SCHEMAS
 
 export const SignatureSchema = z.object({

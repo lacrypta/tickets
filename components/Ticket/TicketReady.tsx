@@ -1,5 +1,12 @@
 import { Alert } from "@mui/material";
 import useOrder from "../../hooks/useOrder";
+import QRCode from "react-qr-code";
+import styled from "@emotion/styled";
+
+const QrDiv = styled.div`
+  text-align: center;
+  padding: 40px;
+`;
 
 const TicketReady = () => {
   const { order, orderId } = useOrder();
@@ -11,6 +18,13 @@ const TicketReady = () => {
         {order?.status === "completed" ? (
           <>
             <Alert severity='success'>Entrada LISTA!</Alert>
+            <QrDiv>
+              <QRCode
+                bgColor='#000000'
+                fgColor='#ffffff'
+                value={orderId || ""}
+              />
+            </QrDiv>
           </>
         ) : (
           <Alert severity='error'>Falta pagar!</Alert>

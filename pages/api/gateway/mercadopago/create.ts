@@ -7,7 +7,8 @@ import { ConfigTokenOption } from "mercadopago/configuration";
 import { getOrder, updateOrder } from "../../../../lib/private/firestore";
 import { CreatePaymentRequestSchema } from "../../../../types/request";
 
-// const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME || "http://localhost:3000/";
+const HOSTNAME =
+  process.env.NEXT_PUBLIC_HOSTNAME || "https://entradas.lacrypta.com.ar";
 const config: ConfigTokenOption = {
   access_token: process.env.NEXT_PUBLIC_MP_SECRET_TOKEN || "",
 };
@@ -52,7 +53,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       ],
       back_urls: {
-        success: "http://localhost:3000/api/gateway/mercadopago/approve",
+        success: HOSTNAME + "/api/gateway/mercadopago/approve",
       },
       additional_info: String(orderId),
       statement_descriptor: "La Crypta - Halloween",

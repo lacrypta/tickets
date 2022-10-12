@@ -34,18 +34,21 @@ export const MainForm = () => {
       <form onSubmit={handleSubmit}>
         <TextField
           label='Nombre Completo'
+          type='text'
           onChange={(e) => setFullname(e.target.value)}
+          required
           variant='outlined'
           value={fullname}
         />
         <TextField
           label='E-mail'
-          onChange={(e) => setEmail(e.target.value)}
           type='email'
+          onChange={(e) => setEmail(e.target.value)}
+          required
           variant='outlined'
           value={email}
         />
-        <SubmitButton type='submit'>Manda</SubmitButton>
+        <SubmitButton type='submit'>COMPRAR</SubmitButton>
       </form>
     </Container>
   );

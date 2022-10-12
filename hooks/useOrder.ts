@@ -1,20 +1,19 @@
 import { useContext } from "react";
-
-import { useAccount } from "wagmi";
 import { OrderContext } from "../contexts/Order";
+import { IOrder } from "../types/order";
 import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
-export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
   fullname: string;
   email: string;
-  orderTotal: string;
+  order?: IOrder;
   isLoading?: boolean;
   isSuccess?: boolean;
   isPayed?: boolean;
   isError?: boolean;
   error?: string;
+  setOrderId: (_str: string) => void;
   createOrder: (_order: ICreateOrderRequestBody) => void;
   setFullname: (_str: string) => void;
   setEmail: (_str: string) => void;
@@ -40,7 +39,6 @@ const ajaxCreateOrder = async (
 };
 
 const useOrder = (): IUseUserResult => {
-  const { address } = useAccount();
   const {
     orderId,
     setOrderId,
@@ -48,8 +46,8 @@ const useOrder = (): IUseUserResult => {
     setFullname,
     email,
     setEmail,
-    orderTotal,
-    setOrderTotal,
+    order,
+    setOrder,
     isLoading,
     setIsLoading,
     isSuccess,
@@ -77,7 +75,7 @@ const useOrder = (): IUseUserResult => {
 
     // Parse Data
     setOrderId(String(res.data.id));
-    setOrderTotal(String(res.data.total));
+    setOrder(res.data);
     setIsLoading(false);
   }
 
@@ -85,12 +83,13 @@ const useOrder = (): IUseUserResult => {
     orderId,
     fullname,
     email,
+    order,
     isLoading,
     isSuccess,
     isError,
     error,
-    orderTotal,
     isPayed,
+    setOrderId,
     setFullname,
     setEmail,
     createOrder: createOrder.bind(this),

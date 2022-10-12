@@ -8,6 +8,8 @@ import { Background } from "../../components/Background";
 
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import useOrder from "../../hooks/useOrder";
+import TicketReady from "../../components/Ticket/TicketReady";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -26,6 +28,7 @@ const Container = styled.div`
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const { order, setOrderId, isError, error } = useOrder();
 
   // Ticket ID
   useEffect(() => {
@@ -33,7 +36,8 @@ const Home: NextPage = () => {
     if (!id) {
       return;
     }
-    console.info("Request id:", id);
+    setOrderId(String(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   return (
@@ -48,8 +52,16 @@ const Home: NextPage = () => {
         <Background />
         <Container>
           <HeaderLogo />
-          <h1></h1>
-          <h1>Tu entrada vieja!!</h1>
+
+          {!order ? (
+            !isError ? (
+              "Cargando...."
+            ) : (
+              "Error : " + error
+            )
+          ) : (
+            <TicketReady />
+          )}
         </Container>
       </MainBlock>
 

@@ -1,6 +1,4 @@
 import { useContext } from "react";
-
-import { useAccount } from "wagmi";
 import { OrderContext } from "../contexts/Order";
 import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
@@ -15,6 +13,7 @@ export interface IUseUserResult {
   isPayed?: boolean;
   isError?: boolean;
   error?: string;
+  setOrderId: (_str: string) => void;
   createOrder: (_order: ICreateOrderRequestBody) => void;
   setFullname: (_str: string) => void;
   setEmail: (_str: string) => void;
@@ -40,7 +39,6 @@ const ajaxCreateOrder = async (
 };
 
 const useOrder = (): IUseUserResult => {
-  const { address } = useAccount();
   const {
     orderId,
     setOrderId,
@@ -91,6 +89,7 @@ const useOrder = (): IUseUserResult => {
     isError,
     error,
     isPayed,
+    setOrderId,
     setFullname,
     setEmail,
     createOrder: createOrder.bind(this),

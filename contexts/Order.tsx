@@ -1,4 +1,11 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { db, onSnapshot, doc } from "../lib/public/firebase";
 import { IOrder } from "../types/order";
 
 interface IOrderContext {
@@ -76,6 +83,32 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
     setIsError(false);
     setError("");
   };
+
+  // Subscribe for OrderID change
+  useEffect(() => {
+    if (!orderId) {
+      return;
+    }
+    setIsLoading(true);
+    const orderRef = doc(db, "orders", orderId);
+    const unsubscribe = onSnapshot(orderRef, {
+      next: (snapshot) => {
+        console.info("Order updated");
+        console.dir(snapshot.data());
+        const order: any = snapshot.data(); // TODO: tidy this
+        if (!order) {
+          setIsError(true);
+          setError("Not found");
+        }
+        setIsLoading(false);
+        setOrder(order);
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [orderId, setOrder]);
 
   return (
     <OrderContext.Provider

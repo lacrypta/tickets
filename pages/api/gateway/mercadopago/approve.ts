@@ -42,6 +42,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
       updateOrder(orderId, {
         status: "completed",
+        payment_method: "mercadopago",
         payment_id: paymentId,
       });
     }

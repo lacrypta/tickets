@@ -33,7 +33,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Validate existance
   if (!order) {
-    res.status(500).json({ false: true, message: "Order ID doesnt exist" });
+    res.status(500).json({ success: true, message: "Order ID doesnt exist" });
     return;
   }
 
@@ -50,6 +50,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       address,
       amount,
       tx,
+      payment_method: "crypto",
       status: "completed",
     });
   }

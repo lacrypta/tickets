@@ -186,7 +186,6 @@ export const addCode = async (code: string): Promise<string | undefined> => {
 };
 
 export const claimCode = async (code: string): Promise<boolean> => {
-  console.info("Claiming code: ", code);
   const codesRef = db.collection("codes");
   var query = codesRef.where("code", "==", code).where("claimed", "==", false);
 

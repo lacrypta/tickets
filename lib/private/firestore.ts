@@ -1,15 +1,11 @@
-import { ITransferVoucherSigned } from "./../../types/crypto";
-import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
-import { IOrderItem } from "../../types/cart";
+import { IOrder } from "../../types/order";
 
 import {
   getFirestore,
   FieldValue,
-  Transaction,
+  DocumentReference,
 } from "firebase-admin/firestore";
-import { BigNumber } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -35,7 +31,10 @@ const db = getFirestore();
  * @param {String} word
  * @returns
  */
-export const log = async (type: string, data: any) => {
+export const log = async (
+  type: string,
+  data: any
+): Promise<DocumentReference> => {
   return await db.collection("log").add({
     time: FieldValue.serverTimestamp(),
     type: type,
@@ -58,89 +57,17 @@ export const getConfig = async () => {
 };
 
 /**
- * Get user by Address
- * @param {address} address Address
+ * Get order by ID
+ * @param {string} orderId Order ID
  * @returns
  */
-export const getUser = async (address: string) => {
-  const userRef = db.collection("users").doc(address);
-  const doc = await userRef.get();
+export const getOrder = async (orderId: string) => {
+  const orderRef = db.collection("orders").doc(orderId);
+  const doc = await orderRef.get();
   if (!doc.exists) {
-    log("not doc.exists", { address });
-    return false;
+    return undefined;
   }
   return doc.data();
-};
-
-/**
- * Adds new user to the database
- * @param {String} user
- * @param {String} address
- * @param {IPermit} permit
- * @returns
- */
-export const addUser = async (
-  username: string,
-  address: string,
-  permit: IPermit
-) => {
-  return db.collection("users").doc(address).set({
-    username,
-    permit,
-  });
-};
-
-/**
- * Adds new payment to the database
- * @param {String} orderId
- * @param {ITransferVoucher} permit
- * @returns
- */
-export const addPayment = async (
-  orderId: string,
-  voucher: ITransferVoucherSigned
-): Promise<String> => {
-  const paymentRef = db.collection("payments").doc();
-
-  await db.runTransaction(async (t) => {
-    const orderRef = db.collection("orders").doc(String(orderId));
-    const order = (await t.get(orderRef)).data();
-
-    // Validate status
-    switch (order?.status) {
-      case "processing":
-        throw new Error("Order is already being processed");
-      case "completed":
-        throw new Error("Order already payed");
-      case "cancelled":
-        throw new Error("The order has been cancelled");
-    }
-
-    // Validate amount
-    if (
-      !parseUnits(String(order?.total), 6).eq(
-        BigNumber.from(voucher.voucher.payload.amount)
-      )
-    ) {
-      throw new Error("The order and voucher amount don't match");
-    }
-
-    // Update Order
-    t.update(orderRef, {
-      status: "processing",
-      paymentId: paymentRef.id,
-    });
-
-    // Create Payment
-    t.create(paymentRef, {
-      orderId,
-      address: voucher.voucher.payload.from,
-      voucher,
-      status: "unpublished",
-    });
-  });
-
-  return paymentRef.id;
 };
 
 /**
@@ -149,44 +76,65 @@ export const addPayment = async (
  * @param {IOrderItem[]} items Orders item list
  * @returns {Number} Order Id
  */
-export const addOrder = async (
-  address: string,
-  items: IOrderItem[],
-  total: number
-): Promise<number | undefined> => {
-  let orderId;
-  await db.runTransaction(async (t) => {
-    orderId = await _getNewOrderId(t);
-    const orderRef = db.collection("orders").doc(String(orderId));
-
-    await t.create(orderRef, {
-      items,
-      total,
-      status: "pending",
-    });
+export const addOrder = async (order: IOrder): Promise<string | undefined> => {
+  let orderRef = db.collection("orders").doc();
+  await orderRef.set({
+    fullname: order.fullname,
+    email: order.email,
+    address: order.address || "",
+    payment_id: order.payment_id || "",
+    payment_method: order.payment_method,
+    preference_id: order.payment_id || "",
+    status: order.status || "pending",
   });
 
-  return orderId;
+  return orderRef.id;
 };
 
-//------------- PRIVATE FUNCTIONS -------------//
+export const updateOrder = async (orderId: string, data: any) => {
+  const orderRef = db.collection("orders").doc(orderId);
+  const doc = await orderRef.get();
 
-const _getNewOrderId = async (t: Transaction): Promise<number> => {
-  const configRef = db.collection("config").doc("main");
-  let newOrderId = 1;
+  if (!doc.exists) {
+    return undefined;
+  }
+  orderRef.update(data);
+  return doc.data();
+};
 
-  const currentConfig: any = await t.get(configRef);
+/**
+ * Adds new code to the database
+ * @param code
+ * @returns
+ */
+export const addCode = async (code: string): Promise<string | undefined> => {
+  let codeRef = db.collection("codes").doc();
+  await codeRef.set({
+    code,
+    claimed: false,
+  });
 
-  if (!currentConfig) {
-    console.info("No Config Found", "Creating one...");
-    t.create(configRef, { lastOrderId: 0 });
-  } else {
-    newOrderId = currentConfig.data().lastOrderId + 1;
-    // update lastOrderId
-    t.update(configRef, { lastOrderId: newOrderId });
+  return codeRef.id;
+};
+
+export const claimCode = async (code: string): Promise<boolean> => {
+  const codesRef = db.collection("codes");
+  var query = codesRef.where("code", "==", code).where("claimed", "==", false);
+
+  // Gets query
+  const docs = await query.get();
+  if (docs.size === 0) {
+    return false;
   }
 
-  return newOrderId;
-};
+  // Gets document
+  const codeRef = db.collection("codes").doc(docs.docs[0].id);
 
+  // Updates it
+  await codeRef.update({
+    claimed: true,
+  });
+
+  return true;
+};
 exports.log = log;

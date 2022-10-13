@@ -1,27 +1,10 @@
 import z from "zod";
-import { IOrderItem } from "./cart";
-import {
-  IPermitData,
-  ISignature,
-  ITransferVoucherSigned,
-  PermitSchema,
-  SignatureSchema,
-  TransferVoucherSchemaSigned,
-} from "./crypto";
-export interface ISignupRequestBody {
-  address: string;
-  username: string;
-  permitData: IPermitData;
-  signature: ISignature;
-}
-
-export interface IPaymentRequestBody {
-  orderId: string;
-  voucher: ITransferVoucherSigned;
-}
+import { PaymentMethod } from "./order";
 export interface ICreateOrderRequestBody {
-  address: string;
-  items: IOrderItem[];
+  fullname: string;
+  email: string;
+  address?: string;
+  paymentMethod: PaymentMethod;
 }
 
 export type ResponseDataType = {
@@ -30,24 +13,42 @@ export type ResponseDataType = {
   data?: any;
 };
 
-export const SignupSchema = z.object({
-  address: z.string(),
-  username: z.string(),
-  permitData: PermitSchema,
-  signature: SignatureSchema,
-});
+// Payment Methods
+export interface ICreatePaymentRequestBody {
+  orderId: string;
+}
 
-export const PaymentSchema = z.object({
-  orderId: z.string(),
-  voucher: TransferVoucherSchemaSigned,
-});
+export interface ICreateCryptoPaymentRequestBody {
+  orderId: string;
+  address: string;
+  tx: string;
+  amount: string;
+}
+
+export interface IClaimCodeRequestBody {
+  orderId: string;
+  code: string;
+}
 
 export const OrderSchema = z.object({
+  fullname: z.string(),
+  email: z.string().email(),
+  address: z.string().optional(),
+  paymentMethod: z.enum(["crypto", "mercadopago", "invitation"]),
+});
+
+export const CreatePaymentRequestSchema = z.object({
+  orderId: z.string(),
+});
+
+export const CreateCryptoPaymentRequestSchema = z.object({
+  orderId: z.string(),
   address: z.string(),
-  items: z.array(
-    z.object({
-      id: z.string(),
-      qty: z.number(),
-    })
-  ),
+  tx: z.string(),
+  amount: z.string(),
+});
+
+export const ClaimCodeRequestSchema = z.object({
+  orderId: z.string(),
+  code: z.string(),
 });

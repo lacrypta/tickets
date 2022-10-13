@@ -1,4 +1,4 @@
-# La Crypta - Bar Menu
+# La Crypta - Entradas
 
 ## Getting Started
 

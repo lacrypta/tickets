@@ -76,7 +76,7 @@ export const themeOptions = createTheme({
       defaultProps: { size: "small" },
     },
     MuiTextField: {
-      defaultProps: { margin: "dense", size: "small" },
+      defaultProps: {},
     },
     MuiTooltip: {
       defaultProps: {

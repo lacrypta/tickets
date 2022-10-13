@@ -1,12 +1,10 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import brandLogo from "../public/images/brand-bar.png";
+import brandLogo from "../public/images/lacrypta-title.svg";
 
 const Container = styled.div`
-  max-width: 200px;
+  width: 100%;
   margin-bottom: 2em;
-  z-index: 10;
-  margin-top: 5em;
 `;
 
 export const HeaderLogo = () => {

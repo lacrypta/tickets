@@ -58,7 +58,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       additional_info: String(orderId),
       statement_descriptor: "La Crypta - Halloween",
       auto_return: "all",
-      // notification_url: "https://entradas.lacrypta.com.ar/api/log",
+      notification_url: "https://entradas.lacrypta.com.ar/api/log",
     })
   ).body;
 

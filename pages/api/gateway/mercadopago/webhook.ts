@@ -15,6 +15,10 @@ function extractOrderId(payment: any) {
 }
 
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
+
+  console.info("req.body");
+  console.dir(req.body);
+  
   // Setup MercadoPago
   mercadopago.configure(config);
 
@@ -23,13 +27,8 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     paymentId = z
       .number()
-      .parse(parseInt(z.string().parse(req.query.payment_id)));
+      .parse(parseInt(z.string().parse(req.body.id)));
     payment = (await mercadopago.payment.get(paymentId)).body;
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ success: false, message: "Validation error" });
-    return;
-  }
 
   // Not yet approved
   if (payment.status !== "approved") {
@@ -49,18 +48,18 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // If still pending
   if (order.status === "pending") {
     // **************** SEND Email **************** //
-    // await sendEmail({
-    //   fullname: order.fullname,
-    //   email: order.email,
-    //   url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
-    // });
-    // await updateOrder(orderId, {
-    //   status: "completed",
-    //   payment_method: "mercadopago",
-    //   payment_id: paymentId,
-    // });
+    await sendEmail({
+      fullname: order.fullname,
+      email: order.email,
+      url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
+    });
+    await updateOrder(orderId, {
+      status: "completed",
+      payment_method: "mercadopago",
+      payment_id: paymentId,
+    });
   }
-  res.redirect(307, "/entrada/" + orderId);
+  res.status(200).json({ success: true, message: "Order ID doesnt exist" });
 };
 
 export default request;

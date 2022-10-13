@@ -33,7 +33,7 @@ const request = async (
 
   // Validate existance
   if (!order) {
-    res.status(500).json({ success: true, message: "Order ID doesnt exist" });
+    res.status(500).json({ success: false, message: "Order ID doesnt exist" });
     return;
   }
 

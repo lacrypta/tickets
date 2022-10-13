@@ -49,16 +49,16 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // If still pending
   if (order.status === "pending") {
     // **************** SEND Email **************** //
-    // await sendEmail({
-    //   fullname: order.fullname,
-    //   email: order.email,
-    //   url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
-    // });
-    // await updateOrder(orderId, {
-    //   status: "completed",
-    //   payment_method: "mercadopago",
-    //   payment_id: paymentId,
-    // });
+    await sendEmail({
+      fullname: order.fullname,
+      email: order.email,
+      url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
+    });
+    await updateOrder(orderId, {
+      status: "completed",
+      payment_method: "mercadopago",
+      payment_id: paymentId,
+    });
   }
   res.redirect(307, "/entrada/" + orderId);
 };

@@ -15,20 +15,16 @@ function extractOrderId(payment: any) {
 }
 
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
-
   console.info("req.body");
   console.dir(req.body);
-  
+
   // Setup MercadoPago
   mercadopago.configure(config);
 
   // Parse query
   let payment, paymentId: number;
-  try {
-    paymentId = z
-      .number()
-      .parse(parseInt(z.string().parse(req.body.id)));
-    payment = (await mercadopago.payment.get(paymentId)).body;
+  paymentId = z.number().parse(parseInt(z.string().parse(req.body.id)));
+  payment = (await mercadopago.payment.get(paymentId)).body;
 
   // Not yet approved
   if (payment.status !== "approved") {

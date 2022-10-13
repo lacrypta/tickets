@@ -8,9 +8,12 @@ const QrDiv = styled.div`
   padding: 40px;
 `;
 
+const HOSTNAME =
+  process.env.NEXT_PUBLIC_HOSTNAME || "https://entradas.lacrypta.com.ar";
+
 const TicketReady = () => {
   const { order, orderId } = useOrder();
-
+  const url = HOSTNAME + "/entrada/" + (orderId || "");
   return (
     <>
       <h1>Tu entrada</h1>
@@ -19,11 +22,7 @@ const TicketReady = () => {
           <>
             <Alert severity='success'>Entrada LISTA!</Alert>
             <QrDiv>
-              <QRCode
-                bgColor='#000000'
-                fgColor='#ffffff'
-                value={orderId || ""}
-              />
+              <QRCode bgColor='#000000' fgColor='#ffffff' value={url} />
             </QrDiv>
           </>
         ) : (

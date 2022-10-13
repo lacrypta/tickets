@@ -100,8 +100,13 @@ const Peronio = () => {
       {isTxLoading ? (
         <>
           <div>Esperando confirmación de transacción...</div>
+          <div>No recargues ni salgas de la página.</div>
           <div>
-            <a href={"https://polygonscan.com/tx/" + data?.hash}>
+            <a
+              target='_blank'
+              rel='noreferrer'
+              href={"https://polygonscan.com/tx/" + data?.hash}
+            >
               Ver en PolygonScan
             </a>
           </div>

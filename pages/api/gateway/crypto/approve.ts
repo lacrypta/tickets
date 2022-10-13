@@ -8,6 +8,8 @@ import {
 
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // Requires POST
+
+  console.info("Pre post");
   if (req.method !== "POST") {
     res
       .status(405)
@@ -15,6 +17,8 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
+  console.info("Validate");
+  console.dir(req.body);
   // Validate body type
   try {
     CreateCryptoPaymentRequestSchema.parse(req.body);
@@ -31,6 +35,9 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // Get order
   const order = await getOrder(orderId);
 
+  console.info("Get Order:");
+  console.dir(order);
+
   // Validate existance
   if (!order) {
     res.status(500).json({ success: true, message: "Order ID doesnt exist" });
@@ -44,6 +51,8 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
       email: order.email,
       url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
     });
+
+    console.info("Email sent");
 
     // Updates order
     updateOrder(orderId, {

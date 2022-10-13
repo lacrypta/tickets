@@ -55,13 +55,15 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     console.info("Email sent");
 
     // Updates order
-    updateOrder(orderId, {
+    const debug = await updateOrder(orderId, {
       address,
       amount,
       tx,
       payment_method: "crypto",
       status: "completed",
     });
+
+    console.dir(debug);
   }
 
   res.status(200).json({

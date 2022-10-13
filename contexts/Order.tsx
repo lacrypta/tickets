@@ -1,22 +1,8 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { db, onSnapshot, doc } from "../lib/public/firebase";
-import { IOrder } from "../types/order";
+import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 interface IOrderContext {
   orderId: string;
   setOrderId: Dispatch<SetStateAction<string>>;
-  fullname: string;
-  setFullname: Dispatch<SetStateAction<string>>;
-  email: string;
-  setEmail: Dispatch<SetStateAction<string>>;
-  order?: IOrder;
-  setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
   orderTotal: string;
   setOrderTotal: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
@@ -35,12 +21,6 @@ interface IOrderContext {
 export const OrderContext = createContext<IOrderContext>({
   orderId: "",
   setOrderId: () => {},
-  fullname: "",
-  setFullname: () => {},
-  email: "",
-  setEmail: () => {},
-  order: undefined,
-  setOrder: (_) => {},
   orderTotal: "0",
   setOrderTotal: () => {},
   isLoading: false,
@@ -62,11 +42,6 @@ interface IOrderProviderProps {
 }
 
 export const OrderProvider = ({ children }: IOrderProviderProps) => {
-  const [fullname, setFullname] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-
-  const [order, setOrder] = useState<IOrder>();
-
   const [orderId, setOrderId] = useState<string>("");
   const [orderTotal, setOrderTotal] = useState<string>("0");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -78,49 +53,18 @@ export const OrderProvider = ({ children }: IOrderProviderProps) => {
   const clear = () => {
     setIsPayed(false);
     setOrderId("");
+
     setIsLoading(false);
     setIsSuccess(false);
     setIsError(false);
     setError("");
   };
 
-  // Subscribe for OrderID change
-  useEffect(() => {
-    if (!orderId) {
-      return;
-    }
-    setIsLoading(true);
-    const orderRef = doc(db, "orders", orderId);
-    const unsubscribe = onSnapshot(orderRef, {
-      next: (snapshot) => {
-        console.info("Order updated");
-        console.dir(snapshot.data());
-        const order: any = snapshot.data(); // TODO: tidy this
-        if (!order) {
-          setIsError(true);
-          setError("Not found");
-        }
-        setIsLoading(false);
-        setOrder(order);
-      },
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [orderId, setOrder]);
-
   return (
     <OrderContext.Provider
       value={{
         orderId,
         setOrderId,
-        fullname,
-        setFullname,
-        email,
-        setEmail,
-        order,
-        setOrder,
         orderTotal,
         setOrderTotal,
         isLoading,

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { addOrder } from "../../../lib/private/firestore";
+import { getTotal } from "../../../lib/public/menu";
 
 import {
   ICreateOrderRequestBody,
@@ -23,29 +24,17 @@ const request = async (
     OrderSchema.parse(req.body);
   } catch (e) {
     res.status(400).json({ success: false, message: "Malformed request" });
-    console.error(e);
-    return;
   }
 
-  const {
-    email,
-    fullname,
-    paymentMethod: payment_method,
-    address,
-  }: ICreateOrderRequestBody = req.body;
-
-  const orderId = await addOrder({
-    email,
-    fullname,
-    address,
-    payment_method,
-    status: "pending",
-  });
+  const { address, items }: ICreateOrderRequestBody = req.body;
+  const total = getTotal(items);
+  const orderId = await addOrder(address, items, total);
 
   res.status(200).json({
     success: true,
     data: {
       id: orderId,
+      total,
     },
   });
 };

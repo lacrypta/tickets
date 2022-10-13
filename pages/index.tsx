@@ -1,15 +1,20 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
+import { useAccount, useNetwork } from "wagmi";
 
 import { HeaderLogo } from "../components/HeaderLogo";
 import { Footer } from "../components/Footer";
 import { Background } from "../components/Background";
+import Header from "../components/Header";
 
-import { ReactElement, useContext, useEffect, useState } from "react";
-import { MainForm } from "../components/Steps/MainForm";
-import { StepsContext } from "../contexts/Steps";
-import { Checkout } from "../components/Steps/Checkout";
+import DisconnectedWidget from "../components/Widgets/DisconnectedWidget";
+import MainWidget from "../components/Widgets/MainWidget";
+import InvalidNetworkWidget from "../components/Widgets/InvalidNetworkWidget";
+import useUser from "../hooks/useUser";
+import SignupWidget from "../components/Widgets/SignupWidget";
+import { useEffect, useState } from "react";
+import useLoading from "../hooks/useLoading";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -18,41 +23,53 @@ const MainBlock = styled.main`
   flex-direction: column;
   align-items: center;
   position: relative;
-  min-height: 100vh;
 `;
-
-const Container = styled.div`
-  width: 40vw;
-  z-index: 10;
-`;
-
-const stepsComponents: ReactElement<any, any>[] = [
-  <MainForm key='main' />,
-  <Checkout key='checkout' />,
-];
 
 const Home: NextPage = () => {
+  const { isDisconnected } = useAccount();
+  const { chain } = useNetwork();
   const [isMounted, setIsMounted] = useState(false); // Fix Hydration trouble
-  const { step } = useContext(StepsContext);
+  const { isRegistered, isLoading } = useUser();
+  const { setActive } = useLoading();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    setActive(isLoading);
+  }, [isLoading, setActive]);
+
+  const ValidNetworkBlock = () => {
+    return isRegistered ? <MainWidget /> : <SignupWidget />;
+  };
+
+  const ConnectedBlock = () => {
+    return chain?.id === 137 ? <ValidNetworkBlock /> : <InvalidNetworkWidget />;
+  };
+
   return (
     <div>
       <Head>
-        <title>La Crypta - Entradas</title>
+        <title>La Crypta - Bar</title>
         <meta name='description' content='Feeless implementation for ERC20' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
+      {!isDisconnected ? <Header /> : ""}
+
       <MainBlock>
         <Background />
-        <Container>
-          <HeaderLogo />
-          {isMounted ? stepsComponents[step] : "Cargando..."}
-        </Container>
+        <HeaderLogo />
+        {isMounted ? (
+          isDisconnected ? (
+            <DisconnectedWidget />
+          ) : (
+            <ConnectedBlock />
+          )
+        ) : (
+          "Cargando..."
+        )}
       </MainBlock>
 
       <Footer />

@@ -16,6 +16,7 @@ const Container = styled.div`
 
 import ERC20ABI from "../../../abi/IERC20.json";
 import useOrder from "../../../hooks/useOrder";
+import { useRouter } from "next/router";
 
 const TICKET_PRICE = parseFloat(
   process.env.NEXT_PUBLIC_TICKET_PRICE_PE || "1000"
@@ -26,7 +27,9 @@ const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
 const claimApprove = async (
   data: ICreateCryptoPaymentRequestBody
 ): Promise<ResponseDataType> => {
-  const res = await fetch("/api/gateway/crypto/create", {
+  console.info("Claiming Approve");
+  console.dir(data);
+  const res = await fetch("/api/gateway/crypto/approve", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -41,8 +44,10 @@ const Peronio = () => {
   const { address } = useAccount();
   const { orderId } = useOrder();
   const peAmount = parseUnits(TICKET_PRICE.toString(), 6);
+  const router = useRouter();
 
   const [isTxLoading, setIsTxLoading] = useState<boolean>(false);
+  const [isListening, setIsListening] = useState<boolean>(false); // Tx
 
   const { config } = usePrepareContractWrite({
     addressOrName: PERONIO_ADDRESS,
@@ -66,25 +71,27 @@ const Peronio = () => {
     }
     setIsTxLoading(true);
 
-    console.info("llega data");
-    console.dir(data);
-  }, [address, data, isSuccess, orderId, peAmount]);
+    data.wait().then((tx) => {
+      if (isListening) {
+        return;
+      }
+      setIsListening(true);
+      claimApprove({
+        orderId,
+        address,
+        amount: peAmount.toString(),
+        tx: tx.transactionHash,
+      }).then((res) => {
+        if (!res.success) {
+          setIsListening(false);
+          setIsTxLoading(false);
+          return;
+        }
 
-  useEffect(() => {
-    if (isTxLoading) {
-      return;
-    }
-    console.info("Claiming!!");
-    // claimApprove({
-    //   orderId,
-    //   address,
-    //   amount: peAmount.toString(),
-    //   tx: data.hash,
-    // }).then((res) => {
-    //   console.info("res:");
-    //   console.dir(res);
-    // });
-  }, [isTxLoading]);
+        router.push("/entrada/" + orderId);
+      });
+    });
+  }, [address, data, isListening, isSuccess, orderId, peAmount, router]);
 
   return (
     <Container>
@@ -93,7 +100,11 @@ const Peronio = () => {
       {isTxLoading ? (
         <>
           <div>Esperando confirmación de transacción...</div>
-          <div>{data?.hash}</div>
+          <div>
+            <a href={"https://polygonscan.com/tx/" + data?.hash}>
+              Ver en PolygonScan
+            </a>
+          </div>
         </>
       ) : (
         <>

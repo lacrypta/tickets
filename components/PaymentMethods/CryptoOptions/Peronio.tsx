@@ -66,7 +66,7 @@ const Peronio = () => {
   };
 
   useEffect(() => {
-    if (!isSuccess || !orderId || !address || !data) {
+    if (isTxLoading || !isSuccess || !orderId || !address || !data) {
       return;
     }
     setIsTxLoading(true);
@@ -91,7 +91,16 @@ const Peronio = () => {
         router.push("/entrada/" + orderId);
       });
     });
-  }, [address, data, isListening, isSuccess, orderId, peAmount, router]);
+  }, [
+    address,
+    data,
+    isListening,
+    isSuccess,
+    orderId,
+    peAmount,
+    router,
+    isTxLoading,
+  ]);
 
   return (
     <Container>
@@ -100,8 +109,13 @@ const Peronio = () => {
       {isTxLoading ? (
         <>
           <div>Esperando confirmación de transacción...</div>
+          <div>No recargues ni salgas de la página.</div>
           <div>
-            <a href={"https://polygonscan.com/tx/" + data?.hash}>
+            <a
+              target='_blank'
+              rel='noreferrer'
+              href={"https://polygonscan.com/tx/" + data?.hash}
+            >
               Ver en PolygonScan
             </a>
           </div>

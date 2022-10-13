@@ -65,6 +65,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // Updates order
   updateOrder(orderId, {
     preference_id: preference.id,
+    status: "processing",
   });
 
   res.status(200).json({

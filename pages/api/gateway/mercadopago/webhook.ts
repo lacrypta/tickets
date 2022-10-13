@@ -18,12 +18,20 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   console.info("req.body");
   console.dir(req.body);
 
+  if (req.query.type !== "payment") {
+    console.info("Not proper topic");
+    res.status(200).json({ success: true, message: "Thanks!" });
+    return;
+  }
+
+  console.info("Payment received!");
+
   // Setup MercadoPago
   mercadopago.configure(config);
 
   // Parse query
   let payment, paymentId: number;
-  paymentId = z.number().parse(parseInt(z.string().parse(req.body.id)));
+  paymentId = z.number().parse(req.body.id);
   payment = (await mercadopago.payment.get(paymentId)).body;
 
   // Not yet approved

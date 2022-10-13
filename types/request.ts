@@ -25,6 +25,11 @@ export interface ICreateCryptoPaymentRequestBody {
   amount: string;
 }
 
+export interface IClaimCodeRequestBody {
+  orderId: string;
+  code: string;
+}
+
 export const OrderSchema = z.object({
   fullname: z.string(),
   email: z.string().email(),
@@ -41,4 +46,9 @@ export const CreateCryptoPaymentRequestSchema = z.object({
   address: z.string(),
   tx: z.string(),
   amount: z.string(),
+});
+
+export const ClaimCodeRequestSchema = z.object({
+  orderId: z.string(),
+  code: z.string(),
 });

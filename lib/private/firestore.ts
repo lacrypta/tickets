@@ -170,4 +170,39 @@ export const updateOrder = async (orderId: string, data: any) => {
   return doc.data();
 };
 
+/**
+ * Adds new code to the database
+ * @param code
+ * @returns
+ */
+export const addCode = async (code: string): Promise<string | undefined> => {
+  let codeRef = db.collection("codes").doc();
+  await codeRef.set({
+    code,
+    claimed: false,
+  });
+
+  return codeRef.id;
+};
+
+export const claimCode = async (code: string): Promise<boolean> => {
+  const codesRef = db.collection("codes");
+  var query = codesRef.where("code", "==", code).where("claimed", "==", false);
+
+  // Gets query
+  const docs = await query.get();
+  if (docs.size === 0) {
+    return false;
+  }
+
+  // Gets document
+  const codeRef = db.collection("codes").doc(docs.docs[0].id);
+
+  // Updates it
+  await codeRef.update({
+    claimed: true,
+  });
+
+  return true;
+};
 exports.log = log;

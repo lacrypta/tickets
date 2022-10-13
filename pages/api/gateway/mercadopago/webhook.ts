@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
 import { getOrder, updateOrder } from "./../../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";

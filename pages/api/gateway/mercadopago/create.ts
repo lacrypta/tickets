@@ -10,7 +10,7 @@ import { CreatePaymentRequestSchema } from "../../../../types/request";
 const HOSTNAME =
   process.env.NEXT_PUBLIC_HOSTNAME || "https://entradas.lacrypta.com.ar";
 const config: ConfigTokenOption = {
-  access_token: process.env.NEXT_PUBLIC_MP_SECRET_TOKEN || "",
+  access_token: process.env.MP_SECRET_TOKEN || "",
 };
 
 const TICKET_PRICE = process.env.NEXT_PUBLIC_TICKET_PRICE || "2000";

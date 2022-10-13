@@ -4,12 +4,21 @@ import { getOrder, updateOrder } from "./../../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";
 import { sendEmail } from "../../../../lib/private/email";
+import { ConfigTokenOption } from "mercadopago/configuration";
+
+const config: ConfigTokenOption = {
+  access_token: process.env.MP_SECRET_TOKEN || "",
+};
 
 function extractOrderId(payment: any) {
   return payment.additional_info.items[0].id;
 }
 
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
+  // Setup MercadoPago
+  mercadopago.configure(config);
+
+  // Parse query
   let payment, paymentId: number;
   try {
     paymentId = z

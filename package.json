@@ -20,7 +20,7 @@
     "@mui/material": "^5.10.7",
     "@rainbow-me/rainbowkit": "^0.7.0",
     "ethers": "^5.0.0",
-    "firebase": "^9.10.0",
+    "firebase": "^9.12.1",
     "firebase-admin": "^11.0.1",
     "mercadopago": "^1.5.14",
     "next": "^12.1.6",

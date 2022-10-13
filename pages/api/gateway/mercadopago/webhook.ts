@@ -31,7 +31,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Parse query
   let payment, paymentId: number;
-  paymentId = z.number().parse(req.body.id);
+  paymentId = req.body.data.id;
   payment = (await mercadopago.payment.get(paymentId)).body;
 
   // Not yet approved

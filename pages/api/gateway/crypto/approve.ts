@@ -46,7 +46,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (order.status === "pending") {
     // **************** SEND Email **************** //
-    sendEmail({
+    await sendEmail({
       fullname: order.fullname,
       email: order.email,
       url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,

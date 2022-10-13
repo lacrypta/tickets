@@ -49,13 +49,13 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // If still pending
   if (order.status === "pending") {
     // **************** SEND Email **************** //
-    sendEmail({
+    await sendEmail({
       fullname: order.fullname,
       email: order.email,
       url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
     });
 
-    updateOrder(orderId, {
+    await updateOrder(orderId, {
       status: "completed",
       payment_method: "mercadopago",
       payment_id: paymentId,

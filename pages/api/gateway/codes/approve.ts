@@ -50,14 +50,14 @@ const request = async (
   // TODO: Repeated code. Should be in a library
   if (order.status === "pending") {
     // **************** SEND Email **************** //
-    sendEmail({
+    await sendEmail({
       fullname: order.fullname,
       email: order.email,
       url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
     });
 
     // Updates order
-    updateOrder(orderId, {
+    await updateOrder(orderId, {
       code,
       payment_method: "invitation",
       status: "completed",

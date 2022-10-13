@@ -3,7 +3,11 @@ import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 import { IOrder } from "../../types/order";
 
-import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import {
+  getFirestore,
+  FieldValue,
+  DocumentReference,
+} from "firebase-admin/firestore";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 
@@ -31,7 +35,10 @@ const db = getFirestore();
  * @param {String} word
  * @returns
  */
-export const log = async (type: string, data: any) => {
+export const log = async (
+  type: string,
+  data: any
+): Promise<DocumentReference> => {
   return await db.collection("log").add({
     time: FieldValue.serverTimestamp(),
     type: type,

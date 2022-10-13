@@ -1,5 +1,3 @@
-import { ITransferVoucherSigned } from "./../../types/crypto";
-import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 import { IOrder } from "../../types/order";
 
@@ -8,8 +6,6 @@ import {
   FieldValue,
   DocumentReference,
 } from "firebase-admin/firestore";
-import { BigNumber } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -72,77 +68,6 @@ export const getOrder = async (orderId: string) => {
     return undefined;
   }
   return doc.data();
-};
-
-/**
- * Adds new user to the database
- * @param {String} user
- * @param {String} address
- * @param {IPermit} permit
- * @returns
- */
-export const addUser = async (
-  username: string,
-  address: string,
-  permit: IPermit
-) => {
-  return db.collection("users").doc(address).set({
-    username,
-    permit,
-  });
-};
-
-/**
- * Adds new payment to the database
- * @param {String} orderId
- * @param {ITransferVoucher} permit
- * @returns
- */
-export const addPayment = async (
-  orderId: string,
-  voucher: ITransferVoucherSigned
-): Promise<String> => {
-  const paymentRef = db.collection("payments").doc();
-
-  await db.runTransaction(async (t) => {
-    const orderRef = db.collection("orders").doc(String(orderId));
-    const order = (await t.get(orderRef)).data();
-
-    // Validate status
-    switch (order?.status) {
-      case "processing":
-        throw new Error("Order is already being processed");
-      case "completed":
-        throw new Error("Order already payed");
-      case "cancelled":
-        throw new Error("The order has been cancelled");
-    }
-
-    // Validate amount
-    if (
-      !parseUnits(String(order?.total), 6).eq(
-        BigNumber.from(voucher.voucher.payload.amount)
-      )
-    ) {
-      throw new Error("The order and voucher amount don't match");
-    }
-
-    // Update Order
-    t.update(orderRef, {
-      status: "processing",
-      paymentId: paymentRef.id,
-    });
-
-    // Create Payment
-    t.create(paymentRef, {
-      orderId,
-      address: voucher.voucher.payload.from,
-      voucher,
-      status: "unpublished",
-    });
-  });
-
-  return paymentRef.id;
 };
 
 /**

@@ -11,6 +11,7 @@ import { MainForm } from "../components/Steps/MainForm";
 import { StepsContext } from "../contexts/Steps";
 import { Checkout } from "../components/Steps/Checkout";
 import useLoading from "../hooks/useLoading";
+import EventDetails from "../components/EventDetails";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -55,6 +56,7 @@ const Home: NextPage = () => {
         <Background />
         <Container>
           <HeaderLogo />
+          <EventDetails />
           {isMounted ? stepsComponents[step] : "Cargando..."}
         </Container>
       </MainBlock>

@@ -30,7 +30,7 @@ export const MainForm = () => {
 
   return (
     <Container>
-      <h1>Conseguí tu entrada!</h1>
+      <h1>Entradas limitadas!</h1>
       <form onSubmit={handleSubmit}>
         <TextField
           label='Nombre Completo'

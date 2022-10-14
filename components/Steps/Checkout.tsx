@@ -17,9 +17,23 @@ const Container = styled.div`
   backdrop-filter: blur(4px);
 `;
 
+const PriceDiv = styled.div`
+  font-size: 25px;
+`;
+
+const MethodList = styled.div`
+  width: 100%;
+  margin-top: 1em;
+`;
+
 const MethodDiv = styled.div`
   width: 100%;
   margin-bottom: 2em;
+`;
+
+const MethodButton = styled(Button)`
+  width: 100%;
+  font-size: 20px;
 `;
 
 const TICKET_PRICE = process.env.NEXT_PUBLIC_TICKET_PRICE || "2000";
@@ -50,22 +64,26 @@ export const Checkout = () => {
     <Container>
       <h1>Elegí el medio de pago</h1>
 
-      <div>Sale ${TICKET_PRICE}</div>
+      <PriceDiv>Precio de la Entrada ${TICKET_PRICE}</PriceDiv>
 
       {!method ? (
-        <>
+        <MethodList>
           <MethodDiv>
-            <Button onClick={() => setMethod("mercadopago")}>
+            <MethodButton onClick={() => setMethod("mercadopago")}>
               MercadoPago
-            </Button>
+            </MethodButton>
           </MethodDiv>
           <MethodDiv>
-            <Button onClick={() => setMethod("crypto")}>Crypto</Button>
+            <MethodButton onClick={() => setMethod("crypto")}>
+              Crypto
+            </MethodButton>
           </MethodDiv>
           <MethodDiv>
-            <Button onClick={() => setMethod("invitation")}>Código</Button>
+            <MethodButton onClick={() => setMethod("invitation")}>
+              Código
+            </MethodButton>
           </MethodDiv>
-        </>
+        </MethodList>
       ) : (
         paymentMethods[method]
       )}

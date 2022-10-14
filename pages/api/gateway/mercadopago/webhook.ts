@@ -38,7 +38,16 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   log.debug("paymentId", paymentId);
   console.info("Payment ID:", paymentId);
 
-  payment = (await mercadopago.payment.get(paymentId)).body;
+  try {
+    payment = (await mercadopago.payment.get(paymentId)).body;
+  } catch (e) {
+    log.debug("Payment not found", {
+      paymentId,
+      payment,
+    });
+    res.status(500).json({ success: false, message: "Payment not found" });
+    return;
+  }
 
   log.debug("payment", payment);
   // Not yet approved

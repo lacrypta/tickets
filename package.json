@@ -17,7 +17,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@firebase/firestore": "^3.5.0",
     "@mui/icons-material": "^5.10.3",
-    "@mui/material": "^5.10.7",
+    "@mui/material": "^5.10.9",
     "@rainbow-me/rainbowkit": "^0.7.0",
     "ethers": "^5.0.0",
     "firebase": "^9.12.1",

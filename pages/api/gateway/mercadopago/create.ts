@@ -1,3 +1,4 @@
+import { log } from "next-axiom";
 import type { NextApiRequest, NextApiResponse } from "next";
 // import { addOrder } from "../../../lib/private/firestore";
 
@@ -41,26 +42,37 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // Setup MercadoPago
   mercadopago.configure(config);
 
-  const preference = (
-    await mercadopago.preferences.create({
-      items: [
-        {
-          title: "La Crypta - Halloween",
-          quantity: 1,
-          currency_id: "ARS",
-          unit_price: parseInt(TICKET_PRICE),
-          id: orderId,
+  let preference;
+  try {
+    preference = (
+      await mercadopago.preferences.create({
+        items: [
+          {
+            title: "La Crypta - Halloween",
+            quantity: 1,
+            currency_id: "ARS",
+            unit_price: parseInt(TICKET_PRICE),
+            id: orderId,
+          },
+        ],
+        back_urls: {
+          success: HOSTNAME + "/api/gateway/mercadopago/approve",
         },
-      ],
-      back_urls: {
-        success: HOSTNAME + "/api/gateway/mercadopago/approve",
-      },
-      additional_info: String(orderId),
-      statement_descriptor: "La Crypta - Halloween",
-      auto_return: "all",
-      notification_url: process.env.MP_NOTIFICATION_URL,
-    })
-  ).body;
+        additional_info: String(orderId),
+        statement_descriptor: "La Crypta - Halloween",
+        auto_return: "all",
+        notification_url:
+          process.env.MP_NOTIFICATION_URL + "/?orderId=" + orderId,
+      })
+    ).body;
+  } catch (e) {
+    log.debug("mercadopago/preference", e);
+    res.status(500).json({
+      success: true,
+      message: "MercadoPago Error",
+    });
+    return;
+  }
 
   // Updates order
   updateOrder(orderId, {

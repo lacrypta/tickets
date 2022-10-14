@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+export { reportWebVitals } from "next-axiom";
 import type { AppProps } from "next/app";
 import {
   RainbowKitProvider,

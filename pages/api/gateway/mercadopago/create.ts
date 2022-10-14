@@ -61,8 +61,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
         additional_info: String(orderId),
         statement_descriptor: "La Crypta - Halloween",
         auto_return: "all",
-        notification_url:
-          process.env.MP_NOTIFICATION_URL + "/?orderId=" + orderId,
+        notification_url: process.env.MP_NOTIFICATION_URL,
       })
     ).body;
   } catch (e) {

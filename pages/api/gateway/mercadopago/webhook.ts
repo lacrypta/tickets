@@ -67,7 +67,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // If still pending
-  if (order.status === "pending") {
+  if (order.status !== "completed") {
     // **************** SEND Email **************** //
     const mail = await sendEmail({
       fullname: order.fullname,

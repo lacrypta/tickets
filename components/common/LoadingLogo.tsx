@@ -4,9 +4,9 @@ import svgLogo from "../../public/images/lacrypta.svg";
 
 const FlipBox = styled.div`
   background-color: transparent;
-  width: 20vh;
-  height: 20vh;
-  perspective: 1000px;
+  width: 25vh;
+  height: 25vh;
+  perspective: 2000px;
 `;
 
 const SpinEffect = styled.div`
@@ -22,7 +22,7 @@ const SpinEffect = styled.div`
       transform: scale(1) rotateY(0deg);
     }
     50% {
-      transform: scale(1.2) rotateY(181deg);
+      transform: scale(0.7) rotateY(181deg);
     }
     100% {
       transform: rotateY(360deg);

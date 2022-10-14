@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import useOrder from "../../hooks/useOrder";
 import TicketReady from "../../components/Ticket/TicketReady";
+import useLoading from "../../hooks/useLoading";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -29,6 +30,7 @@ const Container = styled.div`
 const Home: NextPage = () => {
   const router = useRouter();
   const { order, setOrderId, isError, error } = useOrder();
+  const { setActive } = useLoading();
 
   // Ticket ID
   useEffect(() => {
@@ -39,6 +41,14 @@ const Home: NextPage = () => {
     setOrderId(String(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  // Remove loading
+  useEffect(() => {
+    if (order) {
+      setActive(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order]);
 
   return (
     <div>

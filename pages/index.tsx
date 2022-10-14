@@ -10,6 +10,7 @@ import { ReactElement, useContext, useEffect, useState } from "react";
 import { MainForm } from "../components/Steps/MainForm";
 import { StepsContext } from "../contexts/Steps";
 import { Checkout } from "../components/Steps/Checkout";
+import useLoading from "../hooks/useLoading";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -34,9 +35,12 @@ const stepsComponents: ReactElement<any, any>[] = [
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false); // Fix Hydration trouble
   const { step } = useContext(StepsContext);
+  const { setActive } = useLoading();
 
   useEffect(() => {
     setIsMounted(true);
+    setActive(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

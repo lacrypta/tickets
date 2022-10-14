@@ -7,6 +7,7 @@ import {
   ICreatePaymentRequestBody,
   ResponseDataType,
 } from "../../types/request";
+import useLoading from "../../hooks/useLoading";
 
 const Container = styled.div`
   width: 100%;
@@ -29,6 +30,7 @@ const requestPreference = async (
 
 export const MercadoPago = () => {
   const [mounted, setMounted] = useState<boolean>(false);
+  const { setActive } = useLoading();
   const [isPreferenceLoading, setIsPreferenceLoading] =
     useState<boolean>(false);
   const [preferenceId, setPreferenceId] = useState<string>();
@@ -41,22 +43,29 @@ export const MercadoPago = () => {
     }
   );
 
+  // Start loading
+  useEffect(() => {
+    setActive(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Requests for a preferenceID once orderID is available
   useEffect(() => {
     if (!orderId) {
       return;
     }
-
     setIsPreferenceLoading(true);
     requestPreference({ orderId }).then((res) => {
+      setIsPreferenceLoading(false);
       if (!res.success) {
         alert("Hubo un error");
+        setActive(false);
         console.dir(res);
         return;
       }
       setPreferenceId(res.data.preferenceId);
-      setIsPreferenceLoading(false);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   // MercadoPago Checkout Pro
@@ -70,11 +79,16 @@ export const MercadoPago = () => {
         },
       });
 
-      checkout.render({
-        container: "#mercadopago-container",
-        label: "Pagar",
-      });
+      checkout
+        .render({
+          container: "#mercadopago-container",
+          label: "Pagar",
+        })
+        .then(() => {
+          setActive(false);
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId, preferenceId, mercadopago, mounted]);
 
   return (

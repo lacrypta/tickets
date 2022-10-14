@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useLoading from "../../hooks/useLoading";
 import useOrder from "../../hooks/useOrder";
 import { IClaimCodeRequestBody, ResponseDataType } from "../../types/request";
 import TextField from "../common/TextField";
@@ -36,6 +37,7 @@ export const InvitationCode = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const { orderId } = useOrder();
+  const { setActive } = useLoading();
 
   const handleSubmit = async (event: any) => {
     if (!code || !orderId) {
@@ -47,14 +49,18 @@ export const InvitationCode = () => {
       orderId,
       code,
     });
-
+    setIsLoading(false);
     if (!res.success) {
-      setIsLoading(false);
       alert("Incorrect code");
       return;
     }
     router.push("/entrada/" + orderId);
   };
+
+  useEffect(() => {
+    setActive(isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   return (
     <Container>

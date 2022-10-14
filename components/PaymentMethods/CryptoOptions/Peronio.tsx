@@ -17,6 +17,7 @@ const Container = styled.div`
 import ERC20ABI from "../../../abi/IERC20.json";
 import useOrder from "../../../hooks/useOrder";
 import { useRouter } from "next/router";
+import useLoading from "../../../hooks/useLoading";
 
 const TICKET_PRICE = parseFloat(
   process.env.NEXT_PUBLIC_TICKET_PRICE_PE || "1000"
@@ -56,6 +57,7 @@ const Peronio = () => {
     args: [BAR_ADDRESS, peAmount],
   });
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  const { setActive } = useLoading();
 
   const handlePay = async () => {
     if (!write) {
@@ -66,16 +68,21 @@ const Peronio = () => {
   };
 
   useEffect(() => {
+    setActive(isLoading);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  useEffect(() => {
     if (isTxLoading || !isSuccess || !orderId || !address || !data) {
       return;
     }
     setIsTxLoading(true);
-
     data.wait().then((tx) => {
       if (isListening) {
         return;
       }
       setIsListening(true);
+      setActive(true);
       claimApprove({
         orderId,
         address,
@@ -85,6 +92,7 @@ const Peronio = () => {
         if (!res.success) {
           setIsListening(false);
           setIsTxLoading(false);
+          setActive(false);
           return;
         }
 
@@ -100,6 +108,7 @@ const Peronio = () => {
     peAmount,
     router,
     isTxLoading,
+    setActive,
   ]);
 
   return (
@@ -125,7 +134,9 @@ const Peronio = () => {
           {isLoading ? (
             "Cargando..."
           ) : (
-            <Button onClick={handlePay}>PAGAR</Button>
+            <Button disabled={!orderId} onClick={handlePay}>
+              PAGAR
+            </Button>
           )}
         </>
       )}

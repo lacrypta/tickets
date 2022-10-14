@@ -10,7 +10,7 @@ interface ILoadingContext {
 }
 
 export const LoadingContext = createContext<ILoadingContext>({
-  active: false,
+  active: true,
   text: "",
   setActive: () => {},
   setText: () => {},
@@ -21,7 +21,7 @@ interface ILoadingProviderProps {
 }
 
 export const LoadingProvider = ({ children }: ILoadingProviderProps) => {
-  const [active, setActive] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(true);
   const [text, setText] = useState<string>("");
 
   return (

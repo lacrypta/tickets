@@ -19,6 +19,13 @@ const SubmitButton = styled(Button)`
   width: 100%;
 `;
 
+const InputField = styled(TextField)`
+  label {
+    color: white !important;
+    background: #111;
+  }
+`;
+
 export const MainForm = () => {
   const { setStep } = useContext(StepsContext);
   const { fullname, setFullname, email, setEmail } = useOrder();
@@ -32,7 +39,7 @@ export const MainForm = () => {
     <Container>
       <h1>Entradas limitadas!</h1>
       <form onSubmit={handleSubmit}>
-        <TextField
+        <InputField
           label='Nombre Completo'
           type='text'
           onChange={(e) => setFullname(e.target.value)}
@@ -40,7 +47,7 @@ export const MainForm = () => {
           variant='outlined'
           value={fullname}
         />
-        <TextField
+        <InputField
           label='E-mail'
           type='email'
           onChange={(e) => setEmail(e.target.value)}

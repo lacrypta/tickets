@@ -70,9 +70,6 @@ const Peronio = () => {
   const { address } = useAccount();
   const { orderId } = useOrder();
 
-  const [isTxLoading, setIsTxLoading] = useState<boolean>(false);
-  const [isListening, setIsListening] = useState<boolean>(false); // Tx
-
   const peAmount = parseUnits(TICKET_PRICE.toString(), 6);
 
   const { config } = usePrepareContractWrite({
@@ -81,11 +78,10 @@ const Peronio = () => {
     functionName: "transfer",
     args: [BAR_ADDRESS, peAmount],
   });
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  const { data, isLoading, write } = useContractWrite(config);
   const { setActive } = useLoading();
 
   const handleTxPayed = (tx: any) => {
-    setIsListening(true);
     setActive(true);
     claimApprove({
       orderId: orderId || "",
@@ -94,8 +90,6 @@ const Peronio = () => {
       tx: tx.transactionHash,
     }).then((res) => {
       if (!res.success) {
-        setIsListening(false);
-        setIsTxLoading(false);
         setActive(false);
         return;
       }
@@ -108,12 +102,7 @@ const Peronio = () => {
       return;
     }
     console.info("Starting payment!");
-    try {
-      write();
-      setIsTxLoading(true);
-    } catch (e) {
-      setIsTxLoading(false);
-    }
+    write();
   };
 
   // Listen for Transfer Event
@@ -151,7 +140,7 @@ const Peronio = () => {
         <span>{TICKET_PRICE.toFixed(2)}</span>
       </PriceDiv>
 
-      {isTxLoading ? (
+      {data?.hash ? (
         <>
           <div>Esperando confirmación de transacción...</div>
           <div>No recargues ni salgas de la página.</div>

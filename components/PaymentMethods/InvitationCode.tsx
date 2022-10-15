@@ -1,19 +1,25 @@
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useLoading from "../../hooks/useLoading";
 import useOrder from "../../hooks/useOrder";
 import { IClaimCodeRequestBody, ResponseDataType } from "../../types/request";
+import LargeButton from "../common/LargeButton";
 import TextField from "../common/TextField";
 const Container = styled.div`
   width: 100%;
   margin-bottom: 2em;
 `;
 
-const SubmitButton = styled(Button)`
+const InputField = styled(TextField)`
+  label {
+    color: white !important;
+    background: #111;
+  }
+`;
+
+const ButtonDiv = styled.div`
   margin-top: 10px;
-  width: 100%;
 `;
 
 const claimCode = async (
@@ -66,7 +72,7 @@ export const InvitationCode = () => {
     <Container>
       <h1>Ingresá el codigo de la invitación</h1>
       <form onSubmit={handleSubmit}>
-        <TextField
+        <InputField
           label='Código'
           type='text'
           onChange={(e) => setCode(e.target.value)}
@@ -77,9 +83,11 @@ export const InvitationCode = () => {
         {isLoading ? (
           "Reclamando..."
         ) : (
-          <SubmitButton disabled={!orderId} type='submit'>
-            RECLAMAR
-          </SubmitButton>
+          <ButtonDiv>
+            <LargeButton disabled={!orderId} type='submit'>
+              Reclamar
+            </LargeButton>
+          </ButtonDiv>
         )}
       </form>
     </Container>

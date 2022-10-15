@@ -1,126 +1,35 @@
-import Web3 from "web3";
-import { Transaction } from "@ethereumjs/tx";
-import { CustomChain, Common } from "@ethereumjs/common";
-import { StateMutabilityType, AbiType } from "web3-utils/types";
-
-import { log } from "./firestore";
-
-export async function sendFunds(address: string) {
-  return claim(address);
-}
+import { ethers } from "ethers";
+import { Interface } from "ethers/lib/utils";
 
 // contract details
-const provider = process.env.RPC_ADDRESS ?? "";
-const contractAddress = process.env.FAUCET_CONTRACT;
-const privateKey = Buffer.from(
-  process.env.FAUCET_OWNER_PRIVATE_KEY ?? "",
-  "hex"
-);
-const defaultAccount = process.env.FAUCET_OWNER_PUBLIC_ADDRESS ?? "";
+const RPC_ADDRESS = process.env.NEXT_PUBLIC_RPC_ADDRESS || "";
 
-const customCommon = Common.custom(
-  {
-    name: CustomChain.PolygonMainnet,
-    chainId: 137,
-    url: provider,
-  },
-  {
-    baseChain: "mainnet",
-    hardfork: "london",
-  }
-);
+const provider = new ethers.providers.JsonRpcProvider(RPC_ADDRESS);
 
-// initiate the web3
-const web3 = new Web3(provider);
+const transferAbi = [
+  "event Transfer(address indexed from, address indexed to, uint value)",
+];
 
-// Get Contract
-function getContract() {
-  const abi = [
-    {
-      inputs: [
-        {
-          internalType: "address payable",
-          name: "recipient",
-          type: "address",
-        },
-      ],
-      name: "claim",
-      outputs: [],
-      stateMutability: "payable" as StateMutabilityType,
-      type: "function" as AbiType,
-    },
-  ];
-  return new web3.eth.Contract(abi, contractAddress);
-}
-// Claim
-async function claim(address: string) {
-  if (address) {
-    const rawTrans = getContract().methods.claim(address); // contract method
-    return sendSignTransaction(rawTrans);
-  } else {
-    throw "Wallet address or no. of tokens is missing.";
-  }
+// const contract = new Contract(PERONIO_ADDRESS, transferAbi, provider);
+
+export async function getTx(txHash: string) {
+  return provider.getTransaction(txHash);
 }
 
-// Send Signed Transaction
-async function sendSignTransaction(rawTrans: any) {
-  // Initiate values required by the dataTrans
-  if (rawTrans) {
-    const txCount = await web3.eth.getTransactionCount(
-      defaultAccount,
-      "pending"
-    ); // needed for nonce
-
-    const abiTrans = rawTrans.encodeABI(); // encoded contract method
-    const gas = await rawTrans.estimateGas({ from: defaultAccount });
-
-    var gasPrice = Number(await web3.eth.getGasPrice()) * 4;
-    var gasLimit = gas * 2;
-
-    // Initiate the transaction data
-
-    var dataTrans = {
-      to: contractAddress,
-      data: abiTrans,
-      chainId: 137,
-      nonce: web3.utils.toHex(txCount),
-      gasLimit: web3.utils.toHex(gasLimit),
-      gasPrice: web3.utils.toHex(gasPrice),
-      value: "0x00",
-    };
-
-    log("tx", dataTrans);
-
-    // sign transaction
-    let tx = new Transaction(dataTrans, {
-      common: customCommon,
-    });
-
-    tx = tx.sign(privateKey);
-
-    console.info("TX:", tx);
-
-    // after signing send the transaction
-    return await sendSigned(tx);
-  } else {
-    throw new Error("Encoded raw transaction was not given.");
-  }
+export async function getTxReceipt(txHash: string) {
+  const receipt = provider.getTransactionReceipt(txHash);
+  return receipt;
 }
-function sendSigned(tx: Transaction) {
-  return new Promise<string>(function (resolve, reject) {
-    // send the signed transaction
-    web3.eth
-      .sendSignedTransaction("0x" + tx.serialize().toString("hex"))
-      .once("transactionHash", function (hash) {
-        // respond with the result
-        resolve(hash);
-      })
-      .then((out) => {
-        console.log(out);
-      })
-      .catch((err) => {
-        // respond with error
-        reject(err);
-      });
-  });
+
+export async function getTransferEvent(txHash: string) {
+  const receipt = await getTxReceipt(txHash);
+  const iface = new Interface(transferAbi);
+  const event = receipt.logs[0];
+  const { from, to, value } = iface.decodeEventLog(
+    "Transfer",
+    event.data,
+    event.topics
+  );
+
+  return { raw: event, decoded: { from, to, value } };
 }

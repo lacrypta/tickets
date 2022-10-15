@@ -1,12 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "@emotion/styled";
-import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
-import { parseUnits } from "ethers/lib/utils";
-
 import {
   ICreateCryptoPaymentRequestBody,
   ResponseDataType,
 } from "../../../types/request";
+import { parseUnits } from "ethers/lib/utils";
+import IERC20ABI from "../../../abi/IERC20.json";
+
+import {
+  useAccount,
+  useContractEvent,
+  useContractWrite,
+  usePrepareContractWrite,
+} from "wagmi";
+
+import { useRouter } from "next/router";
+
+import useOrder from "../../../hooks/useOrder";
+import useLoading from "../../../hooks/useLoading";
+import LargeButton from "../../common/LargeButton";
+import PeronioIcon from "../../common/PeronioIcon";
 
 const Container = styled.div`
   width: 100%;
@@ -29,13 +42,6 @@ const PriceDiv = styled.div`
     margin-left: 5px;
   }
 `;
-
-import ERC20ABI from "../../../abi/IERC20.json";
-import useOrder from "../../../hooks/useOrder";
-import { useRouter } from "next/router";
-import useLoading from "../../../hooks/useLoading";
-import LargeButton from "../../common/LargeButton";
-import PeronioIcon from "../../common/PeronioIcon";
 
 const TICKET_PRICE = parseFloat(
   process.env.NEXT_PUBLIC_TICKET_PRICE_PE || "1000"
@@ -60,22 +66,36 @@ const claimApprove = async (
 };
 
 const Peronio = () => {
+  const router = useRouter();
   const { address } = useAccount();
   const { orderId } = useOrder();
-  const peAmount = parseUnits(TICKET_PRICE.toString(), 6);
-  const router = useRouter();
 
-  const [isTxLoading, setIsTxLoading] = useState<boolean>(false);
-  const [isListening, setIsListening] = useState<boolean>(false); // Tx
+  const peAmount = parseUnits(TICKET_PRICE.toString(), 6);
 
   const { config } = usePrepareContractWrite({
     addressOrName: PERONIO_ADDRESS,
-    contractInterface: ERC20ABI,
+    contractInterface: IERC20ABI,
     functionName: "transfer",
     args: [BAR_ADDRESS, peAmount],
   });
-  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+  const { data, isLoading, write } = useContractWrite(config);
   const { setActive } = useLoading();
+
+  const handleTxPayed = (tx: any) => {
+    setActive(true);
+    claimApprove({
+      orderId: orderId || "",
+      address: address || "",
+      amount: peAmount.toString(),
+      tx: tx.transactionHash,
+    }).then((res) => {
+      if (!res.success) {
+        setActive(false);
+        return;
+      }
+      router.push("/entrada/" + orderId);
+    });
+  };
 
   const handlePay = async () => {
     if (!write) {
@@ -85,49 +105,33 @@ const Peronio = () => {
     write();
   };
 
+  // Listen for Transfer Event
+  useContractEvent({
+    addressOrName: PERONIO_ADDRESS,
+    contractInterface: IERC20ABI,
+    eventName: "Transfer",
+    listener(data) {
+      const [from, to, value, tx] = data;
+
+      if (to !== BAR_ADDRESS || address !== from) {
+        return;
+      }
+
+      if (!value.eq(parseUnits(String(TICKET_PRICE), 6))) {
+        console.error("Invalid Amount!");
+        return;
+      }
+
+      console.info("Handle Tx!");
+      handleTxPayed(tx);
+    },
+  });
+
+  // Sync loading provider with local one
   useEffect(() => {
     setActive(isLoading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
-
-  useEffect(() => {
-    if (isTxLoading || !isSuccess || !orderId || !address || !data) {
-      return;
-    }
-    setIsTxLoading(true);
-    data.wait().then((tx) => {
-      if (isListening) {
-        return;
-      }
-      setIsListening(true);
-      setActive(true);
-      claimApprove({
-        orderId,
-        address,
-        amount: peAmount.toString(),
-        tx: tx.transactionHash,
-      }).then((res) => {
-        if (!res.success) {
-          setIsListening(false);
-          setIsTxLoading(false);
-          setActive(false);
-          return;
-        }
-
-        router.push("/entrada/" + orderId);
-      });
-    });
-  }, [
-    address,
-    data,
-    isListening,
-    isSuccess,
-    orderId,
-    peAmount,
-    router,
-    isTxLoading,
-    setActive,
-  ]);
 
   return (
     <Container>
@@ -135,7 +139,8 @@ const Peronio = () => {
         <b>Precio: </b> <PeronioIcon />
         <span>{TICKET_PRICE.toFixed(2)}</span>
       </PriceDiv>
-      {isTxLoading ? (
+
+      {data?.hash ? (
         <>
           <div>Esperando confirmación de transacción...</div>
           <div>No recargues ni salgas de la página.</div>

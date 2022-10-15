@@ -6,6 +6,7 @@ import {
   FieldValue,
   DocumentReference,
 } from "firebase-admin/firestore";
+import { ITransaction } from "../../types/crypto";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -136,5 +137,18 @@ export const claimCode = async (code: string): Promise<boolean> => {
   });
 
   return true;
+};
+
+export const isTxStored = async (txHash: string): Promise<boolean> => {
+  const txRef = db.collection("transactions").doc(txHash);
+  const doc = await txRef.get();
+  return doc.exists;
+};
+
+export const addTx = async (tx: ITransaction): Promise<string | undefined> => {
+  let txRef = db.collection("transactions").doc(tx.hash);
+  await txRef.set(tx);
+
+  return txRef.id;
 };
 exports.log = log;

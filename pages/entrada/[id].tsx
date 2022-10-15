@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import useOrder from "../../hooks/useOrder";
 import TicketReady from "../../components/Ticket/TicketReady";
 import useLoading from "../../hooks/useLoading";
+import EventDetails from "../../components/EventDetails";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -62,7 +63,7 @@ const Home: NextPage = () => {
         <Background />
         <Container>
           <HeaderLogo />
-
+          <EventDetails />
           {!order ? (
             !isError ? (
               "Cargando...."

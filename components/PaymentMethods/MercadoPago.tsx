@@ -8,6 +8,7 @@ import {
   ResponseDataType,
 } from "../../types/request";
 import useLoading from "../../hooks/useLoading";
+import LargeButton from "../common/LargeButton";
 
 const Container = styled.div`
   width: 100%;
@@ -34,6 +35,7 @@ export const MercadoPago = () => {
   const [isPreferenceLoading, setIsPreferenceLoading] =
     useState<boolean>(false);
   const [preferenceId, setPreferenceId] = useState<string>();
+  const [checkoutObject, setCheckoutObject] = useState<any>();
   const { orderId, isLoading: isOrderLoading } = useOrder();
 
   const mercadopago = useMercadopago.v2(
@@ -42,6 +44,10 @@ export const MercadoPago = () => {
       locale: "es-AR",
     }
   );
+
+  const openCheckout = () => {
+    checkoutObject.open();
+  };
 
   // Start loading
   useEffect(() => {
@@ -79,14 +85,8 @@ export const MercadoPago = () => {
         },
       });
 
-      checkout
-        .render({
-          container: "#mercadopago-container",
-          label: "Pagar",
-        })
-        .then(() => {
-          setActive(false);
-        });
+      setCheckoutObject(checkout);
+      setActive(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId, preferenceId, mercadopago, mounted]);
@@ -96,7 +96,11 @@ export const MercadoPago = () => {
       <h1>MercadoPago</h1>
       {isOrderLoading ? <div>Cargando Orden....</div> : ""}
       {isPreferenceLoading ? <div>Generando ID desde MercadoPago....</div> : ""}
-      <div id='mercadopago-container' />
+      <div>
+        <LargeButton disabled={!checkoutObject} onClick={openCheckout}>
+          PAGAR con MercadoPago
+        </LargeButton>
+      </div>
     </Container>
   );
 };

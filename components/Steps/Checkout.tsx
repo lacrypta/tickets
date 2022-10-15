@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MercadoPago } from "../PaymentMethods/MercadoPago";
 import { InvitationCode } from "../PaymentMethods/InvitationCode";
@@ -7,6 +6,7 @@ import { Crypto } from "../PaymentMethods/Crypto";
 import useOrder from "../../hooks/useOrder";
 // import { ICreateOrderRequestBody } from "../../types/request";
 import { PaymentMethod } from "../../types/order";
+import LargeButton from "../common/LargeButton";
 
 const Container = styled.div`
   width: 100%;
@@ -15,6 +15,15 @@ const Container = styled.div`
   background: rgba(80, 80, 80, 0.3);
   border-radius: 5px;
   backdrop-filter: blur(4px);
+`;
+
+const PriceDiv = styled.div`
+  font-size: 25px;
+`;
+
+const MethodList = styled.div`
+  width: 100%;
+  margin-top: 1em;
 `;
 
 const MethodDiv = styled.div`
@@ -48,24 +57,28 @@ export const Checkout = () => {
 
   return (
     <Container>
-      <h1>Elegí el medio de pago</h1>
+      <h1>Medio de Pago</h1>
 
-      <div>Sale ${TICKET_PRICE}</div>
+      <PriceDiv>Precio de la Entrada ${TICKET_PRICE}</PriceDiv>
 
       {!method ? (
-        <>
+        <MethodList>
           <MethodDiv>
-            <Button onClick={() => setMethod("mercadopago")}>
+            <LargeButton onClick={() => setMethod("mercadopago")}>
               MercadoPago
-            </Button>
+            </LargeButton>
           </MethodDiv>
           <MethodDiv>
-            <Button onClick={() => setMethod("crypto")}>Crypto</Button>
+            <LargeButton onClick={() => setMethod("crypto")}>
+              Crypto
+            </LargeButton>
           </MethodDiv>
           <MethodDiv>
-            <Button onClick={() => setMethod("invitation")}>Código</Button>
+            <LargeButton onClick={() => setMethod("invitation")}>
+              Código
+            </LargeButton>
           </MethodDiv>
-        </>
+        </MethodList>
       ) : (
         paymentMethods[method]
       )}

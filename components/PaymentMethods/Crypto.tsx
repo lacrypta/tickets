@@ -11,8 +11,8 @@ export const Crypto = () => {
   const { address } = useAccount();
   return (
     <Container>
-      <h1>Crypto!!</h1>
-      <h2>50% de Descuento!</h2>
+      <h2>Con Peronio tenes hasta</h2>
+      <h3>50% de Descuento!</h3>
 
       <ConnectButton label='Conectar' />
       {address ? (

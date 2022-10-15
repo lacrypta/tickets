@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 import { parseUnits } from "ethers/lib/utils";
 
@@ -14,10 +13,29 @@ const Container = styled.div`
   margin-bottom: 2em;
 `;
 
+const PriceDiv = styled.div`
+  margin: 10px 0px 10px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  font-size: 30px;
+  justify-content: center;
+
+  b {
+    margin-right: 10px;
+  }
+
+  span {
+    margin-left: 5px;
+  }
+`;
+
 import ERC20ABI from "../../../abi/IERC20.json";
 import useOrder from "../../../hooks/useOrder";
 import { useRouter } from "next/router";
 import useLoading from "../../../hooks/useLoading";
+import LargeButton from "../../common/LargeButton";
+import PeronioIcon from "../../common/PeronioIcon";
 
 const TICKET_PRICE = parseFloat(
   process.env.NEXT_PUBLIC_TICKET_PRICE_PE || "1000"
@@ -113,8 +131,10 @@ const Peronio = () => {
 
   return (
     <Container>
-      <h3>Peronio</h3>
-      <div>Precio en PE: {TICKET_PRICE.toFixed(2)}</div>
+      <PriceDiv>
+        <b>Precio: </b> <PeronioIcon />
+        <span>{TICKET_PRICE.toFixed(2)}</span>
+      </PriceDiv>
       {isTxLoading ? (
         <>
           <div>Esperando confirmación de transacción...</div>
@@ -134,9 +154,9 @@ const Peronio = () => {
           {isLoading ? (
             "Cargando..."
           ) : (
-            <Button disabled={!orderId} onClick={handlePay}>
+            <LargeButton disabled={!orderId} onClick={handlePay}>
               PAGAR
-            </Button>
+            </LargeButton>
           )}
         </>
       )}

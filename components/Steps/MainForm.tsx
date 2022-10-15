@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import { useContext } from "react";
 import { StepsContext } from "../../contexts/Steps";
 import useOrder from "../../hooks/useOrder";
+import LargeButton from "../common/LargeButton";
 import TextField from "../common/TextField";
 
 const Container = styled.div`
@@ -14,16 +15,15 @@ const Container = styled.div`
   backdrop-filter: blur(4px);
 `;
 
-const SubmitButton = styled(Button)`
-  margin-top: 10px;
-  width: 100%;
-`;
-
 const InputField = styled(TextField)`
   label {
     color: white !important;
     background: #111;
   }
+`;
+
+const ButtonDiv = styled.div`
+  margin-top: 10px;
 `;
 
 export const MainForm = () => {
@@ -55,7 +55,9 @@ export const MainForm = () => {
           variant='outlined'
           value={email}
         />
-        <SubmitButton type='submit'>COMPRAR</SubmitButton>
+        <ButtonDiv>
+          <LargeButton type='submit'>COMPRAR</LargeButton>
+        </ButtonDiv>
       </form>
     </Container>
   );

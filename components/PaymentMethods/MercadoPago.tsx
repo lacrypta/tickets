@@ -9,6 +9,7 @@ import {
 } from "../../types/request";
 import useLoading from "../../hooks/useLoading";
 import { Button } from "@mui/material";
+import LargeButton from "../common/LargeButton";
 
 const Container = styled.div`
   width: 100%;
@@ -48,11 +49,6 @@ export const MercadoPago = () => {
   const openCheckout = () => {
     checkoutObject.open();
   };
-
-  const PayButton = styled(Button)`
-    width: 100%;
-    font-size: 20px;
-  `;
 
   // Start loading
   useEffect(() => {
@@ -102,9 +98,9 @@ export const MercadoPago = () => {
       {isOrderLoading ? <div>Cargando Orden....</div> : ""}
       {isPreferenceLoading ? <div>Generando ID desde MercadoPago....</div> : ""}
       <div>
-        <PayButton disabled={!checkoutObject} onClick={openCheckout}>
+        <LargeButton disabled={!checkoutObject} onClick={openCheckout}>
           PAGAR con MercadoPago
-        </PayButton>
+        </LargeButton>
       </div>
     </Container>
   );

@@ -8,7 +8,6 @@ import {
   ResponseDataType,
 } from "../../types/request";
 import useLoading from "../../hooks/useLoading";
-import { Button } from "@mui/material";
 import LargeButton from "../common/LargeButton";
 
 const Container = styled.div`

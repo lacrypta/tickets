@@ -18,7 +18,7 @@
     "@firebase/firestore": "^3.5.0",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.7",
-    "@rainbow-me/rainbowkit": "^0.7.0",
+    "@rainbow-me/rainbowkit": "^0.7.1",
     "ethers": "^5.0.0",
     "firebase": "^9.12.1",
     "firebase-admin": "^11.0.1",

@@ -82,11 +82,10 @@ export const ConnectButton = () => {
           >
             {(() => {
               if (!connected) {
-                return (
-                  <button onClick={openConnectModal} type='button'>
-                    Conectar Wallet
-                  </button>
-                );
+                return "";
+                // <button onClick={openConnectModal} type='button'>
+                //   Conectar Wallet
+                // </button>
               }
 
               if (chain.unsupported) {

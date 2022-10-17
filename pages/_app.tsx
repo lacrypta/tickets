@@ -20,6 +20,7 @@ import { StepsProvider } from "../contexts/Steps";
 import { OrderProvider } from "../contexts/Order";
 import { getMenuItems } from "../lib/public/menu";
 import { LoadingProvider } from "../contexts/Loading";
+import { UserProvider } from "../contexts/User";
 
 const menuItems = getMenuItems();
 
@@ -68,11 +69,13 @@ function MyApp({ Component, pageProps }: AppProps) {
               theme={darkTheme()}
               chains={chains}
             >
-              <CartProvider menu={menuItems}>
-                <OrderProvider>
-                  <Component {...pageProps} />
-                </OrderProvider>
-              </CartProvider>
+              <UserProvider>
+                <CartProvider menu={menuItems}>
+                  <OrderProvider>
+                    <Component {...pageProps} />
+                  </OrderProvider>
+                </CartProvider>
+              </UserProvider>
             </RainbowKitProvider>
           </WagmiConfig>
         </LoadingProvider>

@@ -10,6 +10,8 @@ import useOrder from "../../../hooks/useOrder";
 import PayButton from "../../Menu/PayButton";
 import PaymentModal from "../../Order/PaymentModal";
 import useLoading from "../../../hooks/useLoading";
+import useSpendable from "../../../hooks/useSpendable";
+import useUser from "../../../hooks/useUser";
 
 const CONTRACT_NAME =
   process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
@@ -20,8 +22,12 @@ const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
 export const PayWithPeronio = () => {
   const { setStep } = useContext(StepsContext);
   const { address } = useAccount();
+  const { permit } = useUser();
+
   const { orderId, orderTotal, isPayed, payOrder } = useOrder();
   const { setActive } = useLoading();
+
+  const spendable = useSpendable(permit);
 
   const {
     voucher,
@@ -67,6 +73,8 @@ export const PayWithPeronio = () => {
 
   return (
     <>
+      <h3>Check available payment</h3>
+      {JSON.stringify(spendable)}
       <PayButton onClick={handlePay} />
       <PaymentModal open={open} setOpen={setOpen} />
     </>

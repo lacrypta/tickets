@@ -46,7 +46,7 @@ const useUser = (): IUseUserResult => {
 
     setIsLoading(true);
     const userRef = doc(db, "users", address);
-    onSnapshot(userRef, {
+    const unsubscribe = onSnapshot(userRef, {
       next: (snapshot) => {
         const data = snapshot.data();
         if (!data) {
@@ -65,6 +65,10 @@ const useUser = (): IUseUserResult => {
         setIsLoading(false);
       },
     });
+
+    return () => {
+      unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 

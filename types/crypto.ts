@@ -1,6 +1,12 @@
 import { z } from "zod";
 
 // Interfaces
+
+export interface IUser {
+  username: string;
+  address: string;
+}
+
 export interface IPermitData {
   contract: string;
   name: string;

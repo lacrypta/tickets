@@ -16,3 +16,8 @@ export interface IOrderItem {
 }
 
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
+
+export const PaymentMethods = {
+  MERCADOPAGO: "mercadopago",
+  PERONIO: "peronio",
+};

@@ -54,7 +54,7 @@ export const ConnectButton = () => {
         chain,
         openAccountModal,
         openChainModal,
-        openConnectModal,
+        // openConnectModal,
         authenticationStatus,
         mounted,
       }) => {

@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useAccount } from "wagmi";
 
 import { HeaderLogo } from "../components/HeaderLogo";
 import { Footer } from "../components/Footer";
@@ -23,8 +22,6 @@ const MainBlock = styled.main`
 `;
 
 const Home: NextPage = () => {
-  const { isDisconnected } = useAccount();
-  // const { chain } = useNetwork();
   const { isLoading } = useUser();
   const { setActive } = useLoading();
   const [isMounted, setIsMounted] = useState(false);
@@ -36,13 +33,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  // const ValidNetworkBlock = () => {
-  //   return isRegistered ? <MainWidget /> : <SignupWidget />;
-  // };
-
-  // const ConnectedBlock = () => {
-  //   return chain?.id === 137 ? <ValidNetworkBlock /> : <InvalidNetworkWidget />;
-  // };
 
   return (
     <div>

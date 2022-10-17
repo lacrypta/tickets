@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
-import { useContext, useState } from "react";
-import { StepsContext } from "../../contexts/Steps";
+import { useState } from "react";
 import { PaymentMethods } from "../../types/cart";
 import BackButton from "../BackButton";
 import Button from "../common/Button";
 
-import PayButton from "../Menu/PayButton";
 import { Peronio } from "../PaymentMethods/Peronio/Peronio";
 
 const Container = styled.div`

@@ -19,7 +19,7 @@ export const Peronio = () => {
   const { chain } = useNetwork();
   const { orderId, isPayed } = useOrder();
   const { setActive } = useLoading();
-  const { isRegistered, isLoading: isUserLoading } = useUser();
+  const { isRegistered } = useUser();
 
   useEffect(() => {
     if (setStep && isPayed) {

@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useAccount, useSignTypedData } from "wagmi";
+import { Address, useAccount, useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature } from "../types/crypto";
 import { ethers } from "ethers";
@@ -23,18 +22,12 @@ interface IRequestSignatureArgs {
 }
 
 interface IUseERC20PermitResult {
-  signature?: ISignature;
-  isLoading: boolean;
-  isSuccess: boolean;
-  requestSignature: (_args: IRequestSignatureArgs) => void;
+  requestSignature: (_args: IRequestSignatureArgs) => Promise<ISignature>;
 }
 
 const useERC20Permit = (): IUseERC20PermitResult => {
   const { address: owner } = useAccount();
-
-  const [signature, setSignature] = useState<ISignature>();
-
-  const { data, isLoading, isSuccess, signTypedData } = useSignTypedData();
+  const { signTypedDataAsync } = useSignTypedData();
 
   const requestSignature = async ({
     name,
@@ -42,43 +35,32 @@ const useERC20Permit = (): IUseERC20PermitResult => {
     spender,
     value,
     deadline,
-  }: IRequestSignatureArgs) => {
+  }: IRequestSignatureArgs): Promise<ISignature> => {
     const nonce = ethers.BigNumber.from(
       ethers.utils.randomBytes(32)
     ).toHexString();
 
-    setSignature(undefined);
+    const data = await signTypedDataAsync({
+      domain: {
+        name: name,
+        version: "1",
+        chainId: 137,
+        verifyingContract: contract as Address,
+      },
+      types,
+      value: {
+        owner: owner?.toLocaleLowerCase(),
+        spender: spender,
+        value,
+        nonce,
+        deadline,
+      },
+    });
 
-    try {
-      signTypedData({
-        domain: {
-          name: name,
-          version: "1",
-          chainId: 137,
-          verifyingContract: contract,
-        },
-        types,
-        value: {
-          owner: owner?.toLocaleLowerCase(),
-          spender: spender,
-          value,
-          nonce,
-          deadline,
-        },
-      });
-    } catch (e) {
-      console.dir(e);
-    }
+    return splitSignature(data);
   };
 
-  useEffect(() => {
-    if (!isLoading && isSuccess && data) {
-      const { r, s, v } = splitSignature(data);
-      setSignature({ r, s, v });
-    }
-  }, [data, isLoading, isSuccess]);
-
-  return { signature, isLoading, isSuccess, requestSignature };
+  return { requestSignature };
 };
 
 export default useERC20Permit;

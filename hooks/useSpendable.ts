@@ -1,12 +1,6 @@
 import { BigNumber } from "ethers";
 
-import {
-  Address,
-  useAccount,
-  useBalance,
-  useContract,
-  useContractRead,
-} from "wagmi";
+import { useAccount, useBalance, useContract, useContractRead } from "wagmi";
 import { IPermit } from "../types/crypto";
 
 import PeronioABI from "../abi/Peronio.json";
@@ -47,42 +41,39 @@ const useSpendable = (permit?: IPermit): ISpendableResult => {
   };
 
   const permitContract = useContract({
-    address: PERONIO_CONTRACT_ADDRESS as Address,
-    abi: PeronioABI,
+    addressOrName: PERONIO_CONTRACT_ADDRESS,
+    contractInterface: PeronioABI,
   });
 
   // Fetch Data
   const { data: balanceRes } = useBalance({
     addressOrName: address,
-    token: PERONIO_CONTRACT_ADDRESS as Address,
+    token: PERONIO_CONTRACT_ADDRESS,
     watch: true,
   });
 
   const { data: allowanceRes } = useContractRead({
-    address: PERONIO_CONTRACT_ADDRESS,
-    abi: PeronioABI,
+    addressOrName: PERONIO_CONTRACT_ADDRESS,
+    contractInterface: PeronioABI,
     functionName: "allowance",
     args: [address, GATEWAY_CONTRACT_ADDRESS],
     watch: true, // refresh on every block
   });
 
+  const allowance: BigNumber = (allowanceRes || ZERO) as BigNumber;
+
   // Validate Permit
-  if (permit) {
-    validatePermit(permit);
-  }
+  // if (permit) {
+  //   validatePermit(permit);
+  // }
 
   // Parse results
   const balance: BigNumber = balanceRes?.value || ZERO;
   // const allowance: BigNumber = allowanceRes?.value || ZERO;
 
-  console.dir("allowanceRes: ");
-  console.dir(allowanceRes);
-
-  const allowance = BigNumber.from(0);
-
   const minValue =
     [balance, allowance, permitAmount]
-      .sort((a, b) => (a.gt(b) ? 1 : -1))
+      .sort((a, b) => (a.gt(b) ? -1 : 1))
       .pop() || ZERO;
 
   return {

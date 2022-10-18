@@ -62,14 +62,13 @@ const useSpendable = (permit?: IPermit): ISpendableResult => {
 
   const allowance: BigNumber = (allowanceRes || ZERO) as BigNumber;
 
-  // Validate Permit
+  // TODO: Validate Permit
   // if (permit) {
   //   validatePermit(permit);
   // }
 
   // Parse results
   const balance: BigNumber = balanceRes?.value || ZERO;
-  // const allowance: BigNumber = allowanceRes?.value || ZERO;
 
   const minValue =
     [balance, allowance, permitAmount]

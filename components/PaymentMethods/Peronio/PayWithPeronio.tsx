@@ -4,7 +4,7 @@ import { StepsContext } from "../../../contexts/Steps";
 
 import React, { useContext, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import useGateway from "../../../hooks/useGateway";
+import useGateway from "../../../plugins/gateway/hooks/useGateway";
 import useOrder from "../../../hooks/useOrder";
 
 import PayButton from "../../Menu/PayButton";

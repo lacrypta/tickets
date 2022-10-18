@@ -24,7 +24,8 @@ const MainBlock = styled.main`
 `;
 
 const Container = styled.div`
-  width: 40vw;
+  width: 90vw;
+  max-width: 700px;
   z-index: 10;
 `;
 

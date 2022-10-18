@@ -26,9 +26,9 @@ const request = async (
     res.status(400).json({ success: false, message: "Malformed request" });
   }
 
-  const { address, items }: ICreateOrderRequestBody = req.body;
+  const { address, items, paymentMethod }: ICreateOrderRequestBody = req.body;
   const total = getTotal(items);
-  const orderId = await addOrder(address, items, total);
+  const orderId = await addOrder(items, paymentMethod, total, address);
 
   res.status(200).json({
     success: true,

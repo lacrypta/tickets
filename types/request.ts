@@ -1,5 +1,5 @@
 import z from "zod";
-import { IOrderItem } from "./cart";
+import { IOrderItem, PaymentMethods } from "./cart";
 import {
   IPermitData,
   ISignature,
@@ -20,7 +20,8 @@ export interface IPaymentRequestBody {
   voucher: ITransferVoucherSigned;
 }
 export interface ICreateOrderRequestBody {
-  address: string;
+  address?: string;
+  paymentMethod: string;
   items: IOrderItem[];
 }
 
@@ -43,7 +44,8 @@ export const PaymentSchema = z.object({
 });
 
 export const OrderSchema = z.object({
-  address: z.string(),
+  address: z.string().optional(),
+  paymentMethod: z.enum(["mercadopago", "peronio"]),
   items: z.array(
     z.object({
       id: z.string(),

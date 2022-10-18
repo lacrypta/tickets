@@ -20,7 +20,7 @@ export interface IUseUserResult {
   isPayed?: boolean;
   isError?: boolean;
   error?: string;
-  createOrder: () => void;
+  createOrder: (_paymentMethod: string) => void;
   clear: () => void;
   payOrder: (_signature: any) => void;
 }
@@ -51,6 +51,7 @@ const ajaxCreatePayment = async (
 
 const generateRequest = (
   address: string,
+  paymentMethod: string,
   cart: ICart
 ): ICreateOrderRequestBody => {
   const items = Object.values(cart.items)
@@ -64,6 +65,7 @@ const generateRequest = (
 
   return {
     address,
+    paymentMethod,
     items,
   };
 };
@@ -89,7 +91,7 @@ const useOrder = (): IUseUserResult => {
     clear,
   } = useContext(OrderContext);
 
-  async function createOrder() {
+  async function createOrder(paymentMethod: string) {
     if (isLoading) {
       return;
     }
@@ -105,7 +107,7 @@ const useOrder = (): IUseUserResult => {
       setIsLoading(false);
       return null;
     }
-    const orderRequest = generateRequest(address, cart);
+    const orderRequest = generateRequest(address, paymentMethod, cart);
     // Ajax Request
     const res = await ajaxCreateOrder(orderRequest);
 

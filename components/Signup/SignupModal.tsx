@@ -60,13 +60,11 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   // Contexts
   const { address } = useAccount();
   const { signup } = useUser();
-  const { signature, isSuccess, isLoading, requestSignature } =
-    useERC20Permit();
+  const { requestSignature } = useERC20Permit();
   const { clear } = useContext(CartContext);
 
   // Local Hooks
   const [username, setUsername] = useState("");
-  const [permitData, setPermitData] = useState<any>();
   const [isSignatureLoading, setSignatureLoading] = useState(false);
   const [checkedTerms, setCheckedTerms] = useState(false);
   // const [error, setError] = useState(""); // TODO: Show error
@@ -82,19 +80,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
       setCheckedTerms(false);
     }
   }, [open]);
-
-  useEffect(() => {
-    if (!isLoading && isSuccess && signature) {
-      signup({
-        address: address ?? "",
-        username,
-        permitData,
-        signature,
-      });
-      setSignatureLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signature, isLoading, isSuccess]);
 
   const generatePermitData = () => {
     return {
@@ -114,8 +99,21 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     clear(); // Clear Cart
     setSignatureLoading(true);
     const permitData = generatePermitData();
-    setPermitData(permitData);
-    requestSignature(permitData);
+    try {
+      const signature = await requestSignature(permitData);
+      console.info("res:");
+      console.dir(signature);
+      signup({
+        address: address ?? "",
+        username,
+        permitData,
+        signature,
+      });
+    } catch (e: any) {
+      console.info("Modal closed");
+    }
+
+    setSignatureLoading(false);
   };
 
   const handleInput = (event: { target: { value: any } }) => {

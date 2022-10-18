@@ -43,7 +43,7 @@ const PeronioIcon = () => {
 };
 
 export const ConnectButton = () => {
-  const { balance } = useSpendable({});
+  const { balance } = useSpendable();
   const { isRegistered, user } = useUser();
   const pBalance = parseFloat(formatUnits(balance, 6)).toFixed(2);
 
@@ -54,7 +54,7 @@ export const ConnectButton = () => {
         chain,
         openAccountModal,
         openChainModal,
-        openConnectModal,
+        // openConnectModal,
         authenticationStatus,
         mounted,
       }) => {
@@ -82,11 +82,10 @@ export const ConnectButton = () => {
           >
             {(() => {
               if (!connected) {
-                return (
-                  <button onClick={openConnectModal} type='button'>
-                    Conectar Wallet
-                  </button>
-                );
+                return "";
+                // <button onClick={openConnectModal} type='button'>
+                //   Conectar Wallet
+                // </button>
               }
 
               if (chain.unsupported) {

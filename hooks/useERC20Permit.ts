@@ -1,4 +1,4 @@
-import { Address, useAccount, useSignTypedData } from "wagmi";
+import { useAccount, useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
 import { ISignature } from "../types/crypto";
 import { ethers } from "ethers";
@@ -45,7 +45,7 @@ const useERC20Permit = (): IUseERC20PermitResult => {
         name: name,
         version: "1",
         chainId: 137,
-        verifyingContract: contract as Address,
+        verifyingContract: contract,
       },
       types,
       value: {

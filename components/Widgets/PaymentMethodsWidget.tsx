@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import useOrder from "../../hooks/useOrder";
 import { PaymentMethods } from "../../types/cart";
 import BackButton from "../BackButton";
 import Button from "../common/Button";
@@ -20,6 +21,13 @@ const paymentMethodWidgets = {
 
 export const PaymentMethodsWidget = () => {
   const [paymentMethod, setPaymentMethod] = useState<string>();
+  const { createOrder } = useOrder();
+
+  const startOrder = useCallback((paymentMethod: string) => {
+    createOrder(paymentMethod);
+    setPaymentMethod(paymentMethod);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleBack = () => {
     setPaymentMethod(undefined);
@@ -33,14 +41,12 @@ export const PaymentMethodsWidget = () => {
       {!paymentMethod ? (
         <div>
           <div>
-            <Button
-              onClick={() => setPaymentMethod(PaymentMethods.MERCADOPAGO)}
-            >
+            <Button onClick={() => startOrder(PaymentMethods.MERCADOPAGO)}>
               MercadoPago
             </Button>
           </div>
           <div>
-            <Button onClick={() => setPaymentMethod(PaymentMethods.PERONIO)}>
+            <Button onClick={() => startOrder(PaymentMethods.PERONIO)}>
               Peronio
             </Button>
           </div>

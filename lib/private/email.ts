@@ -17,7 +17,7 @@ export const sendEmail = async ({ fullname, email, url }: MailParams) => {
   return transporter.sendMail({
     from: '"La Crypta" <eventos@lacrypta.com.ar>',
     to: email,
-    subject: "Entrada de Halloween", // Subject line
+    subject: "Entrada a Halloween Party", // Subject line
     text: "Tu entrada del evento La Crypta - Halloween", // plain text body
     html: generateMailHTML({
       fullname,
@@ -37,7 +37,7 @@ const generateMailHTML = ({ fullname, email, url }: MailParams) => {
     '        <img width="100" src="https://raw.githubusercontent.com/lacrypta/branding/main/black-skin/256.png" />';
   html += "    </div>";
   html += '    <div style="margin-top: 0.5em; font-size: 1.3em;">';
-  html += "      <div>Entradaa de La Crypta viejo</div>";
+  html += "      <div>Entrada a La Crypta Halloween Party</div>";
   html += "      <div>Hacé click en el siguiente Link para verla</div>";
   html += '      <div><a href="%URL%">%URL%</a></div>';
   html += "    </h1>";

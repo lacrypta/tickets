@@ -65,7 +65,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
 
   // Local Hooks
   const [username, setUsername] = useState("");
-  const [permitData, setPermitData] = useState<any>();
   const [isSignatureLoading, setSignatureLoading] = useState(false);
   const [checkedTerms, setCheckedTerms] = useState(false);
   // const [error, setError] = useState(""); // TODO: Show error
@@ -100,7 +99,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     clear(); // Clear Cart
     setSignatureLoading(true);
     const permitData = generatePermitData();
-    setPermitData(permitData);
     try {
       const signature = await requestSignature(permitData);
       console.info("res:");

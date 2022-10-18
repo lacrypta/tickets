@@ -12,12 +12,14 @@ import PaymentModal from "../../Order/PaymentModal";
 import useLoading from "../../../hooks/useLoading";
 import useSpendable from "../../../hooks/useSpendable";
 import useUser from "../../../hooks/useUser";
+import { formatUnits } from "ethers/lib/utils";
 
 const CONTRACT_NAME =
   process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
 const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
+const PERONIO_MULTIPLIER = parseFloat(process.env.PERONIO_MULTIPLIER || "0.5");
 
 const PayWithPeronio = () => {
   const { setStep } = useContext(StepsContext);
@@ -27,12 +29,15 @@ const PayWithPeronio = () => {
   const { orderId, orderTotal, isPayed, payOrder } = useOrder();
   const { setActive } = useLoading();
 
-  // const spendable = useSpendable(permit);
-  const spendable = {};
+  const { balance } = useSpendable(permit);
+
+  const peAmount = parseFloat(orderTotal) * PERONIO_MULTIPLIER;
 
   useEffect(() => {
     console.info("Only once!");
+    setActive(false);
   }, []);
+
   const {
     voucher,
     signature,
@@ -75,14 +80,16 @@ const PayWithPeronio = () => {
     });
   };
 
-  console.info("Render");
   return (
-    <>
-      <h3>Check available payment</h3>
-      {JSON.stringify(spendable)}
+    <div>
+      <div>Peronio en la Wallet: {formatUnits(balance, 6)}</div>
+      <div>Monto a Pagar: {peAmount}</div>
+      <div>#OrderID: {orderId} P</div>
+
       <PayButton onClick={handlePay} />
+
       <PaymentModal open={open} setOpen={setOpen} />
-    </>
+    </div>
   );
 };
 

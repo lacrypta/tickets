@@ -38,7 +38,7 @@ export const Peronio = () => {
   const ConnectedBlock = useCallback(() => {
     return chain?.id === 137 ? <ValidNetworkBlock /> : <InvalidNetworkWidget />;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chain?.id]);
+  }, [chain?.id, isRegistered]);
 
   const ValidNetworkBlock = useCallback(() => {
     return isRegistered ? <PayWithPeronio /> : <SignupWidget />;

@@ -5,10 +5,10 @@ import { splitSignature } from "@ethersproject/bytes";
 
 import { useContract, useProvider, useSignMessage } from "wagmi";
 
-import { ISignature, ITransferVoucher } from "../types/crypto";
-import { encodeVoucher } from "../lib/public/utils";
+import { ISignature, ITransferVoucher } from "../../../types/crypto";
+import { encodeVoucher } from "../../../lib/public/utils";
 
-import mockGatewayABI from "../abi/GatewayMock.json";
+import mockGatewayABI from "../../../abi/GatewayMock.json";
 
 const TRANSFER_FROM_TAG =
   process.env.NEXT_PUBLIC_GATEWAY_TRANSFER_FROM_TAG || "";

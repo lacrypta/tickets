@@ -150,9 +150,10 @@ export const addPayment = async (
  * @returns {Number} Order Id
  */
 export const addOrder = async (
-  address: string,
   items: IOrderItem[],
-  total: number
+  paymentMethod: string,
+  total: number,
+  address?: string
 ): Promise<number | undefined> => {
   let orderId;
   await db.runTransaction(async (t) => {
@@ -162,7 +163,9 @@ export const addOrder = async (
     await t.create(orderRef, {
       items,
       total,
+      paymentMethod,
       status: "pending",
+      address,
     });
   });
 

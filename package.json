@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@types/mercadopago": "^1.5.6",
-    "@types/node": "^18.8.5",
+    "@types/node": "^18.11.0",
     "@types/nodemailer": "^6.4.6",
     "@types/react": "^18.0.20",
     "@types/styled-components": "^5.1.26",

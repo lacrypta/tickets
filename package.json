@@ -34,7 +34,7 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
-    "@types/mercadopago": "^1.5.6",
+    "@types/mercadopago": "^1.5.8",
     "@types/node": "^18.11.0",
     "@types/nodemailer": "^6.4.6",
     "@types/react": "^18.0.20",

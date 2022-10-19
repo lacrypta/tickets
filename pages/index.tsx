@@ -10,9 +10,10 @@ import { ReactElement, useContext, useEffect, useState } from "react";
 import { MainForm } from "../components/Steps/MainForm";
 import { StepsContext } from "../contexts/Steps";
 import { Checkout } from "../components/Steps/Checkout";
+import { useRouter } from "next/router";
+
 import useLoading from "../hooks/useLoading";
 import EventDetails from "../components/EventDetails";
-import { useRouter } from "next/router";
 
 const MainBlock = styled.main`
   padding: 4rem 0;

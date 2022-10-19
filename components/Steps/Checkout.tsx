@@ -42,12 +42,13 @@ const paymentMethods: { [_key: string]: any } = {
 
 export const Checkout = () => {
   const [method, setMethod] = useState<PaymentMethod>();
-  const { orderId, createOrder, fullname, email } = useOrder();
+  const { orderId, createOrder, fullname, email, clear } = useOrder();
   const router = useRouter();
 
   useEffect(() => {
     switch (router.asPath) {
       case "/#payment":
+        clear();
         setMethod(undefined);
         break;
       case "/#payment/crypto":

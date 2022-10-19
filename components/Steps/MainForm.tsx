@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import { StepsContext } from "../../contexts/Steps";
 import useOrder from "../../hooks/useOrder";
@@ -28,8 +29,10 @@ const ButtonDiv = styled.div`
 export const MainForm = () => {
   const { setStep } = useContext(StepsContext);
   const { fullname, setFullname, email, setEmail } = useOrder();
+  const router = useRouter();
 
   function handleSubmit(event: any) {
+    router.push("/#payment", undefined);
     setStep(1);
     event.preventDefault();
   }

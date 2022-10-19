@@ -7,6 +7,7 @@ import useOrder from "../../hooks/useOrder";
 // import { ICreateOrderRequestBody } from "../../types/request";
 import { PaymentMethod } from "../../types/order";
 import LargeButton from "../common/LargeButton";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   width: 100%;
@@ -42,6 +43,32 @@ const paymentMethods: { [_key: string]: any } = {
 export const Checkout = () => {
   const [method, setMethod] = useState<PaymentMethod>();
   const { orderId, createOrder, fullname, email } = useOrder();
+  const router = useRouter();
+
+  useEffect(() => {
+    switch (router.asPath) {
+      case "/#payment":
+        setMethod(undefined);
+        break;
+      case "/#payment/crypto":
+        setMethod("crypto");
+        break;
+      case "/#payment/mercadopago":
+        setMethod("mercadopago");
+        break;
+      case "/#payment/invitation":
+        setMethod("invitation");
+        break;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+
+  useEffect(() => {
+    if (method) {
+      router.push(`/#payment/${method}`, undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [method]);
 
   useEffect(() => {
     if (orderId || !method) {

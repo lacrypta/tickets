@@ -12,6 +12,7 @@ import { StepsContext } from "../contexts/Steps";
 import { Checkout } from "../components/Steps/Checkout";
 import useLoading from "../hooks/useLoading";
 import EventDetails from "../components/EventDetails";
+import { useRouter } from "next/router";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -36,8 +37,22 @@ const stepsComponents: ReactElement<any, any>[] = [
 
 const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false); // Fix Hydration trouble
-  const { step } = useContext(StepsContext);
+  const { step, setStep } = useContext(StepsContext);
   const { setActive } = useLoading();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    switch (router.asPath) {
+      case "/":
+        setStep(0);
+        break;
+      case "/#payment":
+        setStep(1);
+        break;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   useEffect(() => {
     setIsMounted(true);

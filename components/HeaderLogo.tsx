@@ -2,13 +2,16 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import brandLogo from "../public/images/lacrypta-title.svg";
 import halloweenLogo from "../public/images/halloween.png";
+import Link from "next/link";
 
 const Container = styled.div`
   width: 100%;
   margin-bottom: 2em;
 `;
 
-const Logo = styled(Image)``;
+const Logo = styled(Image)`
+  cursor: pointer;
+`;
 
 const HalloweenDiv = styled.div`
   width: 45%;
@@ -22,7 +25,9 @@ const Halloween = styled(Image)``;
 export const HeaderLogo = () => {
   return (
     <Container>
-      <Logo alt='La Crypta bar' src={brandLogo} />
+      <Link href={"/"}>
+        <Logo alt='La Crypta bar' src={brandLogo} />
+      </Link>
       <HalloweenDiv>
         <Halloween
           layout='responsive'

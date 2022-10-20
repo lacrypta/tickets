@@ -16,4 +16,18 @@ const encodeVoucher = (voucher: ITransferVoucher) => {
   };
 };
 
-export { encodeVoucher };
+const generatePermitData = (
+  contractAddress?: string,
+  gatewayAddress?: string,
+  signupTTL?: string
+) => {
+  return {
+    name: "Peronio",
+    contract: contractAddress ?? "",
+    spender: gatewayAddress ?? "",
+    value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
+    deadline: Math.floor(Date.now() / 1000) + parseInt(signupTTL || "43200"), // 12 hours
+  };
+};
+
+export { encodeVoucher, generatePermitData };

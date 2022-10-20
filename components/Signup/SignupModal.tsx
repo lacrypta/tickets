@@ -9,6 +9,7 @@ import {
   Modal,
   TextField,
 } from "@mui/material";
+import { generatePermitData } from "../../lib/public/utils";
 
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import React, { useContext, useEffect, useState } from "react";
@@ -81,16 +82,6 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     }
   }, [open]);
 
-  const generatePermitData = () => {
-    return {
-      name: "Peronio",
-      contract: contractAddress ?? "",
-      spender: gatewayAddress ?? "",
-      value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
-      deadline: Math.floor(Date.now() / 1000) + parseInt(signupTTL), // 12 hours
-    };
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -98,7 +89,11 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   const handleSignup = async () => {
     clear(); // Clear Cart
     setSignatureLoading(true);
-    const permitData = generatePermitData();
+    const permitData = generatePermitData(
+      contractAddress,
+      gatewayAddress,
+      signupTTL
+    );
     try {
       const signature = await requestSignature(permitData);
       console.info("res:");

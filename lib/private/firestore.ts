@@ -165,7 +165,7 @@ export const addOrder = async (
       total,
       paymentMethod,
       status: "pending",
-      address,
+      address: address || "",
     });
   });
 

@@ -2,9 +2,8 @@
 
 import { StepsContext } from "../../../contexts/Steps";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import useGateway from "../../../plugins/gateway/hooks/useGateway";
 import useOrder from "../../../hooks/useOrder";
 
 import PayButton from "../../Menu/PayButton";
@@ -14,11 +13,7 @@ import useSpendable from "../../../hooks/useSpendable";
 import useUser from "../../../hooks/useUser";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
-import {
-  ITransferVoucher,
-  ITransferVoucherSigned,
-} from "../../../plugins/gateway/types/Voucher";
-import { RestaurantRounded } from "@mui/icons-material";
+import { ITransferVoucher } from "../../../plugins/gateway/types/Voucher";
 
 // const CONTRACT_NAME =
 process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
@@ -31,7 +26,7 @@ const PayWithPeronio = () => {
   const { address } = useAccount();
   const { permit } = useUser();
 
-  const { orderId, orderTotal, isPayed, payOrder } = useOrder();
+  const { orderId, orderTotal } = useOrder();
   const { setActive } = useLoading();
 
   const [voucher, setVoucher] = useState<ITransferVoucher>();
@@ -43,7 +38,6 @@ const PayWithPeronio = () => {
   const peAmount = parseFloat(orderTotal) * PERONIO_MULTIPLIER;
 
   useEffect(() => {
-    console.info("Only once!");
     setActive(false);
   }, []);
 

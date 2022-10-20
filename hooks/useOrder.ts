@@ -71,7 +71,6 @@ const useOrder = (): IUseUserResult => {
     if (isLoading) {
       return;
     }
-    console.info("Llega acá?");
 
     setIsLoading(true);
     setIsSuccess(false);
@@ -84,12 +83,10 @@ const useOrder = (): IUseUserResult => {
       setIsLoading(false);
       return null;
     }
-    console.info("AQuÍ?");
     const orderRequest = generateRequest(paymentMethod, cart, address);
     // Ajax Request
     const res = await ajaxCreateOrder(orderRequest);
 
-    console.info("METAA");
     // Parse Data
     setOrderId(String(res.data.id));
     setOrderTotal(String(res.data.total));

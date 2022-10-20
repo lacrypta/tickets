@@ -1,5 +1,9 @@
+import { ITransferVoucherSignedStringified } from "./../../plugins/gateway/types/Voucher";
 import { BigNumber, ethers } from "ethers";
-import { ITransferVoucher } from "../../plugins/gateway/types/Voucher";
+import {
+  ITransferVoucher,
+  ITransferVoucherSigned,
+} from "../../plugins/gateway/types/Voucher";
 
 const utf8Encode = new TextEncoder();
 
@@ -30,4 +34,25 @@ const generatePermitData = (
   };
 };
 
-export { encodeVoucher, generatePermitData };
+const formatVoucher = (
+  voucher: ITransferVoucherSigned
+): ITransferVoucherSignedStringified => {
+  const { deadline, metadata, nonce, payload, tag } = voucher.voucher;
+  const { r, s, v } = voucher.signature;
+  return {
+    voucher: {
+      deadline: deadline.toString(),
+      metadata,
+      nonce: nonce.toString(),
+      payload,
+      tag: tag,
+    },
+    signature: {
+      r,
+      s,
+      v,
+    },
+  };
+};
+
+export { encodeVoucher, generatePermitData, formatVoucher };

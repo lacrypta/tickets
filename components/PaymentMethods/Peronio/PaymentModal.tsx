@@ -13,6 +13,10 @@ import {
 // import { StepsContext } from "../../contexts/Steps";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 import useLoading from "../../../hooks/useLoading";
+import { IERC20PaymentRequestBody } from "../../../types/request";
+import useOrder from "../../../hooks/useOrder";
+import { formatVoucher } from "../../../lib/public/utils";
+import { ajaxCall } from "../../../lib/public/request";
 
 const Modal = styled(MaterialModal)`
   position: fixed;
@@ -50,14 +54,28 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
   const { getSignatureMessage } = useVoucher();
   const { setActive } = useLoading();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { orderId } = useOrder();
 
   const handleClose = () => setOpen(false);
   const { signMessageAsync } = useSignMessage();
 
   const { cart } = useContext(CartContext);
 
-  const sendPayment = (voucher: ITransferVoucherSigned) => {
+  const sendPayment = async (voucher: ITransferVoucherSigned) => {
+    if (!orderId) {
+      return;
+    }
     setActive(true);
+    const requestData: IERC20PaymentRequestBody = {
+      orderId,
+      voucher: formatVoucher(voucher),
+    };
+
+    const res = await ajaxCall("gateway/peronio/pay", requestData);
+
+    console.info("RESPONSE:");
+    console.dir(res);
+    setActive(false);
   };
 
   const startSigning = async (voucher: ITransferVoucher) => {

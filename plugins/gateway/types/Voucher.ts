@@ -1,17 +1,12 @@
+import { BigNumber } from "ethers";
 import { ISignature } from "./Signature";
-
-export interface ITransferVoucherPayload {
-  from: string;
-  to: string;
-  amount: string;
-}
 
 export interface ITransferVoucher {
   tag: number;
 
-  nonce: string;
-  deadline: string;
-  payload: ITransferVoucherPayload;
+  nonce: BigNumber;
+  deadline: BigNumber;
+  payload: string;
 
   metadata: string;
 }

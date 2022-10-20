@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { addPayment } from "../../../lib/private/firestore";
-import { IPaymentRequestBody, PaymentSchema } from "../../../types/request";
+import { addPayment } from "../../../../lib/private/firestore";
+import { IPaymentRequestBody, PaymentSchema } from "../../../../types/request";
 
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS;
 

@@ -1,10 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Backdrop, Box, Fade, Modal as MaterialModal } from "@mui/material";
+import { splitSignature } from "@ethersproject/bytes";
+import { useSignMessage } from "wagmi";
 
 import { CartContext } from "../../contexts/Cart";
 
-import PanToolAltTwoToneIcon from "@mui/icons-material/PanToolAltTwoTone";
+import {
+  ITransferVoucher,
+  ITransferVoucherSigned,
+} from "../../plugins/gateway/types/Voucher";
+// import { StepsContext } from "../../contexts/Steps";
+import useVoucher from "../../plugins/gateway/hooks/useVoucher";
+import useLoading from "../../hooks/useLoading";
 
 const Modal = styled(MaterialModal)`
   position: fixed;
@@ -29,44 +37,64 @@ const Amount = styled.div`
   font-size: 20px;
 `;
 
-const PointerWrapper = styled.div`
-  transform: rotate(180deg);
-  position: fixed;
-  top: 150%;
-`;
-
-const ClickHere = styled(PanToolAltTwoToneIcon)`
-  -webkit-animation: mover 0.5s infinite alternate;
-  animation: mover 0.5s infinite alternate;
-  font-size: 80px;
-  @-webkit-keyframes mover {
-    0% {
-      transform: translateY(-5px);
-    }
-    100% {
-      transform: translateY(20px);
-    }
-  }
-  @keyframes mover {
-    0% {
-      transform: translateY(-5px);
-    }
-    100% {
-      transform: translateY(20px);
-    }
-  }
-`;
-
 interface IPaymentModalProps {
   open: boolean;
+  voucher?: ITransferVoucher;
   // eslint-disable-next-line no-unused-vars
   setOpen: (args0: boolean) => void;
 }
 
-const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
+const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
+  // const { setStep } = useContext(StepsContext);
+
+  const { getSignatureMessage } = useVoucher();
+  const { setActive } = useLoading();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const handleClose = () => setOpen(false);
+  const { signMessageAsync } = useSignMessage();
 
   const { cart } = useContext(CartContext);
+
+  const sendPayment = (voucher: ITransferVoucherSigned) => {
+    setActive(true);
+  };
+
+  const startSigning = async (voucher: ITransferVoucher) => {
+    try {
+      const messageToSign = await getSignatureMessage(voucher);
+
+      if (!messageToSign) {
+        throw new Error("No se pudo generar el mensaje a firmar");
+      }
+
+      const signature = await signMessageAsync({ message: messageToSign });
+      const { r, s, v } = splitSignature(signature);
+
+      const signedVoucher: ITransferVoucherSigned = {
+        voucher,
+        signature: {
+          r,
+          s,
+          v,
+        },
+      };
+
+      sendPayment(signedVoucher);
+    } catch (e: any) {
+      console.info("Closed dialog");
+    }
+    setOpen(false);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (open && voucher) {
+      setIsLoading(true);
+      startSigning(voucher);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voucher]);
 
   return (
     <Modal
@@ -86,13 +114,11 @@ const PaymentModal = ({ open, setOpen }: IPaymentModalProps) => {
             <h2>Tocá Confirmar</h2>
           </div>
           <Amount>Monto: {cart.total} PE</Amount>
-          <PointerWrapper>
-            <ClickHere color='info' />
-          </PointerWrapper>
+          {isLoading ? <div>Cargando Firma...</div> : ""}
         </BoxDiv>
       </Fade>
     </Modal>
   );
 };
 
-export default PaymentModal;
+export default React.memo(PaymentModal);

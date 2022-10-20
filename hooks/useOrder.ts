@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
+import { ajaxCall } from "../lib/public/request";
 import { ITransferVoucherSigned } from "../plugins/gateway/types/Voucher";
 import { ICart } from "../types/cart";
 import {
@@ -24,18 +25,6 @@ export interface IUseUserResult {
   clear: () => void;
   payOrder: (_signature: any) => void;
 }
-
-const ajaxCall = async (path: string, data: any): Promise<ResponseDataType> => {
-  const res = await fetch("/api/" + path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  return res.json();
-};
 
 const ajaxCreateOrder = async (
   requestData: ICreateOrderRequestBody

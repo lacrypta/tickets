@@ -17,6 +17,7 @@ import { IERC20PaymentRequestBody } from "../../../types/request";
 import useOrder from "../../../hooks/useOrder";
 import { formatVoucher } from "../../../lib/public/utils";
 import { ajaxCall } from "../../../lib/public/request";
+import { StepsContext } from "../../../contexts/Steps";
 
 const Modal = styled(MaterialModal)`
   position: fixed;
@@ -49,7 +50,7 @@ interface IPaymentModalProps {
 }
 
 const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
-  // const { setStep } = useContext(StepsContext);
+  const { setStep } = useContext(StepsContext);
 
   const { getSignatureMessage } = useVoucher();
   const { setActive } = useLoading();
@@ -73,8 +74,9 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
 
     const res = await ajaxCall("gateway/peronio/pay", requestData);
 
-    console.info("RESPONSE:");
-    console.dir(res);
+    if (res.success) {
+      setStep(3);
+    }
     setActive(false);
   };
 

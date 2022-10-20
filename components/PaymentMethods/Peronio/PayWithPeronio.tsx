@@ -12,11 +12,12 @@ import PaymentModal from "../../Order/PaymentModal";
 import useLoading from "../../../hooks/useLoading";
 import useSpendable from "../../../hooks/useSpendable";
 import useUser from "../../../hooks/useUser";
-import { formatUnits } from "ethers/lib/utils";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
+import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 
-const CONTRACT_NAME =
-  process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
-const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
+// const CONTRACT_NAME =
+process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
+// const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
 const PERONIO_MULTIPLIER = parseFloat(process.env.PERONIO_MULTIPLIER || "0.5");
@@ -28,6 +29,7 @@ const PayWithPeronio = () => {
 
   const { orderId, orderTotal, isPayed, payOrder } = useOrder();
   const { setActive } = useLoading();
+  const { buildVoucher } = useVoucher();
 
   const { balance } = useSpendable(permit);
 
@@ -43,8 +45,8 @@ const PayWithPeronio = () => {
     signature,
     isLoading: isSignatureLoading,
     isSuccess: isSignatureSuccess,
-    requestSignature,
-  } = useGateway(CONTRACT_NAME, GATEWAY_ADDRESS);
+    // requestSignature,
+  } = useGateway();
 
   const [open, setOpen] = useState(false);
 
@@ -69,22 +71,27 @@ const PayWithPeronio = () => {
     }
   }, [orderId]);
 
-  const handlePay = () => {
+  const handlePay = async () => {
     setOpen(true);
-    requestSignature({
+
+    console.info();
+    const voucher = await buildVoucher({
       from: address || "",
       to: BAR_ADDRESS,
-      amount: orderTotal,
+      amount: parseUnits(String(peAmount), 6),
       deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
       orderId: orderId || "",
     });
+
+    console.dir(voucher);
+    // requestSignature(voucher);
   };
 
   return (
     <div>
       <div>Peronio en la Wallet: {formatUnits(balance, 6)}</div>
-      <div>Monto a Pagar: {peAmount}</div>
-      <div>#OrderID: {orderId} P</div>
+      <div>Monto a Pagar: {peAmount} P</div>
+      <div>#OrderID: {orderId}</div>
 
       <PayButton onClick={handlePay} />
 

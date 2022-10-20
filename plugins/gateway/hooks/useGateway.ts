@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { GatewayContext } from "./../contexts/Gateway";
+import { BarGateway as BarGatewayContract } from "@lacrypta/bar-gateway/typechain/BarGateway";
+
+import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { splitSignature } from "@ethersproject/bytes";
 
-import { useContract, useProvider, useSignMessage } from "wagmi";
+import { useSignMessage } from "wagmi";
 
 import { ISignature, ITransferVoucher } from "../../../types/crypto";
 import { encodeVoucher } from "../../../lib/public/utils";
@@ -21,6 +24,7 @@ interface IRequestSignatureArgs {
 }
 
 interface IUseGatewayResult {
+  contract?: BarGatewayContract;
   signature?: ISignature;
   isError: boolean;
   isLoading: boolean;
@@ -29,28 +33,14 @@ interface IUseGatewayResult {
   requestSignature: (_args: IRequestSignatureArgs) => void;
 }
 
-const MOCK_GATEWAY = "0x6d824682aA66da4e6738c6f3e16cC15fe9ce6F79";
+const useGateway = (): IUseGatewayResult => {
+  const { contract: gatewayContract } = useContext(GatewayContext);
 
-const useGateway = (
-  contractName: string,
-  contractAddress: string,
-  onSuccess?: (_args: any) => void
-): IUseGatewayResult => {
   const [signature, setSignature] = useState<ISignature>();
   const [voucher, setVoucher] = useState<ITransferVoucher>();
   const [signatureMessage, setSignatureMessage] = useState<string>();
 
-  const provider = useProvider();
-
-  const gatewayContract = useContract({
-    addressOrName: MOCK_GATEWAY,
-    contractInterface: mockGatewayABI,
-    signerOrProvider: provider,
-  });
-
-  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
-    onSuccess,
-  });
+  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage();
 
   const mockMessage = async (voucher: ITransferVoucher): Promise<string> => {
     let message = "👉👉👉  AUTORIZO EL PAGO  👈👈👈\n";
@@ -71,6 +61,43 @@ const useGateway = (
     const message = mockMessage(voucher); // TODO: Remove this
     return message;
   };
+
+  // const requestSignatureOld = async ({
+  //   from,
+  //   to,
+  //   amount,
+  //   deadline,
+  //   orderId,
+  // }: IRequestSignatureArgs) => {
+  //   const nonce = ethers.BigNumber.from(
+  //     ethers.utils.randomBytes(32)
+  //   ).toHexString();
+
+  //   setSignature(undefined);
+
+  //   const _voucher: ITransferVoucher = {
+  //     tag: TRANSFER_FROM_TAG,
+  //     //
+  //     nonce,
+  //     deadline: String(deadline),
+  //     payload: {
+  //       from,
+  //       to,
+  //       amount: parseUnits(amount, 6).toString(),
+  //     },
+  //     //
+  //     metadata: orderId,
+  //   };
+
+  //   setVoucher(_voucher);
+
+  //   const _signatureMessage = await getSignatureMessage(_voucher);
+  //   setSignatureMessage(_signatureMessage);
+
+  //   signMessage({
+  //     message: _signatureMessage,
+  //   });
+  // };
 
   const requestSignature = async ({
     from,
@@ -117,6 +144,7 @@ const useGateway = (
   }, [data, isLoading, isSuccess]);
 
   return {
+    contract: gatewayContract,
     voucher,
     signature,
     isError,

@@ -81,6 +81,8 @@ const useOrder = (): IUseUserResult => {
   } = useContext(OrderContext);
 
   async function createOrder(paymentMethod: string) {
+    console.info("Create Order bitch!");
+    console.info("paymentMethod:", paymentMethod);
     if (isLoading) {
       return;
     }

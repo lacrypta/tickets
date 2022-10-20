@@ -8,7 +8,7 @@ import useGateway from "../../../plugins/gateway/hooks/useGateway";
 import useOrder from "../../../hooks/useOrder";
 
 import PayButton from "../../Menu/PayButton";
-import PaymentModal from "../../Order/PaymentModal";
+import PaymentModal from "./PaymentModal";
 import useLoading from "../../../hooks/useLoading";
 import useSpendable from "../../../hooks/useSpendable";
 import useUser from "../../../hooks/useUser";

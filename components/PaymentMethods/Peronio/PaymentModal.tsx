@@ -4,15 +4,15 @@ import { Backdrop, Box, Fade, Modal as MaterialModal } from "@mui/material";
 import { splitSignature } from "@ethersproject/bytes";
 import { useSignMessage } from "wagmi";
 
-import { CartContext } from "../../contexts/Cart";
+import { CartContext } from "../../../contexts/Cart";
 
 import {
   ITransferVoucher,
   ITransferVoucherSigned,
-} from "../../plugins/gateway/types/Voucher";
+} from "../../../plugins/gateway/types/Voucher";
 // import { StepsContext } from "../../contexts/Steps";
-import useVoucher from "../../plugins/gateway/hooks/useVoucher";
-import useLoading from "../../hooks/useLoading";
+import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
+import useLoading from "../../../hooks/useLoading";
 
 const Modal = styled(MaterialModal)`
   position: fixed;

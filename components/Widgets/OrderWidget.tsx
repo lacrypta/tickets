@@ -9,7 +9,7 @@ import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 
 import PayButton from "../Menu/PayButton";
-import PaymentModal from "../Order/PaymentModal";
+import PaymentModal from "../PaymentMethods/Peronio/PaymentModal";
 
 const Container = styled.div`
   width: 100%;
@@ -21,8 +21,6 @@ const Container = styled.div`
 export const OrderWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
-
-  const [open, setOpen] = useState(false);
 
   const handlePay = () => {
     setStep(2);
@@ -42,8 +40,6 @@ export const OrderWidget = () => {
       <BackButton onClick={handleBack} />
 
       <PayButton onClick={handlePay} />
-
-      <PaymentModal open={open} setOpen={setOpen} />
     </Container>
   );
 };

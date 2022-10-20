@@ -11,7 +11,22 @@ export interface ITransferVoucher {
   metadata: string;
 }
 
+export interface ITransferVoucherStringified {
+  tag: number;
+
+  nonce: string;
+  deadline: string;
+  payload: string;
+
+  metadata: string;
+}
+
 export interface ITransferVoucherSigned {
   voucher: ITransferVoucher;
+  signature: ISignature;
+}
+
+export interface ITransferVoucherSignedStringified {
+  voucher: ITransferVoucherStringified;
   signature: ISignature;
 }

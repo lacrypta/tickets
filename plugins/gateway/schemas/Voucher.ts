@@ -2,18 +2,12 @@ import { z } from "zod";
 
 import { SignatureSchema } from "./Signature";
 
-export const TransferVoucherPayloadSchema = z.object({
-  from: z.string(),
-  to: z.string(),
-  amount: z.string(),
-});
-
 export const TransferVoucherSchema = z.object({
-  tag: z.string(),
+  tag: z.number(),
 
   nonce: z.string(),
   deadline: z.string(),
-  payload: TransferVoucherPayloadSchema,
+  payload: z.string(),
 
   metadata: z.string(),
 });

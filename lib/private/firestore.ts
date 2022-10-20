@@ -1,4 +1,7 @@
-import { ITransferVoucherSigned } from "../../plugins/gateway/types/Voucher";
+import {
+  ITransferVoucherPayload,
+  ITransferVoucherSignedStringified,
+} from "./../../plugins/gateway/types/Voucher";
 import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 import { IOrderItem } from "../../types/cart";
@@ -8,8 +11,6 @@ import {
   FieldValue,
   Transaction,
 } from "firebase-admin/firestore";
-import { BigNumber } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -91,14 +92,16 @@ export const addUser = async (
 };
 
 /**
- * Adds new payment to the database
- * @param {String} orderId
- * @param {ITransferVoucher} permit
+ * Adds ERC20 Payment
+ * @param orderId Order ID
+ * @param voucher Voucher with Signature included
+ * @param payload Payload
  * @returns
  */
-export const addPayment = async (
+export const addERC20Payment = async (
   orderId: string,
-  voucher: ITransferVoucherSigned
+  voucher: ITransferVoucherSignedStringified,
+  payload: ITransferVoucherPayload
 ): Promise<String> => {
   const paymentRef = db.collection("payments").doc();
 
@@ -117,25 +120,31 @@ export const addPayment = async (
     }
 
     // Validate amount
-    if (
-      !parseUnits(String(order?.total), 6).eq(
-        BigNumber.from(voucher.voucher.payload.amount)
-      )
-    ) {
-      throw new Error("The order and voucher amount don't match");
-    }
+    // if (
+    //   !parseUnits(String(order?.total), 6).eq(
+    //     BigNumber.from(voucher.voucher.payload.amount)
+    //   )
+    // ) {
+    //   throw new Error("The order and voucher amount don't match");
+    // }
 
     // Update Order
     t.update(orderRef, {
       status: "processing",
       paymentId: paymentRef.id,
+      address: payload.from,
     });
 
     // Create Payment
     t.create(paymentRef, {
       orderId,
-      address: voucher.voucher.payload.from,
+      // address: voucher.voucher.payload.from,
       voucher,
+      payload: {
+        from: payload.from,
+        to: payload.to,
+        amount: payload.amount.toString(),
+      },
       status: "unpublished",
     });
   });

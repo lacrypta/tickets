@@ -30,3 +30,9 @@ export interface ITransferVoucherSignedStringified {
   voucher: ITransferVoucherStringified;
   signature: ISignature;
 }
+
+export interface ITransferVoucherPayload {
+  from: string;
+  to: string;
+  amount: BigNumber;
+}

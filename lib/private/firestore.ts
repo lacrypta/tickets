@@ -1,4 +1,4 @@
-import { ITransferVoucherSigned } from "./../../types/crypto";
+import { ITransferVoucherSigned } from "../../plugins/gateway/types/Voucher";
 import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
 import { IOrderItem } from "../../types/cart";

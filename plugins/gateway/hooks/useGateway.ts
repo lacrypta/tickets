@@ -1,3 +1,6 @@
+import { ISignature } from "../types/Signature";
+import { ITransferVoucher } from "../types/Voucher";
+
 import { GatewayContext } from "./../contexts/Gateway";
 import { BarGateway as BarGatewayContract } from "@lacrypta/bar-gateway/typechain/BarGateway";
 
@@ -8,7 +11,6 @@ import { splitSignature } from "@ethersproject/bytes";
 
 import { useSignMessage } from "wagmi";
 
-import { ISignature, ITransferVoucher } from "../../../types/crypto";
 import { encodeVoucher } from "../../../lib/public/utils";
 
 import mockGatewayABI from "../../../abi/GatewayMock.json";

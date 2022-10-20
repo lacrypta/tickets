@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { ITransferVoucher } from "../../types/crypto";
+import { ITransferVoucher } from "../../plugins/gateway/types/Voucher";
 
 const utf8Encode = new TextEncoder();
 

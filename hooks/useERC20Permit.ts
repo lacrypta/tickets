@@ -1,7 +1,7 @@
 import { useAccount, useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
-import { ISignature } from "../types/crypto";
 import { ethers } from "ethers";
+import { ISignature } from "../plugins/gateway/types/Signature";
 
 const types = {
   Permit: [

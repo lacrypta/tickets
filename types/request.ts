@@ -1,13 +1,10 @@
 import z from "zod";
-import { IOrderItem, PaymentMethods } from "./cart";
-import {
-  IPermitData,
-  ISignature,
-  ITransferVoucherSigned,
-  PermitSchema,
-  SignatureSchema,
-  TransferVoucherSchemaSigned,
-} from "./crypto";
+import { SignatureSchema } from "../plugins/gateway/schemas/Signature";
+import { TransferVoucherSchemaSigned } from "../plugins/gateway/schemas/Voucher";
+import { ISignature } from "../plugins/gateway/types/Signature";
+import { ITransferVoucherSigned } from "../plugins/gateway/types/Voucher";
+import { IOrderItem } from "./cart";
+import { IPermitData, PermitSchema } from "./crypto";
 export interface ISignupRequestBody {
   address: string;
   username: string;

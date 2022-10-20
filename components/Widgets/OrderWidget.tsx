@@ -3,13 +3,12 @@ import styled from "@emotion/styled";
 import { CartContext } from "../../contexts/Cart";
 import { StepsContext } from "../../contexts/Steps";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 
 import PayButton from "../Menu/PayButton";
-import PaymentModal from "../PaymentMethods/Peronio/PaymentModal";
 
 const Container = styled.div`
   width: 100%;

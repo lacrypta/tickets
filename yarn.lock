@@ -1179,7 +1179,7 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
-"@lacrypta/bar-gateway@^0.8.7":
+"@lacrypta/bar-gateway@0.8.7":
   version "0.8.7"
   resolved "https://registry.yarnpkg.com/@lacrypta/bar-gateway/-/bar-gateway-0.8.7.tgz#de93589dd4da0c29a5fdd631f5a84774edf3dafa"
   integrity sha512-ZCtJDEy31Mj1pS8t1eUTOewpWt+wCOI9zEu8VcsKdgsQAS7tWTclA4AvU0/qvtPJCWn4D05tJ5OoyZMH/YK2Aw==

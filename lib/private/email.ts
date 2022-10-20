@@ -38,6 +38,8 @@ const generateMailHTML = ({ fullname, email, url }: MailParams) => {
   html += "    </div>";
   html += '    <div style="margin-top: 0.5em; font-size: 1.3em;">';
   html += "      <div>Entrada a La Crypta Halloween Party</div>";
+  html +=
+    '      <div>Dirección: <a href="https://www.google.com/maps/place/Villanueva+1367,+C1426+BMI,+Buenos+Aires/@-34.5648535,-58.4453019,17z/data=!3m1!4b1!4m5!3m4!1s0x95bcb5c8870cdc23:0xc945d369aa39b3e0!8m2!3d-34.5648579!4d-58.4431132">Villanueva 1367, CABA</a></div>';
   html += "      <div>Hacé click en el siguiente Link para verla</div>";
   html += '      <div><a href="%URL%">%URL%</a></div>';
   html += "    </h1>";

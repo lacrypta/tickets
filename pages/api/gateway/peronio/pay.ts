@@ -1,6 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { addPayment } from "../../../../lib/private/firestore";
-import { IPaymentRequestBody, PaymentSchema } from "../../../../types/request";
+
+import {
+  ERC20PaymentSchema,
+  IERC20PaymentRequestBody,
+} from "../../../../types/request";
+import { decodePayload } from "../../../../plugins/gateway/lib/utils";
+
+import { addERC20Payment } from "../../../../lib/private/firestore";
 
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS;
 
@@ -18,20 +24,30 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return;
   }
 
+  let requestData: IERC20PaymentRequestBody;
   try {
-    PaymentSchema.parse(req.body);
+    requestData = ERC20PaymentSchema.parse(req.body);
   } catch (e) {
     console.error(e);
     res.status(400).json({ success: false, message: "Malformed request" });
     return;
   }
 
+  const { voucher } = requestData.voucher;
+  const payload = decodePayload(voucher.payload);
+
   try {
-    const payment: IPaymentRequestBody = req.body;
-    if (payment.voucher.voucher.payload.to !== BAR_ADDRESS) {
+    if (payload.to !== BAR_ADDRESS) {
       throw new Error("Invalid destination");
     }
-    const paymentId = await addPayment(payment.orderId, payment.voucher);
+
+    // Add
+    const paymentId = await addERC20Payment(
+      requestData.orderId,
+      requestData.voucher,
+      payload
+    );
+
     res.status(200).json({ success: true, data: { paymentId } });
   } catch (e: any) {
     console.error(e);

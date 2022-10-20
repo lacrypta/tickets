@@ -1,8 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
-import { StepsContext } from "../../../contexts/Steps";
-
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import useOrder from "../../../hooks/useOrder";
 
@@ -14,7 +11,6 @@ import useUser from "../../../hooks/useUser";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 import { ITransferVoucher } from "../../../plugins/gateway/types/Voucher";
-import { CartContext } from "../../../contexts/Cart";
 
 // const CONTRACT_NAME =
 process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
@@ -29,8 +25,6 @@ const PayWithPeronio = () => {
   const { orderId, orderTotal } = useOrder();
   const { buildVoucher } = useVoucher();
   const { setActive } = useLoading();
-
-  const { cart } = useContext(CartContext);
 
   const { balance } = useSpendable(permit);
 

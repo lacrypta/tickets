@@ -17,7 +17,6 @@ process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
 // const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
-const PERONIO_MULTIPLIER = parseFloat(process.env.PERONIO_MULTIPLIER || "0.5");
 
 const PayWithPeronio = () => {
   const { address } = useAccount();
@@ -27,8 +26,6 @@ const PayWithPeronio = () => {
   const { setActive } = useLoading();
 
   const { balance } = useSpendable(permit);
-
-  const peAmount = parseFloat(orderTotal) * PERONIO_MULTIPLIER;
 
   const [voucher, setVoucher] = useState<ITransferVoucher>();
 
@@ -55,7 +52,7 @@ const PayWithPeronio = () => {
       const _voucher = await buildVoucher({
         from: address || "",
         to: BAR_ADDRESS,
-        amount: parseUnits(String(peAmount), 6),
+        amount: parseUnits(String(orderTotal), 6),
         deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
         orderId: orderId || "",
       });
@@ -77,7 +74,7 @@ const PayWithPeronio = () => {
   return (
     <div>
       <div>Peronio en la Wallet: {formatUnits(balance, 6)}</div>
-      <div>Monto a Pagar: {peAmount} P</div>
+      <div>Monto a Pagar: {orderTotal} P</div>
       <div>#OrderID: {orderId}</div>
 
       <PayButton onClick={handlePay} />

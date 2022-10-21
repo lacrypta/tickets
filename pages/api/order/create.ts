@@ -8,6 +8,8 @@ import {
   ResponseDataType,
 } from "../../../types/request";
 
+const PERONIO_MULTIPLIER = parseFloat(process.env.PERONIO_MULTIPLIER || "1");
+
 const request = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseDataType>
@@ -27,7 +29,10 @@ const request = async (
   }
 
   const { address, items, paymentMethod }: ICreateOrderRequestBody = req.body;
-  const total = getTotal(items);
+  let total = getTotal(items);
+
+  total = paymentMethod === "peronio" ? total * PERONIO_MULTIPLIER : total;
+
   const orderId = await addOrder(items, paymentMethod, total, address);
 
   res.status(200).json({

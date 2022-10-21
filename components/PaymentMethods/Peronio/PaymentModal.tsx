@@ -4,8 +4,6 @@ import { Backdrop, Box, Fade, Modal as MaterialModal } from "@mui/material";
 import { splitSignature } from "@ethersproject/bytes";
 import { useSignMessage } from "wagmi";
 
-import { CartContext } from "../../../contexts/Cart";
-
 import {
   ITransferVoucher,
   ITransferVoucherSigned,
@@ -52,21 +50,30 @@ interface IPaymentModalProps {
 const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
   const { setStep } = useContext(StepsContext);
 
-  const { getSignatureMessage } = useVoucher();
+  const { getSignatureMessage, tryServe } = useVoucher();
   const { setActive } = useLoading();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { orderId } = useOrder();
+  const { orderId, orderTotal } = useOrder();
 
   const handleClose = () => setOpen(false);
   const { signMessageAsync } = useSignMessage();
-
-  const { cart } = useContext(CartContext);
 
   const sendPayment = async (voucher: ITransferVoucherSigned) => {
     if (!orderId) {
       return;
     }
     setActive(true);
+
+    try {
+      const tried = await tryServe(voucher);
+      console.info("RESULTADO:");
+      console.dir(tried);
+    } catch (e: any) {
+      console.error(e);
+      setActive(false);
+      return;
+    }
+
     const requestData: IERC20PaymentRequestBody = {
       orderId,
       voucher: formatVoucher(voucher),
@@ -133,7 +140,7 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
           <div>
             <h2>Tocá Confirmar</h2>
           </div>
-          <Amount>Monto: {cart.total} PE</Amount>
+          <Amount>Monto: {orderTotal} PE</Amount>
           {isLoading ? <div>Cargando Firma...</div> : ""}
         </BoxDiv>
       </Fade>

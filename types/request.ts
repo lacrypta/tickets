@@ -31,6 +31,10 @@ export type ResponseDataType = {
   data?: any;
 };
 
+export const CreatePaymentRequestSchema = z.object({
+  orderId: z.string(),
+});
+
 export const SignupSchema = z.object({
   address: z.string(),
   username: z.string(),

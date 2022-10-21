@@ -104,6 +104,7 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
           r,
           s,
           v,
+          full: signature,
         },
       };
 

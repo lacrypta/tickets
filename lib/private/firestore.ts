@@ -11,6 +11,7 @@ import {
   FieldValue,
   Transaction,
 } from "firebase-admin/firestore";
+import { parseUnits } from "ethers/lib/utils";
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
@@ -120,13 +121,9 @@ export const addERC20Payment = async (
     }
 
     // Validate amount
-    // if (
-    //   !parseUnits(String(order?.total), 6).eq(
-    //     BigNumber.from(voucher.voucher.payload.amount)
-    //   )
-    // ) {
-    //   throw new Error("The order and voucher amount don't match");
-    // }
+    if (!parseUnits(String(order?.total), 6).eq(payload.amount)) {
+      throw new Error("The order and voucher amount don't match");
+    }
 
     // Update Order
     t.update(orderRef, {

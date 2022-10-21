@@ -55,10 +55,14 @@ const useVoucher = (): IUseVoucherResult => {
   // Simulate static call
   const tryServe = async (signedVoucher: ITransferVoucherSigned) => {
     const { r, s, v } = signedVoucher.signature;
-
+    const { deadline, metadata, nonce, payload, tag } = signedVoucher.voucher;
+    const voucher = { deadline, metadata, nonce, payload, tag };
+    console.info("trying...");
+    console.dir(voucher);
+    console.dir(signedVoucher.signature);
     return contract?.callStatic[
       "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes32,bytes32,uint8)"
-    ](signedVoucher.voucher, r, s, v);
+    ](voucher, r, s, v);
   };
 
   return { buildVoucher, getSignatureMessage, tryServe };

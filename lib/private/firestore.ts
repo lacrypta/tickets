@@ -172,6 +172,36 @@ export const addOrder = async (
   return orderId;
 };
 
+/**
+ * Get order by ID
+ * @param {string} orderId Order ID
+ * @returns
+ */
+export const getOrder = async (orderId: string) => {
+  const orderRef = db.collection("orders").doc(orderId);
+  const doc = await orderRef.get();
+  if (!doc.exists) {
+    return undefined;
+  }
+  return doc.data();
+};
+
+/**
+ * Updates Order
+ * @param orderId Order ID
+ * @param data
+ * @returns
+ */
+export const updateOrder = async (orderId: string, data: any) => {
+  const orderRef = db.collection("orders").doc(orderId);
+  const doc = await orderRef.get();
+
+  if (!doc.exists) {
+    return undefined;
+  }
+  orderRef.update(data);
+  return doc.data();
+};
 //------------- PRIVATE FUNCTIONS -------------//
 
 const _getNewOrderId = async (t: Transaction): Promise<number> => {

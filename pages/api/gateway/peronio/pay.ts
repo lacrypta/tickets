@@ -4,9 +4,13 @@ import {
   ERC20PaymentSchema,
   IERC20PaymentRequestBody,
 } from "../../../../types/request";
-import { decodePayload } from "../../../../plugins/gateway/lib/utils";
+import {
+  decodePayload,
+  encodeVoucher,
+} from "../../../../plugins/gateway/lib/utils";
 
 import { addERC20Payment } from "../../../../lib/private/firestore";
+import { serveVoucher } from "../../../../lib/private/blockchain";
 
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS;
 
@@ -33,7 +37,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return;
   }
 
-  const { voucher } = requestData.voucher;
+  const { voucher, signature } = requestData.voucher;
   const payload = decodePayload(voucher.payload);
 
   try {
@@ -48,7 +52,17 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       payload
     );
 
-    res.status(200).json({ success: true, data: { paymentId } });
+    // Broadcast
+    console.info("Needs to broadcast");
+    console.info("Payment ID: " + paymentId);
+    try {
+      const tx = await serveVoucher(encodeVoucher(voucher), signature);
+      console.info("Broadcaster TX!:");
+      console.dir(tx);
+    } catch (e: any) {
+      console.error(e);
+      throw new Error("Transaction not broaadcasted");
+    }
   } catch (e: any) {
     console.error(e);
     res.status(406).json({ success: false, message: e.message });

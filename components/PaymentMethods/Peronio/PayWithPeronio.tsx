@@ -11,6 +11,7 @@ import useUser from "../../../hooks/useUser";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 import { ITransferVoucher } from "../../../plugins/gateway/types/Voucher";
+import { generateMessage } from "../../../lib/public/utils";
 
 // const CONTRACT_NAME =
 process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
@@ -49,12 +50,14 @@ const PayWithPeronio = () => {
     setActive(true);
 
     try {
+      const message = generateMessage(orderId || "", orderTotal);
+
       const _voucher = await buildVoucher({
         from: address || "",
         to: BAR_ADDRESS,
         amount: parseUnits(String(orderTotal), 6),
         deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
-        orderId: orderId || "",
+        message,
       });
 
       if (!_voucher) {

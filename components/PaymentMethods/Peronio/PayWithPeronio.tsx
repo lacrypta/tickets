@@ -10,13 +10,12 @@ import useSpendable from "../../../hooks/useSpendable";
 import useUser from "../../../hooks/useUser";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
-import { ITransferVoucher } from "../../../plugins/gateway/types/Voucher";
+import { IVoucher } from "../../../plugins/gateway/types/Voucher";
 import { generateMessage } from "../../../lib/public/utils";
 
 // const CONTRACT_NAME =
 process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
 // const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
-const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS || "";
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
 
 const PayWithPeronio = () => {
@@ -28,7 +27,7 @@ const PayWithPeronio = () => {
 
   const { balance } = useSpendable(permit);
 
-  const [voucher, setVoucher] = useState<ITransferVoucher>();
+  const [voucher, setVoucher] = useState<IVoucher>();
 
   useEffect(() => {
     setActive(false);
@@ -54,7 +53,6 @@ const PayWithPeronio = () => {
 
       const _voucher = await buildVoucher({
         from: address || "",
-        to: BAR_ADDRESS,
         amount: parseUnits(String(orderTotal), 6),
         deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
         message,
@@ -64,7 +62,6 @@ const PayWithPeronio = () => {
         setOpen(false);
         throw new Error("No se pudo generar el voucher con el call");
       }
-
       setVoucher(_voucher);
     } catch (e: any) {
       alert(e.message);

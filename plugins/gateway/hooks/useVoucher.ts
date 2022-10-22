@@ -1,8 +1,7 @@
 import { BigNumber, ethers } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 import { ITransferVoucher, ITransferVoucherSigned } from "../types/Voucher";
 import useGateway from "./useGateway";
-
-const utf8Encode = new TextEncoder();
 
 interface IBuildVoucherArgs {
   from: string;
@@ -29,7 +28,6 @@ const useVoucher = (): IUseVoucherResult => {
   // Build voucher
   const buildVoucher = async ({
     from,
-    to,
     amount,
     deadline,
     orderId,
@@ -38,11 +36,23 @@ const useVoucher = (): IUseVoucherResult => {
       ethers.utils.randomBytes(32)
     ).toHexString();
 
-    const metadata = utf8Encode.encode(orderId);
+    const formattedAmount = formatUnits(amount, 6);
+    const message = `Pagar la cuenta de la Orden #${orderId}\nMonto: ${formattedAmount}`;
 
-    return contract?.[
-      "buildTransferFromVoucher(uint256,uint256,address,address,uint256,bytes)"
-    ](nonce, deadline, from, to, amount, metadata);
+    contract?.["buildPurchaseVoucher(uint256,uint256,address,uint256,string)"](
+      nonce,
+      deadline,
+      from,
+      amount,
+      message
+    );
+
+    return contract?.["buildPurchaseVoucher(uint256,address,uint256,string)"](
+      nonce,
+      from,
+      amount,
+      message
+    );
   };
 
   // Generate signature string with voucher

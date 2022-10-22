@@ -1,8 +1,11 @@
 import { createContext } from "react";
-import BarGateway from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
+import BarGatewayArtifact from "@lacrypta/bar-gateway/artifacts/contracts/BarGateway.sol/BarGateway.json";
+import BarGatewayDeployment from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
 import { BarGateway as BarGatewayContract } from "@lacrypta/bar-gateway/typechain/BarGateway";
 import { useContract, useProvider } from "wagmi";
-import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+
+const { abi: barGatewayABI } = BarGatewayArtifact;
+const { address: deployedAddress } = BarGatewayDeployment;
 
 interface IGatewayContext {
   name?: string;
@@ -24,12 +27,12 @@ export const GatewayProvider = ({
 }: IGatewayProviderProps) => {
   const provider = useProvider();
 
-  const gatewayAddress = address || BarGateway.address;
+  const gatewayAddress = address || deployedAddress;
   const gatewayName = name || "Bar Gateway";
 
   const contract: BarGatewayContract = useContract({
     addressOrName: gatewayAddress,
-    contractInterface: BarGateway.abi,
+    contractInterface: barGatewayABI,
     signerOrProvider: provider,
   });
 

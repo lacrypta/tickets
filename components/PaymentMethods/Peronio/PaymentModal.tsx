@@ -50,7 +50,7 @@ interface IPaymentModalProps {
 const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
   const { setStep } = useContext(StepsContext);
 
-  const { getSignatureMessage, tryServe } = useVoucher();
+  const { getSignatureMessage, validate } = useVoucher();
   const { setActive } = useLoading();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { orderId, orderTotal } = useOrder();
@@ -63,9 +63,8 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
       return;
     }
     setActive(true);
-
     try {
-      const tried = await tryServe(voucher);
+      const tried = await validate(voucher);
       console.info("RESULTADO:");
       console.dir(tried);
     } catch (e: any) {

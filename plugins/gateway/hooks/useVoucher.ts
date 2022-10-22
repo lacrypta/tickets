@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
 import { ITransferVoucher, ITransferVoucherSigned } from "../types/Voucher";
 import useGateway from "./useGateway";
 
@@ -8,7 +7,7 @@ interface IBuildVoucherArgs {
   to: string;
   amount: BigNumber;
   deadline: number;
-  orderId: string;
+  message: string;
 }
 
 interface IUseVoucherResult {
@@ -19,7 +18,8 @@ interface IUseVoucherResult {
     _voucher: ITransferVoucher
   ) => Promise<string | undefined>;
 
-  tryServe: (_voucher: ITransferVoucherSigned) => any;
+  tryServe: (_voucher: ITransferVoucherSigned) => Promise<any>;
+  validate: (_voucher: ITransferVoucherSigned) => Promise<boolean>;
 }
 
 const useVoucher = (): IUseVoucherResult => {
@@ -30,14 +30,11 @@ const useVoucher = (): IUseVoucherResult => {
     from,
     amount,
     deadline,
-    orderId,
+    message,
   }: IBuildVoucherArgs): Promise<ITransferVoucher | undefined> => {
     const nonce = ethers.BigNumber.from(
       ethers.utils.randomBytes(32)
     ).toHexString();
-
-    const formattedAmount = formatUnits(amount, 6);
-    const message = `Pagar la cuenta de la Orden #${orderId}\nMonto: ${formattedAmount}`;
 
     contract?.["buildPurchaseVoucher(uint256,uint256,address,uint256,string)"](
       nonce,
@@ -65,14 +62,28 @@ const useVoucher = (): IUseVoucherResult => {
   // Simulate static call
   const tryServe = async (signedVoucher: ITransferVoucherSigned) => {
     const { full: signature } = signedVoucher.signature;
-    const { deadline, metadata, nonce, payload, tag } = signedVoucher.voucher;
-    const voucher = { deadline, metadata, nonce, payload, tag };
     return contract?.callStatic[
       "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
-    ](voucher, signature);
+    ](signedVoucher.voucher, signature);
   };
 
-  return { buildVoucher, getSignatureMessage, tryServe };
+  // Validate Voucher
+  const validate = async (signedVoucher: ITransferVoucherSigned) => {
+    const { full: signature } = signedVoucher.signature;
+    if (!contract) {
+      return false;
+    }
+    try {
+      await contract[
+        "validateVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
+      ](signedVoucher.voucher, signature);
+      return true;
+    } catch (e: any) {
+      return false;
+    }
+  };
+
+  return { buildVoucher, getSignatureMessage, tryServe, validate };
 };
 
 export default useVoucher;

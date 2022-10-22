@@ -1,7 +1,10 @@
-import { useAccount, useSignTypedData } from "wagmi";
+import { useAccount, useContract, useProvider, useSignTypedData } from "wagmi";
 import { splitSignature } from "@ethersproject/bytes";
-import { ethers } from "ethers";
 import { ISignature } from "../plugins/gateway/types/Signature";
+
+import ERC20PermitAbi from "../abi/ERC20Permit.json";
+
+const PERONIO_ADDRESS = process.env.NEXT_PUBLIC_PERONIO_CONTRACT || "";
 
 const types = {
   Permit: [
@@ -27,7 +30,14 @@ interface IUseERC20PermitResult {
 
 const useERC20Permit = (): IUseERC20PermitResult => {
   const { address: owner } = useAccount();
+  const provider = useProvider();
   const { signTypedDataAsync } = useSignTypedData();
+
+  const erc20Contract = useContract({
+    addressOrName: PERONIO_ADDRESS,
+    contractInterface: ERC20PermitAbi,
+    signerOrProvider: provider,
+  });
 
   const requestSignature = async ({
     name,
@@ -36,11 +46,9 @@ const useERC20Permit = (): IUseERC20PermitResult => {
     value,
     deadline,
   }: IRequestSignatureArgs): Promise<ISignature> => {
-    const nonce = ethers.BigNumber.from(
-      ethers.utils.randomBytes(32)
-    ).toHexString();
+    const nonce = await erc20Contract.nonces(owner);
 
-    const data = await signTypedDataAsync({
+    const toSign = {
       domain: {
         name: name,
         version: "1",
@@ -49,15 +57,19 @@ const useERC20Permit = (): IUseERC20PermitResult => {
       },
       types,
       value: {
-        owner: owner?.toLocaleLowerCase(),
+        owner: owner,
         spender: spender,
         value,
         nonce,
         deadline,
       },
-    });
+    };
 
-    return splitSignature(data);
+    console.dir(toSign);
+
+    const data = await signTypedDataAsync(toSign);
+    const { r, s, v } = splitSignature(data);
+    return { r, s, v, full: data };
   };
 
   return { requestSignature };

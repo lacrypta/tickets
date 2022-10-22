@@ -7,7 +7,6 @@ import { ajaxCall } from "../lib/public/request";
 import { ICart } from "../types/cart";
 import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
-export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
   orderTotal: string;

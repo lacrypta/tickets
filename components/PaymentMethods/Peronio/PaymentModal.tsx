@@ -5,8 +5,8 @@ import { splitSignature } from "@ethersproject/bytes";
 import { useSignMessage } from "wagmi";
 
 import {
-  ITransferVoucher,
-  ITransferVoucherSigned,
+  IVoucher,
+  IVoucherSigned,
 } from "../../../plugins/gateway/types/Voucher";
 // import { StepsContext } from "../../contexts/Steps";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
@@ -42,7 +42,7 @@ const Amount = styled.div`
 
 interface IPaymentModalProps {
   open: boolean;
-  voucher?: ITransferVoucher;
+  voucher?: IVoucher;
   // eslint-disable-next-line no-unused-vars
   setOpen: (args0: boolean) => void;
 }
@@ -58,7 +58,7 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
   const handleClose = () => setOpen(false);
   const { signMessageAsync } = useSignMessage();
 
-  const sendPayment = async (voucher: ITransferVoucherSigned) => {
+  const sendPayment = async (voucher: IVoucherSigned) => {
     if (!orderId) {
       return;
     }
@@ -86,7 +86,7 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
     setActive(false);
   };
 
-  const startSigning = async (voucher: ITransferVoucher) => {
+  const startSigning = async (voucher: IVoucher) => {
     try {
       const messageToSign = await getSignatureMessage(voucher);
 
@@ -97,7 +97,7 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
       const signature = await signMessageAsync({ message: messageToSign });
       const { r, s, v } = splitSignature(signature);
 
-      const signedVoucher: ITransferVoucherSigned = {
+      const signedVoucher: IVoucherSigned = {
         voucher,
         signature: {
           r,

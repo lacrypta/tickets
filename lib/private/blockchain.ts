@@ -60,17 +60,10 @@ export async function serveVoucher(
     "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
   ](voucher, signature.full);
 
-  console.info("Broadcasting tx...");
-  console.dir(await tx);
   return (await tx).hash;
 }
 
 export async function runPermit(permit: IPermit) {
   const { owner, spender, value, deadline, v, r, s } = permit;
-
-  console.info("Executing PERMIT on", tokenContract.address);
-  console.info("PERMIT:");
-  console.dir(permit);
-
   return tokenContract.permit(owner, spender, value, deadline, v, r, s);
 }

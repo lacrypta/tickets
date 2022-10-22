@@ -1,13 +1,12 @@
-import { ITransferVoucher } from "./../../plugins/gateway/types/Voucher";
+import { IVoucher } from "./../../plugins/gateway/types/Voucher";
 import { Contract, ethers } from "ethers";
 import { Interface } from "ethers/lib/utils";
 
-import {
-  address,
-  abi as gatewayAbi,
-} from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
+import BarGatewayJSON from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
 
 import ERC20PermitAbi from "../../abi/ERC20Permit.json";
+
+const { address, abi: gatewayAbi } = BarGatewayJSON;
 
 import { ISignature } from "../../plugins/gateway/types/Signature";
 import { IPermit } from "../../types/crypto";
@@ -54,7 +53,7 @@ export async function getTransferEvent(txHash: string) {
 }
 
 export async function serveVoucher(
-  voucher: ITransferVoucher,
+  voucher: IVoucher,
   signature: ISignature
 ): Promise<string> {
   const tx = gatewayContract[

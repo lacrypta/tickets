@@ -139,8 +139,8 @@ export const addERC20Payment = async (
       voucher,
       payload: {
         from: payload.from,
-        to: payload.to,
         amount: payload.amount.toString(),
+        message: payload.message,
       },
       status: "unpublished",
     });

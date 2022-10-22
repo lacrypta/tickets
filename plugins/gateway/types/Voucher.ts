@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers";
 import { ISignature } from "./Signature";
 
-export interface ITransferVoucher {
+export interface IVoucher {
   tag: number;
 
   nonce: BigNumber;
@@ -11,7 +11,7 @@ export interface ITransferVoucher {
   metadata: string;
 }
 
-export interface ITransferVoucherStringified {
+export interface IVoucherStringified {
   tag: number;
 
   nonce: string;
@@ -21,18 +21,24 @@ export interface ITransferVoucherStringified {
   metadata: string;
 }
 
-export interface ITransferVoucherSigned {
-  voucher: ITransferVoucher;
+export interface IVoucherSigned {
+  voucher: IVoucher;
   signature: ISignature;
 }
 
-export interface ITransferVoucherSignedStringified {
-  voucher: ITransferVoucherStringified;
+export interface IVoucherSignedStringified {
+  voucher: IVoucherStringified;
   signature: ISignature;
 }
 
-export interface ITransferVoucherPayload {
+export interface IVoucherPayload {
   from: string;
   to: string;
   amount: BigNumber;
+}
+
+export interface IPurchaseVoucherPayload {
+  from: string;
+  amount: BigNumber;
+  message: string;
 }

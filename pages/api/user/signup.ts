@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { runPermit } from "../../../lib/private/blockchain";
 import { addUser } from "../../../lib/private/firestore";
+import { IPermit } from "../../../types/crypto";
 
 import {
   ISignupRequestBody,
@@ -33,12 +35,7 @@ const request = async (
   const { address, username, permitData, signature }: ISignupRequestBody =
     req.body;
 
-  if (!isValidPermit(permitData, signature)) {
-    res.status(406).json({ success: false, message: "Invalid Permit" });
-    return;
-  }
-
-  await addUser(username, address, {
+  const permit: IPermit = {
     owner: address,
     spender: permitData.spender,
     deadline: permitData.deadline,
@@ -46,7 +43,16 @@ const request = async (
     r: signature.r,
     s: signature.s,
     v: signature.v,
-  });
+  };
+  try {
+    await runPermit(permit);
+  } catch (e: any) {
+    console.error(e);
+    res.status(406).json({ success: false, message: "Invalid Permit" });
+    return;
+  }
+
+  await addUser(username, address, permit);
 
   res.status(200).json({ success: true, data: "Ohh yeahh!!" });
 };

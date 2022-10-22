@@ -3,39 +3,20 @@ import { useContext } from "react";
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
 import { OrderContext } from "../contexts/Order";
+import { ajaxCall } from "../lib/public/request";
 import { ICart } from "../types/cart";
-import { ITransferVoucherSigned } from "../types/crypto";
-import {
-  ICreateOrderRequestBody,
-  IPaymentRequestBody,
-  ResponseDataType,
-} from "../types/request";
+import { ICreateOrderRequestBody, ResponseDataType } from "../types/request";
 
-export interface IOrder {}
 export interface IUseUserResult {
   orderId?: string;
   orderTotal: string;
   isLoading?: boolean;
   isSuccess?: boolean;
-  isPayed?: boolean;
   isError?: boolean;
   error?: string;
   createOrder: (_paymentMethod: string) => void;
   clear: () => void;
-  payOrder: (_signature: any) => void;
 }
-
-const ajaxCall = async (path: string, data: any): Promise<ResponseDataType> => {
-  const res = await fetch("/api/" + path, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  return res.json();
-};
 
 const ajaxCreateOrder = async (
   requestData: ICreateOrderRequestBody
@@ -43,16 +24,10 @@ const ajaxCreateOrder = async (
   return ajaxCall("order/create", requestData);
 };
 
-const ajaxCreatePayment = async (
-  requestData: IPaymentRequestBody
-): Promise<ResponseDataType> => {
-  return ajaxCall("gateway/pay", requestData);
-};
-
 const generateRequest = (
-  address: string,
   paymentMethod: string,
-  cart: ICart
+  cart: ICart,
+  address?: string
 ): ICreateOrderRequestBody => {
   const items = Object.values(cart.items)
     .map((item) => {
@@ -86,12 +61,12 @@ const useOrder = (): IUseUserResult => {
     setIsError,
     error,
     setError,
-    isPayed,
-    setIsPayed,
     clear,
   } = useContext(OrderContext);
 
   async function createOrder(paymentMethod: string) {
+    console.info("Create Order!");
+    console.info("paymentMethod:", paymentMethod);
     if (isLoading) {
       return;
     }
@@ -101,13 +76,13 @@ const useOrder = (): IUseUserResult => {
     setOrderId("");
 
     //  Return null on empty address or cart
-    if (!address || !cart) {
+    if (!cart) {
       setIsError(true);
       setError("No address or cart");
       setIsLoading(false);
       return null;
     }
-    const orderRequest = generateRequest(address, paymentMethod, cart);
+    const orderRequest = generateRequest(paymentMethod, cart, address);
     // Ajax Request
     const res = await ajaxCreateOrder(orderRequest);
 
@@ -117,17 +92,6 @@ const useOrder = (): IUseUserResult => {
     setIsLoading(false);
   }
 
-  const payOrder = async (voucher: ITransferVoucherSigned) => {
-    const res = await ajaxCreatePayment({
-      orderId,
-      voucher,
-    });
-
-    if (res.success) {
-      setIsPayed(true);
-    }
-  };
-
   return {
     orderId,
     isLoading,
@@ -135,9 +99,7 @@ const useOrder = (): IUseUserResult => {
     isError,
     error,
     orderTotal,
-    isPayed,
     createOrder: createOrder.bind(this),
-    payOrder,
     clear,
   };
 };

@@ -8,7 +8,6 @@ const { abi: barGatewayABI } = BarGatewayArtifact;
 const { address: deployedAddress } = BarGatewayDeployment;
 
 interface IGatewayContext {
-  name?: string;
   contract?: BarGatewayContract;
 }
 
@@ -16,19 +15,16 @@ export const GatewayContext = createContext<IGatewayContext>({});
 
 interface IGatewayProviderProps {
   address?: string;
-  name?: string;
   children: JSX.Element | JSX.Element[];
 }
 
 export const GatewayProvider = ({
-  name,
   address,
   children,
 }: IGatewayProviderProps) => {
   const provider = useProvider();
 
   const gatewayAddress = address || deployedAddress;
-  const gatewayName = name || "Bar Gateway";
 
   const contract: BarGatewayContract = useContract({
     addressOrName: gatewayAddress,
@@ -37,7 +33,7 @@ export const GatewayProvider = ({
   });
 
   return (
-    <GatewayContext.Provider value={{ name: gatewayName, contract }}>
+    <GatewayContext.Provider value={{ contract }}>
       {children}
     </GatewayContext.Provider>
   );

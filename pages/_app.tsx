@@ -23,7 +23,6 @@ import { LoadingProvider } from "../contexts/Loading";
 import { UserProvider } from "../contexts/User";
 import { GatewayProvider } from "../plugins/gateway/contexts/Gateway";
 
-const GATEWAY_CONTRACT_NAME = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME;
 const GATEWAY_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
 
 const menuItems = getMenuItems();
@@ -73,10 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               theme={darkTheme()}
               chains={chains}
             >
-              <GatewayProvider
-                name={GATEWAY_CONTRACT_NAME}
-                address={GATEWAY_CONTRACT_ADDRESS}
-              >
+              <GatewayProvider address={GATEWAY_CONTRACT_ADDRESS}>
                 <UserProvider>
                   <CartProvider menu={menuItems}>
                     <OrderProvider>

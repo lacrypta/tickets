@@ -1,10 +1,9 @@
 import { BigNumber, ethers } from "ethers";
-import { ITransferVoucher, ITransferVoucherSigned } from "../types/Voucher";
+import { IVoucher, IVoucherSigned } from "../types/Voucher";
 import useGateway from "./useGateway";
 
 interface IBuildVoucherArgs {
   from: string;
-  to: string;
   amount: BigNumber;
   deadline: number;
   message: string;
@@ -13,13 +12,11 @@ interface IBuildVoucherArgs {
 interface IUseVoucherResult {
   buildVoucher: (
     _voucherData: IBuildVoucherArgs
-  ) => Promise<ITransferVoucher | undefined>;
-  getSignatureMessage: (
-    _voucher: ITransferVoucher
-  ) => Promise<string | undefined>;
+  ) => Promise<IVoucher | undefined>;
+  getSignatureMessage: (_voucher: IVoucher) => Promise<string | undefined>;
 
-  tryServe: (_voucher: ITransferVoucherSigned) => Promise<any>;
-  validate: (_voucher: ITransferVoucherSigned) => Promise<boolean>;
+  tryServe: (_voucher: IVoucherSigned) => Promise<any>;
+  validate: (_voucher: IVoucherSigned) => Promise<boolean>;
 }
 
 const useVoucher = (): IUseVoucherResult => {
@@ -31,36 +28,25 @@ const useVoucher = (): IUseVoucherResult => {
     amount,
     deadline,
     message,
-  }: IBuildVoucherArgs): Promise<ITransferVoucher | undefined> => {
+  }: IBuildVoucherArgs): Promise<IVoucher | undefined> => {
     const nonce = ethers.BigNumber.from(
       ethers.utils.randomBytes(32)
     ).toHexString();
 
-    contract?.["buildPurchaseVoucher(uint256,uint256,address,uint256,string)"](
-      nonce,
-      deadline,
-      from,
-      amount,
-      message
-    );
-
-    return contract?.["buildPurchaseVoucher(uint256,address,uint256,string)"](
-      nonce,
-      from,
-      amount,
-      message
-    );
+    return contract?.[
+      "buildPurchaseVoucher(uint256,uint256,address,uint256,string)"
+    ](nonce, deadline, from, amount, message);
   };
 
   // Generate signature string with voucher
   const getSignatureMessage = async (
-    voucher: ITransferVoucher
+    voucher: IVoucher
   ): Promise<string | undefined> => {
     return contract?.stringifyVoucher(voucher);
   };
 
   // Simulate static call
-  const tryServe = async (signedVoucher: ITransferVoucherSigned) => {
+  const tryServe = async (signedVoucher: IVoucherSigned) => {
     const { full: signature } = signedVoucher.signature;
     return contract?.callStatic[
       "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
@@ -68,7 +54,7 @@ const useVoucher = (): IUseVoucherResult => {
   };
 
   // Validate Voucher
-  const validate = async (signedVoucher: ITransferVoucherSigned) => {
+  const validate = async (signedVoucher: IVoucherSigned) => {
     const { full: signature } = signedVoucher.signature;
     if (!contract) {
       return false;

@@ -2,7 +2,7 @@ import z from "zod";
 import { SignatureSchema } from "../plugins/gateway/schemas/Signature";
 import { TransferVoucherSchemaSigned } from "../plugins/gateway/schemas/Voucher";
 import { ISignature } from "../plugins/gateway/types/Signature";
-import { ITransferVoucherSignedStringified } from "../plugins/gateway/types/Voucher";
+import { IVoucherSignedStringified } from "../plugins/gateway/types/Voucher";
 import { IOrderItem } from "./cart";
 import { IPermitData, PermitSchema } from "./crypto";
 export interface ISignupRequestBody {
@@ -14,7 +14,7 @@ export interface ISignupRequestBody {
 
 export interface IERC20PaymentRequestBody {
   orderId: string;
-  voucher: ITransferVoucherSignedStringified;
+  voucher: IVoucherSignedStringified;
 }
 
 export interface ICreateOrderRequestBody {

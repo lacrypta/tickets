@@ -1,5 +1,5 @@
-import { ITransferVoucherSignedStringified } from "./../../plugins/gateway/types/Voucher";
-import { ITransferVoucherSigned } from "../../plugins/gateway/types/Voucher";
+import { IVoucherSignedStringified } from "./../../plugins/gateway/types/Voucher";
+import { IVoucherSigned } from "../../plugins/gateway/types/Voucher";
 import { ICart } from "../../types/cart";
 
 const generatePermitData = (
@@ -16,9 +16,7 @@ const generatePermitData = (
   };
 };
 
-const formatVoucher = (
-  voucher: ITransferVoucherSigned
-): ITransferVoucherSignedStringified => {
+const formatVoucher = (voucher: IVoucherSigned): IVoucherSignedStringified => {
   const { deadline, metadata, nonce, payload, tag } = voucher.voucher;
   const { r, s, v, full } = voucher.signature;
   return {

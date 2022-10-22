@@ -1,6 +1,6 @@
 import {
-  ITransferVoucherPayload,
-  ITransferVoucherSignedStringified,
+  IPurchaseVoucherPayload,
+  IVoucherSignedStringified,
 } from "./../../plugins/gateway/types/Voucher";
 import { IPermit } from "../../types/crypto";
 import { initializeApp, cert } from "firebase-admin/app";
@@ -101,8 +101,8 @@ export const addUser = async (
  */
 export const addERC20Payment = async (
   orderId: string,
-  voucher: ITransferVoucherSignedStringified,
-  payload: ITransferVoucherPayload
+  voucher: IVoucherSignedStringified,
+  payload: IPurchaseVoucherPayload
 ): Promise<String> => {
   const paymentRef = db.collection("payments").doc();
 

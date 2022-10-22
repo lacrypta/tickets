@@ -1,6 +1,7 @@
 import {
-  ITransferVoucher,
-  ITransferVoucherStringified,
+  IPurchaseVoucherPayload,
+  IVoucher,
+  IVoucherStringified,
 } from "./../types/Voucher";
 import { BigNumber, ethers } from "ethers";
 
@@ -10,7 +11,7 @@ export const encodeVoucher = ({
   nonce,
   payload,
   tag,
-}: ITransferVoucherStringified): ITransferVoucher => {
+}: IVoucherStringified): IVoucher => {
   return {
     deadline: BigNumber.from(deadline),
     metadata,
@@ -20,15 +21,17 @@ export const encodeVoucher = ({
   };
 };
 
-export const decodePayload = (payload: string) => {
+export const decodePayload = (payload: string): IPurchaseVoucherPayload => {
   const abiCoder = ethers.utils.defaultAbiCoder;
-  const [from, to, amount] = abiCoder.decode(
-    ["address", "address", "uint256"],
+  const [metadata] = abiCoder.decode(
+    ["tuple(address, uint256, string)"],
     payload
   );
+  const [from, amount, message] = metadata;
+
   return {
     from,
-    to,
     amount,
+    message,
   };
 };

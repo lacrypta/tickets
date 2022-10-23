@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 
 import { useAccount } from "wagmi";
 import { CartContext } from "../contexts/Cart";
@@ -20,6 +20,7 @@ export interface IUseUserResult {
   isPayed?: boolean;
   isError?: boolean;
   error?: string;
+  setOrderId?: Dispatch<SetStateAction<string>>;
   createOrder: (_paymentMethod: string) => void;
   clear: () => void;
   payOrder: (_signature: any) => void;
@@ -137,6 +138,7 @@ const useOrder = (): IUseUserResult => {
     orderTotal,
     isPayed,
     createOrder: createOrder.bind(this),
+    setOrderId,
     payOrder,
     clear,
   };

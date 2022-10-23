@@ -28,7 +28,7 @@ const MainBlock = styled.main`
   position: relative;
 `;
 
-const getOrderByCode = async (code: string) => {
+const getOrderByCode = async (code: string): Promise<number | undefined> => {
   console.info("Code", code);
 
   const codeRef = doc(db, "secret", code);
@@ -38,7 +38,7 @@ const getOrderByCode = async (code: string) => {
   if (!codeDoc.exists()) {
     return undefined;
   }
-  return codeDoc.data();
+  return codeDoc.data().orderId;
 };
 
 const Home: NextPage = () => {
@@ -46,6 +46,8 @@ const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
+  const [orderId, setOrderId] = useState<number>();
+  const [order, setOrder] = useState<any | undefined>();
 
   const { code } = router.query;
 
@@ -54,11 +56,35 @@ const Home: NextPage = () => {
       return;
     }
 
-    getOrderByCode(code as string).then((res) => {
-      console.info("RES:");
-      console.dir(res);
+    getOrderByCode(code as string).then((orderId) => {
+      if (!orderId) {
+        alert("No order Id!");
+        return;
+      }
+      setOrderId(orderId);
     });
   }, [code]);
+
+  useEffect(() => {
+    if (!orderId) {
+      return;
+    }
+
+    const orderRef = doc(db, "orders", String(orderId));
+
+    const unsubscribe = onSnapshot(orderRef, {
+      next: (snapshot) => {
+        console.info("Order Updated!");
+        console.dir(snapshot.data());
+
+        setOrder(snapshot?.data());
+      },
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [orderId]);
 
   useEffect(() => {
     setActive(isLoading);
@@ -81,7 +107,11 @@ const Home: NextPage = () => {
       <MainBlock>
         <Background />
         <HeaderLogo />
-        {isMounted ? <DoneWidget /> : "Cargando..."}
+        {isMounted ? (
+          <DoneWidget orderId={orderId} order={order} />
+        ) : (
+          "Cargando..."
+        )}
       </MainBlock>
 
       <Footer />

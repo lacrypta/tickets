@@ -16,6 +16,7 @@ import useOrder from "../../../hooks/useOrder";
 import { formatVoucher } from "../../../lib/public/utils";
 import { ajaxCall } from "../../../lib/public/request";
 import { StepsContext } from "../../../contexts/Steps";
+import { useRouter } from "next/router";
 
 const Modal = styled(MaterialModal)`
   position: fixed;
@@ -49,6 +50,7 @@ interface IPaymentModalProps {
 
 const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
   const { setStep } = useContext(StepsContext);
+  const router = useRouter();
 
   const { getSignatureMessage, validate } = useVoucher();
   const { setActive } = useLoading();
@@ -82,8 +84,10 @@ const PaymentModal = ({ voucher, open, setOpen }: IPaymentModalProps) => {
 
     if (res.success) {
       setStep(3);
+      router.push("/order/" + res.data.code);
+    } else {
+      setActive(false);
     }
-    setActive(false);
   };
 
   const startSigning = async (voucher: IVoucher) => {

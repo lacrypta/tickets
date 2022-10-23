@@ -202,6 +202,34 @@ export const updateOrder = async (orderId: string, data: any) => {
   orderRef.update(data);
   return doc.data();
 };
+
+/**
+ * Adds order secret code
+ * @param orderId
+ * @returns
+ */
+export const addCode = async (orderId: string) => {
+  return db.collection("secret").doc().set({
+    orderId,
+  });
+};
+
+/**
+ * Get Order by Code
+ * @param {string} code Secret Code
+ * @returns
+ */
+export const getOrderIdByCode = async (
+  code: string
+): Promise<string | undefined> => {
+  const secretRef = db.collection("secret").doc(code);
+  const doc = await secretRef.get();
+  if (!doc.exists) {
+    return undefined;
+  }
+
+  return doc.id;
+};
 //------------- PRIVATE FUNCTIONS -------------//
 
 const _getNewOrderId = async (t: Transaction): Promise<number> => {

@@ -4,6 +4,7 @@ import useOrder from "../../hooks/useOrder";
 import { PaymentMethods } from "../../types/cart";
 import BackButton from "../BackButton";
 import Button from "../common/Button";
+import MercadoPago from "../PaymentMethods/MercadoPago/MercadoPago";
 
 import { Peronio } from "../PaymentMethods/Peronio/Peronio";
 
@@ -15,7 +16,7 @@ const Container = styled.div`
 `;
 
 const paymentMethodWidgets = {
-  [PaymentMethods.MERCADOPAGO]: "MercadoPago Bitch",
+  [PaymentMethods.MERCADOPAGO]: <MercadoPago />,
   [PaymentMethods.PERONIO]: <Peronio />,
 };
 

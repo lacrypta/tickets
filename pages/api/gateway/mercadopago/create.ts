@@ -54,7 +54,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         ],
         back_urls: {
-          success: HOSTNAME + "/api/gateway/mercadopago/approve",
+          success: HOSTNAME + "/api/gateway/mercadopago/webhook",
         },
         additional_info: String(orderId),
         statement_descriptor: "La Crypta - Bar",
@@ -64,7 +64,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     ).body;
   } catch (e) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: "MercadoPago Error",
     });
     return;

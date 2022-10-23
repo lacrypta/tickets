@@ -3,7 +3,6 @@ import { z } from "zod";
 import { getOrder, updateOrder } from "./../../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";
-import { sendEmail } from "../../../../lib/private/email";
 import { ConfigTokenOption } from "mercadopago/configuration";
 
 const config: ConfigTokenOption = {
@@ -48,12 +47,6 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // If still pending
   if (order.status !== "completed") {
-    // **************** SEND Email **************** //
-    await sendEmail({
-      fullname: order.fullname,
-      email: order.email,
-      url: "https://entradas.lacrypta.com.ar/entrada/" + orderId,
-    });
     await updateOrder(orderId, {
       status: "completed",
       payment_method: "mercadopago",

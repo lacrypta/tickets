@@ -50,15 +50,16 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   // If still pending
+  let code;
   if (order.status !== "completed") {
-    await addCode(orderId);
+    code = await addCode(orderId);
     await updateOrder(orderId, {
       status: "completed",
       payment_method: "mercadopago",
       payment_id: paymentId,
     });
   }
-  res.redirect(307, "/entrada/" + orderId);
+  res.redirect(307, "/order/" + code);
 };
 
 export default request;

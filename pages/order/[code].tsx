@@ -2,6 +2,13 @@ import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import {
+  db,
+  collection,
+  onSnapshot,
+  doc,
+  getDoc,
+} from "../../lib/public/firebase";
 
 import { useEffect, useState } from "react";
 import { Background } from "../../components/Background";
@@ -21,6 +28,19 @@ const MainBlock = styled.main`
   position: relative;
 `;
 
+const getOrderByCode = async (code: string) => {
+  console.info("Code", code);
+
+  const codeRef = doc(db, "secret", code);
+
+  const codeDoc = await getDoc(codeRef);
+
+  if (!codeDoc.exists()) {
+    return undefined;
+  }
+  return codeDoc.data();
+};
+
 const Home: NextPage = () => {
   const { isLoading } = useUser();
   const { setActive } = useLoading();
@@ -28,8 +48,18 @@ const Home: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const { code } = router.query;
-  console.info("Router!");
-  console.dir({ code });
+
+  useEffect(() => {
+    if (!code) {
+      return;
+    }
+
+    getOrderByCode(code as string).then((res) => {
+      console.info("RES:");
+      console.dir(res);
+    });
+  }, [code]);
+
   useEffect(() => {
     setActive(isLoading);
   }, [isLoading, setActive]);

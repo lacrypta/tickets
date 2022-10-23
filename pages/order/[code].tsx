@@ -2,13 +2,7 @@ import styled from "@emotion/styled";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import {
-  db,
-  collection,
-  onSnapshot,
-  doc,
-  getDoc,
-} from "../../lib/public/firebase";
+import { db, onSnapshot, doc, getDoc } from "../../lib/public/firebase";
 
 import { useEffect, useState } from "react";
 import { Background } from "../../components/Background";
@@ -17,7 +11,6 @@ import Header from "../../components/Header";
 import { HeaderLogo } from "../../components/HeaderLogo";
 import { DoneWidget } from "../../components/Widgets/DoneWidget";
 import useLoading from "../../hooks/useLoading";
-import useUser from "../../hooks/useUser";
 
 const MainBlock = styled.main`
   padding: 4rem 0;
@@ -42,10 +35,9 @@ const getOrderByCode = async (code: string): Promise<number | undefined> => {
 };
 
 const Home: NextPage = () => {
-  const { isLoading } = useUser();
   const { setActive } = useLoading();
   const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [orderId, setOrderId] = useState<number>();
   const [order, setOrder] = useState<any | undefined>();
 
@@ -58,11 +50,13 @@ const Home: NextPage = () => {
 
     getOrderByCode(code as string).then((orderId) => {
       if (!orderId) {
-        alert("No order Id!");
+        alert("No hay una orden con ese código");
+        router.push("/");
         return;
       }
       setOrderId(orderId);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   useEffect(() => {
@@ -78,6 +72,7 @@ const Home: NextPage = () => {
         console.dir(snapshot.data());
 
         setOrder(snapshot?.data());
+        setIsLoading(false);
       },
     });
 
@@ -89,10 +84,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     setActive(isLoading);
   }, [isLoading, setActive]);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <div>
@@ -107,7 +98,7 @@ const Home: NextPage = () => {
       <MainBlock>
         <Background />
         <HeaderLogo />
-        {isMounted ? (
+        {!isLoading && orderId ? (
           <DoneWidget orderId={orderId} order={order} />
         ) : (
           "Cargando..."

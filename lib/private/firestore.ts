@@ -215,9 +215,11 @@ export const updateOrder = async (orderId: string, data: any) => {
  * @returns
  */
 export const addCode = async (orderId: string) => {
-  return db.collection("secret").doc().set({
+  const secretRef = db.collection("secret").doc();
+  secretRef.set({
     orderId,
   });
+  return secretRef.id;
 };
 
 /**

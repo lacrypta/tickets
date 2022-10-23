@@ -10,7 +10,7 @@ const Container = styled.div``;
 const CategoryDiv = styled.div`
   font-size: 24px;
   font-weight: bold;
-  margin: 10px 0px 10px 0px;
+  margin: 30px 0px 10px 0px;
 `;
 
 export const MenuItems = () => {

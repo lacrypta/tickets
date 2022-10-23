@@ -1,11 +1,8 @@
 import styled from "@emotion/styled";
-import { StepsContext } from "../../contexts/Steps";
-import { useContext } from "react";
-import { CartContext } from "../../contexts/Cart";
-import CartList from "../Order/OrderList";
 import BackButton from "../BackButton";
-import useOrder from "../../hooks/useOrder";
-import useUser from "../../hooks/useUser";
+import CartList from "../Order/OrderList";
+import { generateCart } from "../../lib/public/utils";
+import { useRouter } from "next/router";
 
 const Container = styled.div`
   width: 100%;
@@ -15,27 +12,23 @@ const Container = styled.div`
   font-variant-caps: petite-caps;
 `;
 
-const Account = styled.div`
-  font-size: 15px;
-  margin: 8px 0px;
-`;
-
 const OrderID = styled.div`
   font-size: 20px;
   margin: 8px 0px;
 `;
 
-export const DoneWidget = () => {
-  const { cart, clear: clearCart } = useContext(CartContext);
-  const { setStep } = useContext(StepsContext);
-  const { orderId, clear: clearOrder } = useOrder();
-  const { user } = useUser();
+interface IDoneProps {
+  orderId: number;
+  order: any;
+}
+
+export const DoneWidget = ({ orderId, order }: IDoneProps) => {
+  const router = useRouter();
+
+  const cart = generateCart(order.items);
 
   const handleBack = () => {
-    clearCart();
-    clearOrder();
-
-    setStep(0);
+    router.push("/");
   };
 
   return (
@@ -43,11 +36,14 @@ export const DoneWidget = () => {
       <div>
         <h1>Pedido realizado!</h1>
       </div>
-      <div>Van a llamarte por el nombre cuando tu pedido esté listo</div>
+      <div>Retirá tu ticket por CAJA</div>
       <OrderID>Orden : #{orderId}</OrderID>
-      <Account>Nombre: {user?.username}</Account>
       <CartList cart={cart} />
-      <BackButton onClick={handleBack} />
+      <div>Método: {order.payment_method}</div>
+      <div>Cart total: $ {cart.total}</div>
+      <div>Pagado: $ {order.total}</div>
+
+      <BackButton label={"Nueva Orden"} onClick={handleBack} />
     </Container>
   );
 };

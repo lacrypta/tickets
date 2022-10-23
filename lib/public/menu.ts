@@ -2,8 +2,9 @@
 
 import menuItems from "../../data/menu.json";
 import { IOrderItem } from "../../types/cart";
+import { IMenuProduct } from "../../types/menu";
 
-const indexedMenuPrices: { [index: string]: number } = {};
+const indexedMenu: { [index: string]: IMenuProduct } = {};
 
 const getMenuItems = () => {
   return menuItems;
@@ -11,9 +12,9 @@ const getMenuItems = () => {
 
 const generateIndex = () => {
   menuItems.forEach((item) => {
-    indexedMenuPrices[item.id] = item.price;
+    indexedMenu[item.id] = item;
   });
-  indexedMenuPrices;
+  indexedMenu;
 };
 
 const getTotal = (items: IOrderItem[]) => {
@@ -21,7 +22,7 @@ const getTotal = (items: IOrderItem[]) => {
 
   Object.values(items).map((item) => {
     // eslint-disable-next-line no-undef
-    total += item.qty * indexedMenuPrices[item.id];
+    total += item.qty * indexedMenu[item.id].price;
   });
   return total;
 };
@@ -29,4 +30,4 @@ const getTotal = (items: IOrderItem[]) => {
 // Just once
 generateIndex();
 
-export { getMenuItems, getTotal };
+export { indexedMenu, getMenuItems, getTotal };

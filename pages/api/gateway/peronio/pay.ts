@@ -9,7 +9,7 @@ import {
   encodeVoucher,
 } from "../../../../plugins/gateway/lib/utils";
 
-import { addERC20Payment } from "../../../../lib/private/firestore";
+import { addCode, addERC20Payment } from "../../../../lib/private/firestore";
 import { serveVoucher } from "../../../../lib/private/blockchain";
 
 type Data = {
@@ -55,12 +55,15 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       payload
     );
 
+    const code = await addCode(requestData.orderId);
+
     // Reply OK
     res.status(200).json({
       success: true,
       data: {
         paymentId,
         txHash,
+        code,
       },
     });
   } catch (e: any) {

@@ -29,6 +29,14 @@ export type ResponseDataType = {
   data?: any;
 };
 
+export interface ICreateMercadoPagoRequestBody {
+  orderId: string;
+}
+
+export const CreateMercadoPagoRequestSchema = z.object({
+  orderId: z.string(),
+});
+
 export const SignupSchema = z.object({
   address: z.string(),
   username: z.string(),

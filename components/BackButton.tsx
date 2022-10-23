@@ -3,10 +3,11 @@ import UndoIcon from "@mui/icons-material/Undo";
 import { MouseEventHandler } from "react";
 
 interface IBackButtonProps {
+  label?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-const BackButton = ({ onClick }: IBackButtonProps) => {
+const BackButton = ({ label, onClick }: IBackButtonProps) => {
   return (
     <Fab
       variant='extended'
@@ -17,7 +18,7 @@ const BackButton = ({ onClick }: IBackButtonProps) => {
       onClick={onClick}
     >
       <UndoIcon sx={{ mr: 1 }} />
-      Volver
+      {label ? label : "Volver"}
     </Fab>
   );
 };

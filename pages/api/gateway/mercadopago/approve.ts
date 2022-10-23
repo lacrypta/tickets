@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
-import { getOrder, updateOrder } from "./../../../../lib/private/firestore";
+import {
+  addCode,
+  getOrder,
+  updateOrder,
+} from "./../../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";
@@ -47,6 +51,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // If still pending
   if (order.status !== "completed") {
+    await addCode(orderId);
     await updateOrder(orderId, {
       status: "completed",
       payment_method: "mercadopago",

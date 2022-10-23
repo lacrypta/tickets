@@ -1,11 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-// import { addOrder } from "../../../lib/private/firestore";
 
 import mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";
 
 import { getOrder, updateOrder } from "../../../../lib/private/firestore";
-import { CreatePaymentRequestSchema } from "../../../../types/request";
+import { CreateMercadoPagoRequestSchema } from "../../../../types/request";
 
 const HOSTNAME =
   process.env.NEXT_PUBLIC_HOSTNAME || "https://bar.lacrypta.com.ar";
@@ -26,7 +25,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Validation
   try {
-    CreatePaymentRequestSchema.parse(req.body);
+    CreateMercadoPagoRequestSchema.parse(req.body);
   } catch (e) {
     res.status(400).json({ success: false, message: "Malformed request" });
   }
@@ -58,7 +57,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
           success: HOSTNAME + "/api/gateway/mercadopago/approve",
         },
         additional_info: String(orderId),
-        statement_descriptor: "La Crypta - Halloween",
+        statement_descriptor: "La Crypta - Bar",
         auto_return: "all",
         notification_url: process.env.MP_NOTIFICATION_URL,
       })

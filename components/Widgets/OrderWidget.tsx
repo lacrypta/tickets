@@ -3,13 +3,12 @@ import styled from "@emotion/styled";
 import { CartContext } from "../../contexts/Cart";
 import { StepsContext } from "../../contexts/Steps";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 
 import PayButton from "../Menu/PayButton";
-import PaymentModal from "../Order/PaymentModal";
 
 const Container = styled.div`
   width: 100%;
@@ -21,8 +20,6 @@ const Container = styled.div`
 export const OrderWidget = () => {
   const { setStep } = useContext(StepsContext);
   const { cart } = useContext(CartContext);
-
-  const [open, setOpen] = useState(false);
 
   const handlePay = () => {
     setStep(2);
@@ -42,8 +39,6 @@ export const OrderWidget = () => {
       <BackButton onClick={handleBack} />
 
       <PayButton onClick={handlePay} />
-
-      <PaymentModal open={open} setOpen={setOpen} />
     </Container>
   );
 };

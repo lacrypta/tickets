@@ -17,16 +17,9 @@ export const Peronio = () => {
   const { setStep } = useContext(StepsContext);
   const { isDisconnected } = useAccount();
   const { chain } = useNetwork();
-  const { orderId, isPayed } = useOrder();
+  const { orderId } = useOrder();
   const { setActive } = useLoading();
   const { isRegistered } = useUser();
-
-  useEffect(() => {
-    if (setStep && isPayed) {
-      setStep(3);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPayed, setStep]);
 
   useEffect(() => {
     if (orderId) {

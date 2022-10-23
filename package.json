@@ -16,6 +16,7 @@
     "@ethereumjs/tx": "^4.0.0",
     "@ethersproject/bytes": "^5.7.0",
     "@firebase/firestore": "^3.5.0",
+    "@lacrypta/bar-gateway": "^0.9.4",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.10",
     "@rainbow-me/rainbowkit": "^0.7.1",
@@ -30,7 +31,6 @@
     "react-qr-code": "^2.0.8",
     "react-sdk-mercadopago": "^1.1.1",
     "wagmi": "0.6.8",
-    "web3": "^1.8.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {

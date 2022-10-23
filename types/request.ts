@@ -1,13 +1,10 @@
 import z from "zod";
-import { IOrderItem, PaymentMethods } from "./cart";
-import {
-  IPermitData,
-  ISignature,
-  ITransferVoucherSigned,
-  PermitSchema,
-  SignatureSchema,
-  TransferVoucherSchemaSigned,
-} from "./crypto";
+import { SignatureSchema } from "../plugins/gateway/schemas/Signature";
+import { TransferVoucherSchemaSigned } from "../plugins/gateway/schemas/Voucher";
+import { ISignature } from "../plugins/gateway/types/Signature";
+import { IVoucherSignedStringified } from "../plugins/gateway/types/Voucher";
+import { IOrderItem } from "./cart";
+import { IPermitData, PermitSchema } from "./crypto";
 export interface ISignupRequestBody {
   address: string;
   username: string;
@@ -15,10 +12,11 @@ export interface ISignupRequestBody {
   signature: ISignature;
 }
 
-export interface IPaymentRequestBody {
+export interface IERC20PaymentRequestBody {
   orderId: string;
-  voucher: ITransferVoucherSigned;
+  voucher: IVoucherSignedStringified;
 }
+
 export interface ICreateOrderRequestBody {
   address?: string;
   paymentMethod: string;
@@ -46,7 +44,7 @@ export const SignupSchema = z.object({
   signature: SignatureSchema,
 });
 
-export const PaymentSchema = z.object({
+export const ERC20PaymentSchema = z.object({
   orderId: z.string(),
   voucher: TransferVoucherSchemaSigned,
 });

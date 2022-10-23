@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { addPayment } from "../../../lib/private/firestore";
+import { addCode, addPayment } from "../../../lib/private/firestore";
 import { IPaymentRequestBody, PaymentSchema } from "../../../types/request";
 
 const BAR_ADDRESS = process.env.NEXT_PUBLIC_BAR_ADDRESS;
@@ -32,6 +32,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       throw new Error("Invalid destination");
     }
     const paymentId = await addPayment(payment.orderId, payment.voucher);
+    await addCode(payment.orderId);
     res.status(200).json({ success: true, data: { paymentId } });
   } catch (e: any) {
     console.error(e);

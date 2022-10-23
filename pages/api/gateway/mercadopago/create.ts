@@ -12,8 +12,6 @@ const config: ConfigTokenOption = {
   access_token: process.env.MP_SECRET_TOKEN || "",
 };
 
-const TICKET_PRICE = process.env.NEXT_PUBLIC_TICKET_PRICE || "2000";
-
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
   // TODO: Limit user order creation by time
   if (req.method !== "POST") {
@@ -28,13 +26,16 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     CreateMercadoPagoRequestSchema.parse(req.body);
   } catch (e) {
     res.status(400).json({ success: false, message: "Malformed request" });
+    return;
   }
 
   const { orderId } = req.body;
 
-  // Checek Order existance
-  if (!(await getOrder(orderId))) {
+  // Get Order
+  const order = await getOrder(orderId);
+  if (!order) {
     res.status(406).json({ success: false, message: "Order doesnt exist" });
+    return;
   }
 
   // Setup MercadoPago
@@ -49,12 +50,12 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
             title: "La Crypta - Halloween",
             quantity: 1,
             currency_id: "ARS",
-            unit_price: parseInt(TICKET_PRICE),
+            unit_price: parseInt(order.total),
             id: orderId,
           },
         ],
         back_urls: {
-          success: HOSTNAME + "/api/gateway/mercadopago/webhook",
+          success: HOSTNAME + "/api/gateway/mercadopago/approve",
         },
         additional_info: String(orderId),
         statement_descriptor: "La Crypta - Bar",

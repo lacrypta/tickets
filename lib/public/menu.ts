@@ -1,8 +1,10 @@
 // Menu functions
 
-import menuItems from "../../data/menu.json";
+import menuJSON from "../../data/menu.json";
 import { IOrderItem } from "../../types/cart";
 import { IMenuProduct } from "../../types/menu";
+
+const { categories, items: menuItems } = menuJSON;
 
 const indexedMenu: { [index: string]: IMenuProduct } = {};
 
@@ -30,4 +32,4 @@ const getTotal = (items: IOrderItem[]) => {
 // Just once
 generateIndex();
 
-export { indexedMenu, getMenuItems, getTotal };
+export { categories, indexedMenu, getMenuItems, getTotal };

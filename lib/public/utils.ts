@@ -47,12 +47,13 @@ const generateCart = (items: IOrderItem[]): ICart => {
   let total = 0;
 
   items.forEach((item) => {
-    const { name, price } = indexedMenu[item.id];
+    const { name, price, cat } = indexedMenu[item.id];
     cartItems[item.id] = {
       product: {
         id: item.id,
         name,
         price,
+        cat,
       },
       qty: item.qty,
     };

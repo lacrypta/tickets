@@ -1,6 +1,6 @@
 import { IVoucherSignedStringified } from "./../../plugins/gateway/types/Voucher";
 import { IVoucherSigned } from "../../plugins/gateway/types/Voucher";
-import { ICart } from "../../types/cart";
+import { ICart, ICartItem, IOrderItem } from "../../types/cart";
 
 const generatePermitData = (
   contractAddress?: string,
@@ -41,4 +41,27 @@ const generateMessage = (orderId: string, total: string, _cart?: ICart) => {
   return `Pagar la cuenta de la Orden #${orderId}\nMonto: ${formattedAmount}`;
 };
 
-export { generatePermitData, formatVoucher, generateMessage };
+const generateCart = (items: IOrderItem[]): ICart => {
+  const cartItems: { [index: string]: ICartItem } = {};
+  let total = 0;
+  items.forEach((item) => {
+    const name = "NOMBREEE";
+    const price = 6788.99;
+    cartItems[item.id] = {
+      product: {
+        id: item.id,
+        name,
+        price,
+      },
+      qty: item.qty,
+    };
+    total += item.qty * price;
+  });
+
+  return {
+    total: total,
+    items: cartItems,
+  };
+};
+
+export { generatePermitData, formatVoucher, generateMessage, generateCart };

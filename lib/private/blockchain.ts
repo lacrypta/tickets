@@ -1,6 +1,6 @@
 import { IVoucher } from "./../../plugins/gateway/types/Voucher";
 import { Contract, ethers } from "ethers";
-import { formatUnits, Interface } from "ethers/lib/utils";
+import { Interface } from "ethers/lib/utils";
 
 import BarGatewayJSON from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
 
@@ -10,7 +10,6 @@ const { address, abi: gatewayAbi } = BarGatewayJSON;
 
 import { ISignature } from "../../plugins/gateway/types/Signature";
 import { IPermit } from "../../types/crypto";
-// import {} from "@lacrypta/bar-gateway/";
 
 // contract details
 const RPC_ADDRESS = process.env.NEXT_PUBLIC_RPC_ADDRESS || "";

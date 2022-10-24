@@ -14,7 +14,7 @@ const generatePermitData = (
     name: "Peronio",
     contract: contractAddress ?? "",
     spender: gatewayAddress ?? "",
-    value: BigNumber.from("1").shl(256).sub(1),
+    value: BigNumber.from("1").shl(256).sub(1).toString(),
     deadline: Math.floor(Date.now() / 1000) + parseInt(signupTTL || "43200"), // 12 hours
   };
 };

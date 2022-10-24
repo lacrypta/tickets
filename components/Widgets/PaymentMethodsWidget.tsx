@@ -4,6 +4,7 @@ import useOrder from "../../hooks/useOrder";
 import { PaymentMethods } from "../../types/cart";
 import BackButton from "../BackButton";
 import Button from "../common/Button";
+import { Cash } from "../PaymentMethods/Cash/Cash";
 import MercadoPago from "../PaymentMethods/MercadoPago/MercadoPago";
 
 import { Peronio } from "../PaymentMethods/Peronio/Peronio";
@@ -18,6 +19,7 @@ const Container = styled.div`
 const paymentMethodWidgets = {
   [PaymentMethods.MERCADOPAGO]: <MercadoPago />,
   [PaymentMethods.PERONIO]: <Peronio />,
+  [PaymentMethods.CASH]: <Cash />,
 };
 
 export const PaymentMethodsWidget = () => {
@@ -49,6 +51,11 @@ export const PaymentMethodsWidget = () => {
           <div>
             <Button onClick={() => startOrder(PaymentMethods.PERONIO)}>
               Peronio
+            </Button>
+          </div>
+          <div>
+            <Button onClick={() => startOrder(PaymentMethods.CASH)}>
+              Efectivo
             </Button>
           </div>
         </div>

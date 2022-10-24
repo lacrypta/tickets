@@ -55,6 +55,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
     code = await addCode(orderId);
     await updateOrder(orderId, {
       status: "completed",
+      pos: "print_pending",
       payment_method: "mercadopago",
       payment_id: paymentId,
     });

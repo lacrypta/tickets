@@ -127,7 +127,8 @@ export const addERC20Payment = async (
 
     // Update Order
     t.update(orderRef, {
-      status: "processing",
+      status: "completed",
+      pos: "print_pending",
       paymentId: paymentRef.id,
       address: payload.from,
     });

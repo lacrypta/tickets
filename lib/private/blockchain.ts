@@ -16,7 +16,6 @@ import { IPermit } from "../../types/crypto";
 const RPC_ADDRESS = process.env.NEXT_PUBLIC_RPC_ADDRESS || "";
 const PERONIO_ADDRESS = process.env.NEXT_PUBLIC_PERONIO_CONTRACT || "";
 const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || address;
-const CALLER_ADDRESS = process.env.CALLER_PUBLIC_ADDRESS || "";
 const CALLER_PRIVATE_KEY = process.env.CALLER_PRIVATE_KEY || "";
 
 const provider = new ethers.providers.JsonRpcProvider(RPC_ADDRESS);
@@ -60,7 +59,7 @@ export async function serveVoucher(
   const gasPrice = await (await provider.getGasPrice()).mul(2);
 
   const tx = gatewayContract[
-    "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
+    "serveVoucher((uint32,uint256,uint256,uint256,bytes,bytes),bytes)"
   ](voucher, signature.full, { gasPrice });
 
   return (await tx).hash;
@@ -70,8 +69,6 @@ export async function runPermit(permit: IPermit) {
   const { owner, spender, value, deadline, v, r, s } = permit;
 
   const gasPrice = await (await provider.getGasPrice()).mul(2);
-
-  console.info("Gas Price", formatUnits(gasPrice, 9));
 
   return tokenContract.permit(owner, spender, value, deadline, v, r, s, {
     gasPrice,

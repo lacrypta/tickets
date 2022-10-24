@@ -51,7 +51,7 @@ const PayWithPeronio = () => {
       const _voucher = await buildVoucher({
         from: address || "",
         amount: parseUnits(String(orderTotal), 6),
-        deadline: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
+        validUntil: Math.floor(Date.now() / 1000) + parseInt(PAYMENT_TTL),
         message,
       });
 

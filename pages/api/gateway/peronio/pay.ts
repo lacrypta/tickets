@@ -52,7 +52,8 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const paymentId = await addERC20Payment(
       requestData.orderId,
       requestData.voucher,
-      payload
+      payload,
+      txHash
     );
 
     const code = await addCode(requestData.orderId);

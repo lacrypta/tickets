@@ -3,6 +3,7 @@ import { IVoucherSigned } from "../../plugins/gateway/types/Voucher";
 import { ICart, ICartItem } from "../../types/cart";
 import { IOrderItem } from "../../types/order";
 import { indexedMenu } from "./menu";
+import { BigNumber } from "ethers";
 
 const generatePermitData = (
   contractAddress?: string,
@@ -13,17 +14,19 @@ const generatePermitData = (
     name: "Peronio",
     contract: contractAddress ?? "",
     spender: gatewayAddress ?? "",
-    value: "1000000000000000000000000000000000000000000000", // TODO: Generate proper unlimited
+    value: BigNumber.from("1").shl(256).sub(1),
     deadline: Math.floor(Date.now() / 1000) + parseInt(signupTTL || "43200"), // 12 hours
   };
 };
 
 const formatVoucher = (voucher: IVoucherSigned): IVoucherSignedStringified => {
-  const { deadline, metadata, nonce, payload, tag } = voucher.voucher;
+  const { validUntil, validSince, metadata, nonce, payload, tag } =
+    voucher.voucher;
   const { r, s, v, full } = voucher.signature;
   return {
     voucher: {
-      deadline: deadline.toString(),
+      validUntil: validUntil.toString(),
+      validSince: validSince.toString(),
       metadata,
       nonce: nonce.toString(),
       payload,

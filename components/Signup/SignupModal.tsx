@@ -12,13 +12,11 @@ import {
 import { generatePermitData } from "../../lib/public/utils";
 
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import React, { useContext, useEffect, useState } from "react";
-import { CartContext } from "../../contexts/Cart";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
 import useUser from "../../hooks/useUser";
 
-import TermsCheckbox from "./TermsCheckbox";
 import useGateway from "../../plugins/gateway/hooks/useGateway";
 import useLoading from "../../hooks/useLoading";
 

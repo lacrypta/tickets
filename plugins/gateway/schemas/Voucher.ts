@@ -6,8 +6,9 @@ export const TransferVoucherSchema = z.object({
   tag: z.number(),
 
   nonce: z.string(),
-  deadline: z.string(),
   payload: z.string(),
+  validUntil: z.string(),
+  validSince: z.string(),
 
   metadata: z.string(),
 });

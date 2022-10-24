@@ -5,7 +5,8 @@ export interface IVoucher {
   tag: number;
 
   nonce: BigNumber;
-  deadline: BigNumber;
+  validSince: BigNumber;
+  validUntil: BigNumber;
   payload: string;
 
   metadata: string;
@@ -15,7 +16,8 @@ export interface IVoucherStringified {
   tag: number;
 
   nonce: string;
-  deadline: string;
+  validSince: string;
+  validUntil: string;
   payload: string;
 
   metadata: string;

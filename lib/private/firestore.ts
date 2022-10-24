@@ -102,7 +102,8 @@ export const addUser = async (
 export const addERC20Payment = async (
   orderId: string,
   voucher: IVoucherSignedStringified,
-  payload: IPurchaseVoucherPayload
+  payload: IPurchaseVoucherPayload,
+  tx: any
 ): Promise<String> => {
   const paymentRef = db.collection("payments").doc();
 
@@ -143,6 +144,7 @@ export const addERC20Payment = async (
         amount: payload.amount.toString(),
         message: payload.message,
       },
+      tx,
       status: "unpublished",
     });
   });

@@ -10,7 +10,6 @@ const { address, abi: gatewayAbi } = BarGatewayJSON;
 
 import { ISignature } from "../../plugins/gateway/types/Signature";
 import { IPermit } from "../../types/crypto";
-// import {} from "@lacrypta/bar-gateway/";
 
 // contract details
 const RPC_ADDRESS = process.env.NEXT_PUBLIC_RPC_ADDRESS || "";
@@ -56,14 +55,21 @@ export async function serveVoucher(
   voucher: IVoucher,
   signature: ISignature
 ): Promise<string> {
+  const gasPrice = await (await provider.getGasPrice()).mul(2);
+
   const tx = gatewayContract[
-    "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
-  ](voucher, signature.full);
+    "serveVoucher((uint32,uint256,uint256,uint256,bytes,bytes),bytes)"
+  ](voucher, signature.full, { gasPrice });
 
   return (await tx).hash;
 }
 
 export async function runPermit(permit: IPermit) {
   const { owner, spender, value, deadline, v, r, s } = permit;
-  return tokenContract.permit(owner, spender, value, deadline, v, r, s);
+
+  const gasPrice = await (await provider.getGasPrice()).mul(2);
+
+  return tokenContract.permit(owner, spender, value, deadline, v, r, s, {
+    gasPrice,
+  });
 }

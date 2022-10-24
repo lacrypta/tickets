@@ -30,6 +30,7 @@ const request = async (
     SignupSchema.parse(req.body);
   } catch (e) {
     res.status(400).json({ success: false, message: "Malformed request" });
+    return;
   }
 
   const { address, username, permitData, signature }: ISignupRequestBody =

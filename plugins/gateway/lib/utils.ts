@@ -6,14 +6,16 @@ import {
 import { BigNumber, ethers } from "ethers";
 
 export const encodeVoucher = ({
-  deadline,
+  validSince,
+  validUntil,
   metadata,
   nonce,
   payload,
   tag,
 }: IVoucherStringified): IVoucher => {
   return {
-    deadline: BigNumber.from(deadline),
+    validSince: BigNumber.from(validSince),
+    validUntil: BigNumber.from(validUntil),
     metadata,
     nonce: BigNumber.from(nonce),
     payload,

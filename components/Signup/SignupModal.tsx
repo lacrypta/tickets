@@ -12,13 +12,13 @@ import {
 import { generatePermitData } from "../../lib/public/utils";
 
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import React, { useContext, useEffect, useState } from "react";
-import { CartContext } from "../../contexts/Cart";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import useERC20Permit from "../../hooks/useERC20Permit";
 import useUser from "../../hooks/useUser";
 
-import TermsCheckbox from "./TermsCheckbox";
+import useGateway from "../../plugins/gateway/hooks/useGateway";
+import useLoading from "../../hooks/useLoading";
 
 const BoxDiv = styled(Box)`
   position: fixed;
@@ -62,23 +62,23 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   const { address } = useAccount();
   const { signup } = useUser();
   const { requestSignature } = useERC20Permit();
-  const { clear } = useContext(CartContext);
+  const { contract: gatewayContract } = useGateway();
+  const { setActive } = useLoading();
 
   // Local Hooks
   const [username, setUsername] = useState("");
   const [isSignatureLoading, setSignatureLoading] = useState(false);
-  const [checkedTerms, setCheckedTerms] = useState(false);
   // const [error, setError] = useState(""); // TODO: Show error
 
   // Environment variables
   const contractAddress = process.env.NEXT_PUBLIC_PERONIO_CONTRACT;
-  const gatewayAddress = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
   const signupTTL = process.env.NEXT_PUBLIC_SIGNUP_TTL ?? "0";
+
+  const gatewayAddress = gatewayContract?.address;
 
   useEffect(() => {
     if (open) {
       setUsername("");
-      setCheckedTerms(false);
     }
   }, [open]);
 
@@ -87,8 +87,8 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
   };
 
   const handleSignup = async () => {
-    clear(); // Clear Cart
     setSignatureLoading(true);
+    setActive(true);
     const permitData = generatePermitData(
       contractAddress,
       gatewayAddress,
@@ -96,9 +96,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
     );
     try {
       const signature = await requestSignature(permitData);
-      console.info("res:");
-      console.dir(signature);
-      signup({
+      await signup({
         address: address ?? "",
         username,
         permitData,
@@ -108,6 +106,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
       console.info("Modal closed");
     }
 
+    setActive(false);
     setSignatureLoading(false);
   };
 
@@ -148,11 +147,11 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
                 onChange={handleInput}
               />
             </InputDiv>
-            <TermsCheckbox
+            {/* <TermsCheckbox
               checked={checkedTerms}
               disabled={isSignatureLoading}
               onChange={(_e: any, v: boolean) => setCheckedTerms(v)}
-            />
+            /> */}
           </div>
 
           <ButtonDiv>
@@ -168,7 +167,7 @@ const SignupModal = ({ open, setOpen }: IPaymentModalProps) => {
                 size='large'
                 variant='contained'
                 onClick={handleSignup}
-                disabled={!checkedTerms}
+                // disabled={!checkedTerms}
                 endIcon={<AssignmentTurnedInIcon />}
               >
                 Registrarse

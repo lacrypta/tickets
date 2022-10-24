@@ -8,8 +8,8 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 // import { alchemyProvider } from "wagmi/providers/alchemy";
-// import { publicProvider } from "wagmi/providers/public";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
+// import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import { ThemeProvider } from "@mui/material";
 
@@ -23,7 +23,10 @@ import { LoadingProvider } from "../contexts/Loading";
 import { UserProvider } from "../contexts/User";
 import { GatewayProvider } from "../plugins/gateway/contexts/Gateway";
 
-const GATEWAY_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT;
+import BarGatewayDeployment from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
+
+const GATEWAY_CONTRACT_ADDRESS =
+  process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || BarGatewayDeployment.address;
 
 const menuItems = getMenuItems();
 
@@ -40,12 +43,12 @@ const { chains, provider, webSocketProvider } = configureChains(
     //   // You can get your own at https://dashboard.alchemyapi.io
     //   apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
     // }),
-    // publicProvider(),
-    jsonRpcProvider({
-      rpc: () => ({
-        http: process.env.NEXT_PUBLIC_RPC_ADDRESS || `http://127.0.0.1:8545/`,
-      }),
-    }),
+    publicProvider(),
+    // jsonRpcProvider({
+    //   rpc: () => ({
+    //     http: process.env.NEXT_PUBLIC_RPC_ADDRESS || `http://127.0.0.1:8545/`,
+    //   }),
+    // }),
   ]
 );
 

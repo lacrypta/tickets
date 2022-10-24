@@ -5,7 +5,7 @@ import useGateway from "./useGateway";
 interface IBuildVoucherArgs {
   from: string;
   amount: BigNumber;
-  deadline: number;
+  validUntil: number;
   message: string;
 }
 
@@ -26,16 +26,35 @@ const useVoucher = (): IUseVoucherResult => {
   const buildVoucher = async ({
     from,
     amount,
-    deadline,
+    validUntil,
     message,
   }: IBuildVoucherArgs): Promise<IVoucher | undefined> => {
     const nonce = ethers.BigNumber.from(
       ethers.utils.randomBytes(32)
     ).toHexString();
 
-    return contract?.[
-      "buildPurchaseVoucher(uint256,uint256,address,uint256,string)"
-    ](nonce, deadline, from, amount, message);
+    try {
+      if (!contract) {
+        throw new Error("No contract address providede");
+      }
+      console.info("Contract Address:");
+      console.info(contract.address);
+
+      console.info("Voucher data:");
+      console.dir({ nonce, validUntil, from, amount, message });
+
+      const voucher = await contract?.[
+        "buildPurchaseVoucher(uint256,uint256,address,uint256,string)"
+      ](nonce, validUntil, from, amount, message);
+
+      console.info("BUILT VOUCHER");
+      console.dir(await voucher);
+      return voucher;
+    } catch (e: any) {
+      console.info("Error building Voucher");
+      console.dir(e);
+      return undefined;
+    }
   };
 
   // Generate signature string with voucher
@@ -49,7 +68,7 @@ const useVoucher = (): IUseVoucherResult => {
   const tryServe = async (signedVoucher: IVoucherSigned) => {
     const { full: signature } = signedVoucher.signature;
     return contract?.callStatic[
-      "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
+      "serveVoucher((uint32,uint256,uint256,uint256,bytes,bytes),bytes)"
     ](signedVoucher.voucher, signature);
   };
 
@@ -61,7 +80,7 @@ const useVoucher = (): IUseVoucherResult => {
     }
     try {
       await contract[
-        "validateVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
+        "validateVoucher((uint32,uint256,uint256,uint256,bytes,bytes),bytes)"
       ](signedVoucher.voucher, signature);
       return true;
     } catch (e: any) {

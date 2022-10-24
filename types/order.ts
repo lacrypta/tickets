@@ -5,6 +5,12 @@ export interface IOrderItem {
 
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
 
+export type PosStatus =
+  | "request_payment"
+  | "print_pending"
+  | "printed"
+  | "done";
+
 export const PaymentMethods = {
   MERCADOPAGO: "mercadopago",
   PERONIO: "peronio",

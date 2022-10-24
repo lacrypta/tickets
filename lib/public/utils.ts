@@ -1,6 +1,7 @@
 import { IVoucherSignedStringified } from "./../../plugins/gateway/types/Voucher";
 import { IVoucherSigned } from "../../plugins/gateway/types/Voucher";
-import { ICart, ICartItem, IOrderItem } from "../../types/cart";
+import { ICart, ICartItem } from "../../types/cart";
+import { IOrderItem } from "../../types/order";
 import { indexedMenu } from "./menu";
 
 const generatePermitData = (

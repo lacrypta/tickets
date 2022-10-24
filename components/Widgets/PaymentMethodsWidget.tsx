@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useCallback, useState } from "react";
 import useOrder from "../../hooks/useOrder";
-import { PaymentMethods } from "../../types/cart";
+import { PaymentMethods } from "../../types/order";
 import BackButton from "../BackButton";
 import Button from "../common/Button";
 import { Cash } from "../PaymentMethods/Cash/Cash";

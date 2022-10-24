@@ -1,7 +1,7 @@
 // Menu functions
 
 import menuJSON from "../../data/menu.json";
-import { IOrderItem } from "../../types/cart";
+import { IOrderItem } from "../../types/order";
 import { IMenuProduct } from "../../types/menu";
 
 const { categories, items: menuItems } = menuJSON;

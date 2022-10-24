@@ -1158,10 +1158,10 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
-"@lacrypta/bar-gateway@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@lacrypta/bar-gateway/-/bar-gateway-0.9.6.tgz#05c4d516972c5a5fcc36df58a295a16cfa284f08"
-  integrity sha512-sHkpB9s/0ZQoUFk7OfmAJsW4XP3ShQqbjDfkZRY0+z/U3/gcdoBK07ZghBsLmMa/5LqYokzNNNTeXMg76Z6tbw==
+"@lacrypta/bar-gateway@^0.9.8":
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/@lacrypta/bar-gateway/-/bar-gateway-0.9.8.tgz#573d9d222b777ffee8c04de797b5eceed3477402"
+  integrity sha512-shVIjn/V3e7eXo/c44Q07+27b3MRjFSDnDRAMIAf6sX29raUqnI11U0vL7+GzfW5Au8zYpbtU35ajeajdk+b9A==
 
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"

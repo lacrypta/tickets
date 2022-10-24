@@ -1,6 +1,6 @@
 import { IVoucher } from "./../../plugins/gateway/types/Voucher";
 import { Contract, ethers } from "ethers";
-import { Interface } from "ethers/lib/utils";
+import { formatUnits, Interface } from "ethers/lib/utils";
 
 import BarGatewayJSON from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
 
@@ -16,6 +16,7 @@ import { IPermit } from "../../types/crypto";
 const RPC_ADDRESS = process.env.NEXT_PUBLIC_RPC_ADDRESS || "";
 const PERONIO_ADDRESS = process.env.NEXT_PUBLIC_PERONIO_CONTRACT || "";
 const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || address;
+const CALLER_ADDRESS = process.env.CALLER_PUBLIC_ADDRESS || "";
 const CALLER_PRIVATE_KEY = process.env.CALLER_PRIVATE_KEY || "";
 
 const provider = new ethers.providers.JsonRpcProvider(RPC_ADDRESS);
@@ -56,14 +57,23 @@ export async function serveVoucher(
   voucher: IVoucher,
   signature: ISignature
 ): Promise<string> {
+  const gasPrice = await (await provider.getGasPrice()).mul(2);
+
   const tx = gatewayContract[
     "serveVoucher((uint32,uint256,uint256,bytes,bytes),bytes)"
-  ](voucher, signature.full);
+  ](voucher, signature.full, { gasPrice });
 
   return (await tx).hash;
 }
 
 export async function runPermit(permit: IPermit) {
   const { owner, spender, value, deadline, v, r, s } = permit;
-  return tokenContract.permit(owner, spender, value, deadline, v, r, s);
+
+  const gasPrice = await (await provider.getGasPrice()).mul(2);
+
+  console.info("Gas Price", formatUnits(gasPrice, 9));
+
+  return tokenContract.permit(owner, spender, value, deadline, v, r, s, {
+    gasPrice,
+  });
 }

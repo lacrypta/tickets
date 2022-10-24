@@ -72,9 +72,10 @@ const useUser = (): IUseUserResult => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  const signup = (requestData: ISignupRequestBody) => {
+  const signup = async (requestData: ISignupRequestBody) => {
     const { username, address } = requestData;
-    ajaxSignup(requestData);
+    const res = await ajaxSignup(requestData);
+    console.dir(res);
 
     setIsRegistered(true);
     setUser({

@@ -13,9 +13,6 @@ import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 import { IVoucher } from "../../../plugins/gateway/types/Voucher";
 import { generateMessage } from "../../../lib/public/utils";
 
-// const CONTRACT_NAME =
-process.env.NEXT_PUBLIC_GATEWAY_CONTRACT_NAME || "Peronio ERC20 Gateway";
-// const GATEWAY_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "3000";
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
 
 const PayWithPeronio = () => {

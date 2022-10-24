@@ -6,11 +6,11 @@ import { IPermit } from "../types/crypto";
 import PeronioABI from "../abi/Peronio.json";
 
 import { useState } from "react";
+import useGateway from "../plugins/gateway/hooks/useGateway";
 
 const ZERO = BigNumber.from(0);
 
 const PERONIO_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_PERONIO_CONTRACT || "";
-const GATEWAY_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || "";
 
 interface ISpendableResult {
   balance: BigNumber;
@@ -22,6 +22,7 @@ interface ISpendableResult {
 const useSpendable = (permit?: IPermit): ISpendableResult => {
   const { address } = useAccount();
   const [permitAmount, setPermitAmount] = useState<BigNumber>(ZERO);
+  const { contract: gatewayContract } = useGateway();
 
   const validatePermit = async (permit: IPermit): Promise<boolean> => {
     const res = await permitContract?.callStatic.permit(
@@ -56,7 +57,7 @@ const useSpendable = (permit?: IPermit): ISpendableResult => {
     addressOrName: PERONIO_CONTRACT_ADDRESS,
     contractInterface: PeronioABI,
     functionName: "allowance",
-    args: [address, GATEWAY_CONTRACT_ADDRESS],
+    args: [address, gatewayContract?.address],
     watch: true, // refresh on every block
   });
 

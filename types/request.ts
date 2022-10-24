@@ -37,6 +37,10 @@ export const CreateMercadoPagoRequestSchema = z.object({
   orderId: z.string(),
 });
 
+export const CreateCashRequestSchema = z.object({
+  orderId: z.string(),
+});
+
 export const SignupSchema = z.object({
   address: z.string(),
   username: z.string(),
@@ -51,7 +55,7 @@ export const ERC20PaymentSchema = z.object({
 
 export const OrderSchema = z.object({
   address: z.string().optional(),
-  paymentMethod: z.enum(["mercadopago", "peronio"]),
+  paymentMethod: z.enum(["mercadopago", "peronio", "cash"]),
   items: z.array(
     z.object({
       id: z.string(),

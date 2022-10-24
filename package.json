@@ -16,7 +16,7 @@
     "@ethereumjs/tx": "^4.0.0",
     "@ethersproject/bytes": "^5.7.0",
     "@firebase/firestore": "^3.5.0",
-    "@lacrypta/bar-gateway": "^0.9.4",
+    "@lacrypta/bar-gateway": "^0.9.6",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.10",
     "@rainbow-me/rainbowkit": "^0.7.1",

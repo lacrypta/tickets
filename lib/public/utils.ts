@@ -2,7 +2,7 @@ import { IVoucherSignedStringified } from "./../../plugins/gateway/types/Voucher
 import { IVoucherSigned } from "../../plugins/gateway/types/Voucher";
 import { ICart, ICartItem } from "../../types/cart";
 import { IOrderItem } from "../../types/order";
-import { indexedMenu } from "./menu";
+import { getIndexedMenu } from "./menu";
 import { BigNumber } from "ethers";
 
 const generatePermitData = (
@@ -46,9 +46,11 @@ const generateMessage = (orderId: string, total: string, _cart?: ICart) => {
   return `Pagar la cuenta de la Orden #${orderId}\nMonto: ${formattedAmount}`;
 };
 
-const generateCart = (items: IOrderItem[]): ICart => {
+const generateCart = async (items: IOrderItem[]): Promise<ICart> => {
   const cartItems: { [index: string]: ICartItem } = {};
   let total = 0;
+
+  const indexedMenu = await getIndexedMenu();
 
   items.forEach((item) => {
     const { name, price, cat } = indexedMenu[item.id];

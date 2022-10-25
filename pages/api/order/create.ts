@@ -29,7 +29,7 @@ const request = async (
   }
 
   const { address, items, paymentMethod }: ICreateOrderRequestBody = req.body;
-  let total = getTotal(items);
+  let total = await getTotal(items);
 
   total = paymentMethod === "peronio" ? total * PERONIO_MULTIPLIER : total;
 

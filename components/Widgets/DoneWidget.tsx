@@ -3,6 +3,8 @@ import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 import { generateCart } from "../../lib/public/utils";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { ICart } from "../../types/cart";
 
 const Container = styled.div`
   width: 100%;
@@ -24,8 +26,16 @@ interface IDoneProps {
 
 export const DoneWidget = ({ orderId, order }: IDoneProps) => {
   const router = useRouter();
+  const [cart, setCart] = useState<ICart>();
 
-  const cart = generateCart(order.items);
+  useEffect(() => {
+    if (!order) {
+      return;
+    }
+    generateCart(order.items).then((cart) => {
+      setCart(cart);
+    });
+  }, [order]);
 
   const handleBack = () => {
     router.push("/");
@@ -38,10 +48,16 @@ export const DoneWidget = ({ orderId, order }: IDoneProps) => {
       </div>
       <div>Retirá tu ticket por CAJA</div>
       <OrderID>Orden : #{orderId}</OrderID>
-      <CartList cart={cart} />
-      <div>Método: {order.payment_method}</div>
-      <div>Cart total: $ {cart.total}</div>
-      <div>Pagado: $ {order.total}</div>
+      {!cart ? (
+        "Cargando..."
+      ) : (
+        <>
+          <CartList cart={cart} />
+          <div>Método: {order.payment_method}</div>
+          <div>Cart total: $ {cart.total}</div>
+          <div>Pagado: $ {order.total}</div>
+        </>
+      )}
 
       <BackButton label={"Nueva Orden"} onClick={handleBack} />
     </Container>

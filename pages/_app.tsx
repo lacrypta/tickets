@@ -24,11 +24,10 @@ import { UserProvider } from "../contexts/User";
 import { GatewayProvider } from "../plugins/gateway/contexts/Gateway";
 
 import BarGatewayDeployment from "@lacrypta/bar-gateway/deployments/matic/BarGateway.json";
+import { useEffect, useState } from "react";
 
 const GATEWAY_CONTRACT_ADDRESS =
   process.env.NEXT_PUBLIC_GATEWAY_CONTRACT || BarGatewayDeployment.address;
-
-const menuItems = getMenuItems();
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -65,6 +64,11 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [menuItems, setMenuItems] = useState<any>([]);
+  useEffect(() => {
+    getMenuItems().then((res) => setMenuItems(res));
+  }, []);
+
   return (
     <StepsProvider>
       <ThemeProvider theme={themeOptions}>

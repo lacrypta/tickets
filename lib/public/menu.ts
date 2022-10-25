@@ -12,7 +12,7 @@ const indexedMenu: { [index: string]: IMenuProduct } = {};
 const menuRef = collection(db, "menu");
 let menuItems: IMenuProduct[];
 
-const generateMenuItems = async (): Promise<IMenuProduct[]> => {
+const generateMenuItems = async (): Promise<void> => {
   const snapshot = await getDocs(menuRef);
   menuItems = snapshot.docs.map((doc) => {
     const { name, description, cat, price } = doc.data();

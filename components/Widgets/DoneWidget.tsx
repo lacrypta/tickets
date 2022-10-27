@@ -46,7 +46,12 @@ export const DoneWidget = ({ orderId, order }: IDoneProps) => {
       <div>
         <h1>Pedido realizado!</h1>
       </div>
-      <div>Retirá tu ticket por CAJA</div>
+
+      <div>
+        {order.paymentMethod === "cash"
+          ? "Pagá tu orden en la caja"
+          : "Retirá tu ticket por CAJA"}
+      </div>
       <OrderID>Orden : #{orderId}</OrderID>
       {!cart ? (
         "Cargando..."
@@ -54,8 +59,7 @@ export const DoneWidget = ({ orderId, order }: IDoneProps) => {
         <>
           <CartList cart={cart} />
           <div>Método: {order.paymentMethod}</div>
-          <div>Cart total: $ {cart.total}</div>
-          <div>Pagado: $ {order.total}</div>
+          <div>Total: $ {order.total}</div>
         </>
       )}
 

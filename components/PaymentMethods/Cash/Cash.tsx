@@ -1,3 +1,5 @@
+import styled from "@emotion/styled";
+import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { StepsContext } from "../../../contexts/Steps";
@@ -6,6 +8,11 @@ import useOrder from "../../../hooks/useOrder";
 import { ajaxCall } from "../../../lib/public/request";
 import BackButton from "../../BackButton";
 import Button from "../../common/Button";
+
+const Centered = styled.div`
+  margin-top: 5px;
+  text-align: center;
+`;
 
 export const Cash = () => {
   const router = useRouter();
@@ -46,9 +53,13 @@ export const Cash = () => {
 
       <div>Hacé click para Confirmar tu Pedido y pagar en Caja.</div>
 
-      <div>
-        <Button onClick={handleConfirm}>Pagar en Efectivo</Button>
-      </div>
+      <Centered>
+        {!orderId ? (
+          <CircularProgress />
+        ) : (
+          <Button onClick={handleConfirm}>Pagar en Efectivo</Button>
+        )}
+      </Centered>
 
       <BackButton onClick={handleBack} />
     </>

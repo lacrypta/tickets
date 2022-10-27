@@ -29,7 +29,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const code = await addCode(orderId);
 
-    updateOrder(orderId, {
+    await updateOrder(orderId, {
       status: "completed",
       pos: "request_payment",
     });

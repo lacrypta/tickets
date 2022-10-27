@@ -53,7 +53,7 @@ export const DoneWidget = ({ orderId, order }: IDoneProps) => {
       ) : (
         <>
           <CartList cart={cart} />
-          <div>Método: {order.payment_method}</div>
+          <div>Método: {order.paymentMethod}</div>
           <div>Cart total: $ {cart.total}</div>
           <div>Pagado: $ {order.total}</div>
         </>

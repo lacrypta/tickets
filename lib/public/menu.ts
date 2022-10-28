@@ -5,6 +5,8 @@ import menuJSON from "../../data/menu.json";
 import { IOrderItem } from "../../types/order";
 import { IMenuProduct } from "../../types/menu";
 
+import cachedItems from "../../cached/menu.json";
+
 const { categories } = menuJSON;
 
 const indexedMenu: { [index: string]: IMenuProduct } = {};
@@ -12,18 +14,25 @@ const indexedMenu: { [index: string]: IMenuProduct } = {};
 const menuRef = collection(db, "menu");
 let menuItems: IMenuProduct[];
 
+const CACHED = true;
+
 const generateMenuItems = async (): Promise<void> => {
-  const snapshot = await getDocs(menuRef);
-  menuItems = snapshot.docs.map((doc) => {
-    const { name, description, cat, price } = doc.data();
-    return {
-      id: doc.id,
-      name,
-      description,
-      cat,
-      price,
-    };
-  });
+  if (CACHED) {
+    menuItems = cachedItems;
+  } else {
+    const snapshot = await getDocs(menuRef);
+    menuItems = snapshot.docs.map((doc) => {
+      const { name, description, cat, price } = doc.data();
+      return {
+        id: doc.id,
+        name,
+        description,
+        cat,
+        price,
+      };
+    });
+  }
+
   generateIndex();
 };
 

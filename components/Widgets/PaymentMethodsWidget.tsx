@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
+import { StepContent } from "@mui/material";
+import { useCallback, useContext, useState } from "react";
+import { StepsContext } from "../../contexts/Steps";
 import useOrder from "../../hooks/useOrder";
 import { PaymentMethods } from "../../types/order";
 import BackButton from "../BackButton";
@@ -24,6 +26,7 @@ const paymentMethodWidgets = {
 
 export const PaymentMethodsWidget = () => {
   const [paymentMethod, setPaymentMethod] = useState<string>();
+  const { setStep } = useContext(StepsContext);
   const { createOrder } = useOrder();
 
   const startOrder = useCallback((paymentMethod: string) => {
@@ -32,8 +35,13 @@ export const PaymentMethodsWidget = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const backToMethods = () => {
+    setPaymentMethod(undefined);
+  };
+
   const handleBack = () => {
     setPaymentMethod(undefined);
+    setStep(1);
   };
 
   return (
@@ -58,11 +66,12 @@ export const PaymentMethodsWidget = () => {
               Efectivo
             </Button>
           </div>
+          <BackButton onClick={handleBack} />
         </div>
       ) : (
         <>
           {paymentMethodWidgets[paymentMethod]}
-          <BackButton onClick={handleBack} />
+          <BackButton onClick={backToMethods} />
         </>
       )}
     </Container>

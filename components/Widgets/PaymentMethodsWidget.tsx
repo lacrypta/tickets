@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { StepContent } from "@mui/material";
 import { useCallback, useContext, useState } from "react";
 import { StepsContext } from "../../contexts/Steps";
 import useOrder from "../../hooks/useOrder";

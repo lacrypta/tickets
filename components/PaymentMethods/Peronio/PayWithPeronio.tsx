@@ -12,8 +12,18 @@ import { formatUnits, parseUnits } from "ethers/lib/utils";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 import { IVoucher } from "../../../plugins/gateway/types/Voucher";
 import { generateMessage } from "../../../lib/public/utils";
+import { CircularProgress } from "@mui/material";
+import styled from "@emotion/styled";
 
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
+
+const Centered = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const PayWithPeronio = () => {
   const { address } = useAccount();
@@ -72,9 +82,17 @@ const PayWithPeronio = () => {
     <div>
       <div>Peronio en la Wallet: {formatUnits(balance, 6)}</div>
       <div>Monto a Pagar: {orderTotal} P</div>
-      <div>#OrderID: {orderId}</div>
 
-      <PayButton onClick={handlePay} />
+      {!orderId ? (
+        <Centered>
+          <CircularProgress />
+          <div>Cargando Orden...</div>
+        </Centered>
+      ) : (
+        <div>#OrderID: {orderId}</div>
+      )}
+
+      <PayButton disabled={!orderId} onClick={handlePay} />
 
       <PaymentModal voucher={voucher} open={open} setOpen={setOpen} />
     </div>

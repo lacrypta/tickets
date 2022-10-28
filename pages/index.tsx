@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import useLoading from "../hooks/useLoading";
 
 const MainBlock = styled.main`
-  padding: 4rem 0;
+  padding: 4rem 1em;
   flex: 1;
   display: flex;
   flex-direction: column;

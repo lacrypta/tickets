@@ -1,0 +1,72 @@
+[
+  {
+    "id": "0KkRqmwC9QMu5epLMPwC",
+    "name": "Calavera dorada",
+    "description": "Cerveza",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "0ispZvLp2oBEv4ufWaEL",
+    "name": "Halloween tonic",
+    "description": "Gin Tonic",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "LGPObFEPlsiW9CFkj997",
+    "name": "Daño cerebral",
+    "description": "Cuba libre",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "YuoYnPGSbS8muNH1ld48",
+    "name": "Calabaza embrujada",
+    "description": "Campari con naranja",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "aWpvSBWqwwMc8YcO6eaV",
+    "name": "Elixir de vampiro",
+    "description": "Vino tinto",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "gcOkncQhOXamzRCwhclf",
+    "name": "Bloody Aperol",
+    "description": "Aperol Spritz",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "j5eATVmo8TCDQllGjoIz",
+    "name": "Magia negra",
+    "description": "Fernet con cola",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "l17notSgIl2sD8hnsNcu",
+    "name": "Shawarma",
+    "description": "Tremenda carne asada envuelta",
+    "cat": "2",
+    "price": 800
+  },
+  {
+    "id": "wiu0F5o2Uwx60idiN18g",
+    "name": "Fantasma liquido",
+    "description": "Vino blanco",
+    "cat": "1",
+    "price": 800
+  },
+  {
+    "id": "xYnRfi7faLUf17RSzzYh",
+    "name": "Pomelo envenenado",
+    "description": "Cynar pomelo",
+    "cat": "1",
+    "price": 800
+  }
+]

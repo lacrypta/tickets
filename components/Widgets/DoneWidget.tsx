@@ -3,8 +3,13 @@ import BackButton from "../BackButton";
 import CartList from "../Order/OrderList";
 import { generateCart } from "../../lib/public/utils";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ICart } from "../../types/cart";
+import { useContractRead } from "wagmi";
+import { CartContext } from "../../contexts/Cart";
+import useOrder from "../../hooks/useOrder";
+import { SettingsEthernetSharp } from "@mui/icons-material";
+import { StepsContext } from "../../contexts/Steps";
 
 const Container = styled.div`
   width: 100%;
@@ -27,14 +32,22 @@ interface IDoneProps {
 export const DoneWidget = ({ orderId, order }: IDoneProps) => {
   const router = useRouter();
   const [cart, setCart] = useState<ICart>();
+  const { clear: clearCart } = useContext(CartContext);
+  const { clear: clearOrder } = useOrder();
+  const { setStep } = useContext(StepsContext);
 
   useEffect(() => {
     if (!order) {
       return;
     }
+    clearCart();
+    clearOrder();
+    setStep(0);
+
     generateCart(order.items).then((cart) => {
       setCart(cart);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
   const handleBack = () => {

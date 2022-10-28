@@ -5,10 +5,8 @@ import { generateCart } from "../../lib/public/utils";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { ICart } from "../../types/cart";
-import { useContractRead } from "wagmi";
 import { CartContext } from "../../contexts/Cart";
 import useOrder from "../../hooks/useOrder";
-import { SettingsEthernetSharp } from "@mui/icons-material";
 import { StepsContext } from "../../contexts/Steps";
 
 const Container = styled.div`

@@ -14,13 +14,6 @@
     "price": 800
   },
   {
-    "id": "LGPObFEPlsiW9CFkj997",
-    "name": "Daño cerebral",
-    "description": "Cuba libre",
-    "cat": "1",
-    "price": 800
-  },
-  {
     "id": "YuoYnPGSbS8muNH1ld48",
     "name": "Calabaza embrujada",
     "description": "Campari con naranja",
@@ -68,5 +61,12 @@
     "description": "Cynar pomelo",
     "cat": "1",
     "price": 800
+  },
+  {
+    "id": "zzgpKFkOrGmXVKvtUiUK",
+    "name": "Gaseosa",
+    "description": "Gaseosa",
+    "cat": "1",
+    "price": 200
   }
 ]

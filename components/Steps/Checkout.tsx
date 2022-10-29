@@ -8,6 +8,7 @@ import useOrder from "../../hooks/useOrder";
 import { PaymentMethod } from "../../types/order";
 import LargeButton from "../common/LargeButton";
 import { useRouter } from "next/router";
+import { Alert } from "@mui/material";
 
 const Container = styled.div`
   width: 100%;
@@ -89,15 +90,22 @@ export const Checkout = () => {
 
       <PriceDiv>Precio de la Entrada ${TICKET_PRICE}</PriceDiv>
 
+      <Alert severity='warning'>
+        Entradas agotadas para la venta. Sólo con invitación.
+      </Alert>
+
       {!method ? (
         <MethodList>
           <MethodDiv>
-            <LargeButton onClick={() => setMethod("mercadopago")}>
+            <LargeButton
+              disabled={true}
+              onClick={() => setMethod("mercadopago")}
+            >
               MercadoPago
             </LargeButton>
           </MethodDiv>
           <MethodDiv>
-            <LargeButton onClick={() => setMethod("crypto")}>
+            <LargeButton disabled={true} onClick={() => setMethod("crypto")}>
               Crypto
             </LargeButton>
           </MethodDiv>

@@ -12,7 +12,7 @@ import { formatUnits, parseUnits } from "ethers/lib/utils";
 import useVoucher from "../../../plugins/gateway/hooks/useVoucher";
 import { IVoucher } from "../../../plugins/gateway/types/Voucher";
 import { generateMessage } from "../../../lib/public/utils";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import styled from "@emotion/styled";
 
 const PAYMENT_TTL = process.env.NEXT_PUBLIC_PAYMENT_TTL || "300";
@@ -78,6 +78,12 @@ const PayWithPeronio = () => {
     setActive(false);
   };
 
+  const enoughFunds =
+    parseFloat(formatUnits(balance, 6)) >= parseFloat(orderTotal);
+
+  console.info("enoughFunds", enoughFunds);
+  console.info("formatUnits(balance, 6)", formatUnits(balance, 6));
+  console.info("orderTotal", orderTotal);
   return (
     <div>
       <div>Peronio en la Wallet: {formatUnits(balance, 6)}</div>
@@ -91,8 +97,15 @@ const PayWithPeronio = () => {
       ) : (
         <div>#OrderID: {orderId}</div>
       )}
-
-      <PayButton disabled={!orderId} onClick={handlePay} />
+      {!enoughFunds ? (
+        <Alert severity='error'>
+          No tenes Peronios suficientes. Tenes que comprarselos al arbolito de
+          La Crypta.
+        </Alert>
+      ) : (
+        ""
+      )}
+      <PayButton disabled={!orderId || !enoughFunds} onClick={handlePay} />
 
       <PaymentModal voucher={voucher} open={open} setOpen={setOpen} />
     </div>

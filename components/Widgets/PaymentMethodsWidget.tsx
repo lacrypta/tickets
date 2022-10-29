@@ -62,7 +62,7 @@ export const PaymentMethodsWidget = () => {
           </div>
           <div>
             <Button onClick={() => startOrder(PaymentMethods.CASH)}>
-              Efectivo
+              Efectivo / Otro
             </Button>
           </div>
           <BackButton onClick={handleBack} />

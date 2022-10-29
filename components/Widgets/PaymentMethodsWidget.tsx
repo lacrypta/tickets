@@ -57,7 +57,7 @@ export const PaymentMethodsWidget = () => {
           </div>
           <div>
             <Button onClick={() => startOrder(PaymentMethods.PERONIO)}>
-              Peronio
+              Peronio (50% de Descuento)
             </Button>
           </div>
           <div>

@@ -9,8 +9,12 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   createServer((req, res) => {
-    const parsedUrl = parse(req.url!, true);
-    handle(req, res, parsedUrl);
+    try {
+      const parsedUrl = parse(req.url!, true);
+      handle(req, res, parsedUrl);
+    } catch (e) {
+      console.error(e);
+    }
   }).listen(port);
 
   console.log(

@@ -13,7 +13,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@ethereumjs/common": "^3.0.1",
-    "@ethereumjs/tx": "^4.0.0",
+    "@ethereumjs/tx": "^4.0.1",
     "@ethersproject/bytes": "^5.7.0",
     "@firebase/firestore": "^3.5.0",
     "@lacrypta/bar-gateway": "^0.9.8",

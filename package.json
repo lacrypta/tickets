@@ -31,7 +31,7 @@
     "react-qr-code": "^2.0.8",
     "react-sdk-mercadopago": "^1.1.1",
     "wagmi": "^0.6.6",
-    "web3": "^1.8.0",
+    "web3": "^1.8.1",
     "zod": "^3.19.1"
   },
   "devDependencies": {

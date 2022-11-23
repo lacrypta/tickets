@@ -15,7 +15,7 @@
     "@ethereumjs/common": "^3.0.0",
     "@ethereumjs/tx": "^4.0.0",
     "@ethersproject/bytes": "^5.7.0",
-    "@firebase/firestore": "^3.5.0",
+    "@firebase/firestore": "^3.7.3",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.7",
     "@rainbow-me/rainbowkit": "^0.7.4",

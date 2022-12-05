@@ -10,7 +10,7 @@
     "fix": "yarn lint --fix"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.4",
+    "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@ethereumjs/common": "^3.0.0",
     "@ethereumjs/tx": "^4.0.0",

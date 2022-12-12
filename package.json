@@ -18,7 +18,7 @@
     "@firebase/firestore": "^3.7.3",
     "@lacrypta/bar-gateway": "^0.9.8",
     "@mui/icons-material": "^5.10.16",
-    "@mui/material": "^5.10.10",
+    "@mui/material": "^5.10.17",
     "@rainbow-me/rainbowkit": "^0.7.4",
     "debug": "^4.3.4",
     "ethers": "^5.7.2",

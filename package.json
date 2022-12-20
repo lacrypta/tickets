@@ -19,7 +19,6 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.11.1",
     "@rainbow-me/rainbowkit": "^0.8.1",
-    "@wagmi/chains": "^0.1.4",
     "ethers": "^5.7.1",
     "firebase": "^9.10.0",
     "firebase-admin": "^11.0.1",

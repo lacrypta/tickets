@@ -2030,11 +2030,6 @@
   resolved "https://registry.yarnpkg.com/@vanilla-extract/sprinkles/-/sprinkles-1.5.0.tgz#c921183ae518bb484299c2dc81f2acefd91c3dbe"
   integrity sha512-W58f2Rzz5lLmk0jbhgStVlZl5wEiPB1Ur3fRvUaBM+MrifZ3qskmFq/CiH//fEYeG5Dh9vF1qRviMMH46cX9Nw==
 
-"@wagmi/chains@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@wagmi/chains/-/chains-0.1.4.tgz#ddb2ba588c2541b5465856d13c5d9c238cb9ac09"
-  integrity sha512-ZuZ2VrJxoJFgZHNc7k8okloPqlkwIzBtXOpakYylNFL4F4znd2oQyUL5Wj+9orEerUi4QI5iqlBf0WW4KFTOyw==
-
 "@wagmi/core@^0.5.8":
   version "0.5.8"
   resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.5.8.tgz#9e375c0dd31c3b22973d000694e1c2b06c05dbbc"

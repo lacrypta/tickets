@@ -18,7 +18,8 @@
     "@firebase/firestore": "^3.5.0",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.11.1",
-    "@rainbow-me/rainbowkit": "^0.7.0",
+    "@rainbow-me/rainbowkit": "^0.8.1",
+    "@wagmi/chains": "^0.1.4",
     "ethers": "^5.7.1",
     "firebase": "^9.10.0",
     "firebase-admin": "^11.0.1",
@@ -30,7 +31,7 @@
     "react-dom": "^18.1.0",
     "react-qr-code": "^2.0.8",
     "react-sdk-mercadopago": "^1.1.1",
-    "wagmi": "^0.6.6",
+    "wagmi": "=0.6.8",
     "web3": "^1.8.0",
     "zod": "^3.19.1"
   },

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import Image from "next/image";
 import svgLogo from "../../public/images/lacrypta.svg";
 
 const FlipBox = styled.div`
@@ -51,7 +50,7 @@ const LoadingLogo = () => {
       <FlipBoxInner>
         <FlipBoxSide>
           <SpinEffect>
-            <Image alt='skin' src={svgLogo} />
+            <img alt='skin' src={svgLogo.src} />
           </SpinEffect>
         </FlipBoxSide>
       </FlipBoxInner>

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import Image from "next/image";
 import brandLogo from "../public/images/lacrypta-title.svg";
 
 const Container = styled.div`
@@ -11,9 +10,11 @@ export const HeaderLogo = () => {
   return (
     <Container>
       <a href={"/"}>
-        <Image
+        <img
           alt='La Crypta bar'
-          src={brandLogo}
+          src={brandLogo.src}
+          width='auto'
+          height='auto'
           style={{ cursor: "pointer" }}
         />
       </a>

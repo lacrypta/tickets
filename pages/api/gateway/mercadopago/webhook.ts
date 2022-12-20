@@ -35,8 +35,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   let payment, paymentId: number;
   paymentId = parseInt(req.body.data.id);
 
-  log.debug("paymentId", paymentId);
-  console.info("Payment ID:", paymentId);
+  log.debug("paymentId", { paymentId });
 
   try {
     payment = (await mercadopago.payment.get(paymentId)).body;

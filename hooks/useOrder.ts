@@ -53,11 +53,11 @@ const useOrder = (): IUseUserResult => {
     isSuccess,
     setIsSuccess,
     isError,
-    setIsError,
+    // setIsError,
     error,
-    setError,
+    // setError,
     isPayed,
-    setIsPayed,
+    // setIsPayed,
     clear,
   } = useContext(OrderContext);
 

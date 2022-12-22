@@ -64,7 +64,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
         notification_url: process.env.MP_NOTIFICATION_URL,
       })
     ).body;
-  } catch (e) {
+  } catch (e: any) {
     log.debug("mercadopago/preference", e);
     res.status(500).json({
       success: true,

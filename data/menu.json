@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "name": "Speed con Vodka",
+    "price": 500
+  },
+  {
+    "id": "2",
+    "name": "Gin And Tonic",
+    "price": 500
+  },
+  {
+    "id": "3",
+    "name": "Cynar con Pomelo",
+    "price": 600
+  },
+  {
+    "id": "4",
+    "name": "Cerveza",
+    "price": 200
+  }
+]

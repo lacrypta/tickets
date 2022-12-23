@@ -1,10 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 
-// Hooks
 // import useLoading from "../hooks/useLoading";
-
-import { Background, HeaderLogo, Footer } from "../components/common";
 
 const Home: NextPage = () => {
   // const { setActive } = useLoading();
@@ -17,14 +14,14 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div className='overflow-hidden w-full h-screen flex justify-center'>
-        <Background />
-        <div className='w-[42rem] mt-20'>
-          <HeaderLogo />
-        </div>
+      <div
+        className='rounded-md
+            backdrop-blur-sm bg-white/[0.08]
+            h-[30rem] mt-8 p-8
+          '
+      >
+        Hola
       </div>
-
-      <Footer />
     </div>
   );
 };

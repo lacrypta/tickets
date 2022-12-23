@@ -11,6 +11,7 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import { LoadingProvider } from "../contexts/Loading";
+import { Background, Footer, HeaderLogo } from "../components/common";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -55,7 +56,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           theme={darkTheme()}
           chains={chains}
         >
-          <Component {...pageProps} />
+          <div className='overflow-hidden w-full h-screen flex justify-center'>
+            <Background />
+            <div className='w-[42rem] mt-5 p-5 md:mt-20'>
+              <HeaderLogo />
+              <Component {...pageProps} />
+            </div>
+          </div>
+
+          <Footer />
         </RainbowKitProvider>
       </WagmiConfig>
     </LoadingProvider>

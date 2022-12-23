@@ -1,10 +1,15 @@
 import { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
 
-// import useLoading from "../hooks/useLoading";
+import useLoading from "../hooks/useLoading";
 
 const Home: NextPage = () => {
-  // const { setActive } = useLoading();
+  const { setActive } = useLoading();
+
+  useEffect(() => {
+    setActive(false);
+  }, []);
 
   return (
     <div>

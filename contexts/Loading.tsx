@@ -1,5 +1,6 @@
 // import { Backdrop } from "@mui/material";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
+import Backdrop from "../components/common/Backdrop";
 import LoadingLogo from "../components/common/LoadingLogo";
 
 interface ILoadingContext {
@@ -10,7 +11,7 @@ interface ILoadingContext {
 }
 
 export const LoadingContext = createContext<ILoadingContext>({
-  active: true,
+  active: false,
   text: "",
   setActive: () => {},
   setText: () => {},
@@ -26,13 +27,10 @@ export const LoadingProvider = ({ children }: ILoadingProviderProps) => {
 
   return (
     <LoadingContext.Provider value={{ active, setActive, text, setText }}>
-      {/* <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={active}
-      >
-        <LoadingLogo />
-      </Backdrop> */}
       {children}
+      <Backdrop open={active}>
+        <LoadingLogo />
+      </Backdrop>
     </LoadingContext.Provider>
   );
 };

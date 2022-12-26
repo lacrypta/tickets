@@ -56,9 +56,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           theme={darkTheme()}
           chains={chains}
         >
-          <div className='overflow-hidden w-full h-screen flex justify-center'>
+          <div className='flex justify-center relative w-full min-h-screen'>
             <Background />
-            <div className='w-[42rem] mt-5 p-5 md:mt-20'>
+            <div className='w-[42rem] mt-5 md:mt-20'>
               <HeaderLogo />
               <Component {...pageProps} />
             </div>

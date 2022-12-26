@@ -23,7 +23,7 @@ const Home: NextPage = () => {
       <div
         className='rounded-md
             backdrop-blur-sm bg-white/[0.08]
-            h-[30rem] mt-8 p-8
+            h-[30rem] mt-8 p-8 mb-14
           '
       >
         Hola

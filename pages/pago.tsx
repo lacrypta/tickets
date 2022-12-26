@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Card from "../components/common/Card";
 
@@ -8,7 +7,6 @@ import useLoading from "../hooks/useLoading";
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
-  const router = useRouter();
 
   const [show, setShow] = useState(false);
 

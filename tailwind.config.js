@@ -5,7 +5,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      transitionTimingFunction: {
+        bounce: "cubic-bezier(0.22, 0.14, 0.34, 1.4)",
+      },
+    },
   },
   plugins: [],
 };

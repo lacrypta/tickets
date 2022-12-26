@@ -12,6 +12,21 @@ body {
   background: black;
 }
 
-opacity-0 {
-  opacity: 0;
+.perspective {
+  perspective: 1000px;
+}
+
+.card {
+  position: relative;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+
+  &.rotateY-90 {
+    transform: rotateY(90deg);
+  }
+
+  &.-rotateY-90 {
+    transform: rotateY(-90deg);
+  }
 }

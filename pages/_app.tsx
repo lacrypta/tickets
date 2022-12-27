@@ -12,7 +12,12 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 
 import { LoadingProvider } from "../contexts/Loading";
-import { Background, Footer, HeaderLogo } from "../components/common";
+import {
+  Background,
+  Footer,
+  HeaderLogo,
+  Transition,
+} from "../components/common";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -61,7 +66,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Background />
             <div className='w-[42rem] mt-5 md:mt-20'>
               <HeaderLogo />
-              <Component {...pageProps} />
+              <Transition>
+                <Component {...pageProps} />
+              </Transition>
             </div>
           </div>
 

@@ -5,8 +5,7 @@ export const Background = () => {
   return (
     <div className='flex justify-center inset-0 overflow-hidden absolute'>
       <Image
-        fill
-        className='opacity-[0.1] scale-[2] w-full'
+        className='opacity-[0.1] scale-[2] h-screen'
         alt='skin'
         src={svgSkin}
       />

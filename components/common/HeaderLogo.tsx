@@ -1,4 +1,4 @@
-import brandLogo from "../../public/images/lacrypta-title.svg";
+import BrandLogo from "../../public/images/lacrypta-title.svg";
 
 // const Container = styled.div`
 //   width: 100%;
@@ -9,13 +9,7 @@ export const HeaderLogo = () => {
   return (
     <div>
       <a href={"/"}>
-        <img
-          alt='La Crypta bar'
-          src={brandLogo.src}
-          width='auto'
-          height='auto'
-          style={{ cursor: "pointer" }}
-        />
+        <BrandLogo alt='La Crypta bar' style={{ cursor: "pointer" }} />
       </a>
     </div>
   );

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import svgLogo from "../../public/images/lacrypta.svg";
+import SVGLogo from "../../public/images/lacrypta.svg";
 
 const FlipBox = styled.div`
   background-color: transparent;
@@ -50,7 +50,7 @@ export const LoadingLogo = () => {
       <FlipBoxInner>
         <FlipBoxSide>
           <SpinEffect>
-            <img alt='skin' src={svgLogo.src} />
+            <SVGLogo alt='skin' />
           </SpinEffect>
         </FlipBoxSide>
       </FlipBoxInner>

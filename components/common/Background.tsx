@@ -1,6 +1,3 @@
-import Image from "next/image";
-// import svgSkin from "../../public/images/skin.svg";
-
 import SVGSkin from "../../public/images/skin.svg";
 
 export const Background = () => {

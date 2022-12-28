@@ -17,8 +17,9 @@ const variants = {
   inactive: {
     transform: "rotateY(0deg)",
     transition: {
-      duration: 0.35,
-      delay: 0.35,
+      duration: 0.4,
+      delay: 0.5,
+      ease: "backOut",
     },
   },
 };
@@ -37,8 +38,12 @@ const MotionDiv = styled(motion.div)`
   height: 100%;
 
   margin: 0 auto;
-  transform-style: preserve-3d;
   transform: rotateY(0deg);
+  transform-style: preserve-3d;
+
+  & * {
+    transform-style: preserve-3d;
+  }
 `;
 
 export const Transition = ({ children }: ITransitionProps) => {
@@ -52,8 +57,7 @@ export const Transition = ({ children }: ITransitionProps) => {
           animate='inactive'
           initial='in'
           exit='out'
-          transition={{ duration: 0.35 }}
-          className='backdrop-blur-sm'
+          transition={{ duration: 0.4, ease: "backIn" }}
         >
           {children}
         </MotionDiv>

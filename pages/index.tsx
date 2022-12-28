@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Card from "../components/common/Card";
+import Button from "../components/Form/Button";
 
 import useLoading from "../hooks/useLoading";
 
@@ -38,14 +39,13 @@ const Home: NextPage = () => {
           E-mail <input type='text' />
         </div>
         <div>
-          <button
+          <Button
             onClick={() => {
               nextStep();
             }}
-            className='bg-red-500 text-white rounded-md px-4 py-2 w-full'
           >
             Comprar
-          </button>
+          </Button>
         </div>
       </Card>
     </div>

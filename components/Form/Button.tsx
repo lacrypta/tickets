@@ -9,7 +9,6 @@ export const Button = ({ children, ...rest }: ButtonProps) => {
     <button
       {...rest}
       className='bg-red-500 text-white rounded-md px-4 py-2 w-full'
-      style={{ transform: "translateZ(10px)" }}
     >
       {children}
     </button>

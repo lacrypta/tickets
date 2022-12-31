@@ -39,11 +39,6 @@ const MotionDiv = styled(motion.div)`
 
   margin: 0 auto;
   transform: rotateY(0deg);
-  transform-style: preserve-3d;
-
-  & * {
-    transform-style: preserve-3d;
-  }
 `;
 
 export const Transition = ({ children }: ITransitionProps) => {

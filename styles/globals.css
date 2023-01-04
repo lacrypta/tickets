@@ -15,5 +15,5 @@ body {
 }
 
 h1 {
-  @apply text-center text-xl font-bold;
+  @apply text-center text-xl font-bold p-3 rounded-md backdrop-blur-sm bg-gradient-to-b from-black/50;
 }

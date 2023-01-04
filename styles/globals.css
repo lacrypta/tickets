@@ -12,4 +12,6 @@ body {
   background: black;
 }
 
+h1 {
+  @apply text-center text-xl font-bold;
 }

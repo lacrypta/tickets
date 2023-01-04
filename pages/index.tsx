@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Card from "../components/common/Card";
 import Button from "../components/Form/Button";
+import Input from "../components/Form/Input";
 
 import useLoading from "../hooks/useLoading";
 
@@ -12,9 +13,7 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   function nextStep() {
-    setTimeout(() => {
-      router.push("/pago", undefined, { scroll: false });
-    }, 350);
+    router.push("/pago", undefined, { scroll: false });
   }
 
   useEffect(() => {
@@ -31,22 +30,22 @@ const Home: NextPage = () => {
       </Head>
 
       <Card>
-        <h1>Formulario</h1>
-        <div>
-          Nombre: <input type='text' />
-        </div>
-        <div>
-          E-mail <input type='text' />
-        </div>
-        <div>
-          <Button
-            onClick={() => {
-              nextStep();
-            }}
-          >
-            Comprar
-          </Button>
-        </div>
+        <h1>Completá tus datos</h1>
+        <Input
+          label='Nombre Completo'
+          name='name'
+          placeholder='Nombre Completo'
+        />
+        <Input label='E-mail' name='email' type='email' placeholder='E-mail' />
+
+        <div className='space-y-2'></div>
+        <Button
+          onClick={() => {
+            nextStep();
+          }}
+        >
+          Comprar
+        </Button>
       </Card>
     </div>
   );

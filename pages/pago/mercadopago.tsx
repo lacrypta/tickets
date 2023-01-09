@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import Price from "../../components/Checkout/Price";
 import Card from "../../components/common/Card";
 import Button from "../../components/Form/Button";
 
@@ -30,7 +31,7 @@ const Home: NextPage = () => {
 
       <Card>
         <h1>MercadoPago</h1>
-        <div>Precio : $1000</div>
+        <Price value={1000} />
         <div>
           <Button onClick={nextStep}>Pagar</Button>
         </div>

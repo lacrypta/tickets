@@ -8,6 +8,10 @@ import Button from "../components/Form/Button";
 import useLoading from "../hooks/useLoading";
 import { PaymentMethod } from "../types/order";
 
+import MercadoPagoSvg from "../public/images/mercadopago.svg";
+import BitcoinSvg from "../public/images/bitcoin.svg";
+import Price from "../components/Checkout/Price";
+
 const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
@@ -31,12 +35,17 @@ const Home: NextPage = () => {
 
       <Card>
         <h1>Métodos de Pago</h1>
-        <div>Precio : $1000</div>
+        <Price value={1000} />
+
         <div>
           <Button onClick={nextStep.bind(this, "mercadopago")}>
-            MercadoPago
+            <MercadoPagoSvg height='60%' className='mr-2' /> MercadoPago
           </Button>
-          <Button onClick={nextStep.bind(this, "crypto")}>Crypto</Button>
+          <Button onClick={nextStep.bind(this, "crypto")}>
+            {" "}
+            <BitcoinSvg height='60%' className='mr-2' />
+            Crypto
+          </Button>
         </div>
       </Card>
     </div>

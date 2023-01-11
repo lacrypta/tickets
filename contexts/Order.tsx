@@ -13,7 +13,9 @@ interface OrderContextType {
   setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
 }
 
-export const OrderContext = createContext<OrderContextType>({});
+export const OrderContext = createContext<OrderContextType>({
+  setOrder: () => {},
+});
 
 export const OrderProvider = ({ children }: any) => {
   const [order, setOrder] = useState<IOrder>();

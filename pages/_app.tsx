@@ -18,6 +18,7 @@ import {
   HeaderLogo,
   Transition,
 } from "../components/common";
+import { OrderProvider } from "../contexts/Order";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -56,25 +57,27 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <LoadingProvider>
-      <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider
-          modalSize='compact'
-          theme={darkTheme()}
-          chains={chains}
-        >
-          <div className='flex justify-center relative w-full min-h-screen'>
-            <Background />
-            <div className='w-[42rem] mt-5 md:mt-20'>
-              <HeaderLogo />
-              <Transition>
-                <Component {...pageProps} />
-              </Transition>
+      <OrderProvider>
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider
+            modalSize='compact'
+            theme={darkTheme()}
+            chains={chains}
+          >
+            <div className='flex justify-center relative w-full min-h-screen'>
+              <Background />
+              <div className='w-[42rem] mt-5 md:mt-20'>
+                <HeaderLogo />
+                <Transition>
+                  <Component {...pageProps} />
+                </Transition>
+              </div>
             </div>
-          </div>
 
-          <Footer />
-        </RainbowKitProvider>
-      </WagmiConfig>
+            <Footer />
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </OrderProvider>
     </LoadingProvider>
   );
 }

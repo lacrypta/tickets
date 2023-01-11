@@ -2,9 +2,9 @@ import { IPayment } from "./payment";
 import { IUser } from "./user";
 
 export interface IOrder {
-  id: string;
+  id?: string;
   user: IUser;
-  payment: IPayment;
+  payment?: IPayment;
   status: OrderStatus;
 }
 

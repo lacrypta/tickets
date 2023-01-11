@@ -80,12 +80,12 @@ export const getOrder = async (orderId: string) => {
 export const addOrder = async (order: IOrder): Promise<string | undefined> => {
   let orderRef = db.collection("orders").doc();
   await orderRef.set({
-    fullname: order.fullname,
-    email: order.email,
-    address: order.address || "",
-    payment_id: order.payment_id || "",
-    payment_method: order.payment_method,
-    preference_id: order.payment_id || "",
+    fullname: order.user.fullname,
+    email: order.user.email,
+    address: order.payment.address || "",
+    payment_id: order.payment.id || "",
+    payment_method: order.payment.method,
+    preference_id: order.payment.preference_id || "",
     status: order.status || "pending",
   });
 

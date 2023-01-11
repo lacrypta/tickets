@@ -1,5 +1,5 @@
 import z from "zod";
-import { PaymentMethod } from "./order";
+import { PaymentMethod } from "./payment";
 export interface ICreateOrderRequestBody {
   fullname: string;
   email: string;

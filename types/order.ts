@@ -1,12 +1,11 @@
+import { IPayment } from "./payment";
+import { IUser } from "./user";
+
 export interface IOrder {
-  fullname: string;
-  email: string;
-  address?: string;
-  payment_id?: number;
-  payment_method: PaymentMethod;
-  preference_id?: string;
+  id: string;
+  user: IUser;
+  payment: IPayment;
   status: OrderStatus;
 }
 
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
-export type PaymentMethod = "crypto" | "mercadopago" | "invitation";

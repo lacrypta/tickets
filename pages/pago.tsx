@@ -6,7 +6,7 @@ import Card from "../components/common/Card";
 import Button from "../components/Form/Button";
 
 import useLoading from "../hooks/useLoading";
-import { PaymentMethod } from "../types/order";
+import { PaymentMethod } from "../types/payment";
 
 import MercadoPagoSvg from "../public/images/mercadopago.svg";
 import BitcoinSvg from "../public/images/bitcoin.svg";

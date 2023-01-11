@@ -82,10 +82,7 @@ export const addOrder = async (order: IOrder): Promise<string | undefined> => {
   await orderRef.set({
     fullname: order.user.fullname,
     email: order.user.email,
-    address: order.payment.address || "",
-    payment_id: order.payment.id || "",
-    payment_method: order.payment.method,
-    preference_id: order.payment.preference_id || "",
+    payment: order.payment,
     status: order.status || "pending",
   });
 

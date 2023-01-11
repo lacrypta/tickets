@@ -7,6 +7,7 @@ import Button from "../components/Form/Button";
 import Input from "../components/Form/Input";
 
 import useLoading from "../hooks/useLoading";
+import useOrder from "../hooks/useOrder";
 
 interface FormTargetProps extends EventTarget {
   name: HTMLInputElement;
@@ -15,18 +16,28 @@ interface FormTargetProps extends EventTarget {
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
+  const { createOrder } = useOrder();
+
   const router = useRouter();
 
+  // On Form Submit
   function nextStep(e: React.FormEvent<HTMLFormElement>) {
     router.push("/pago", undefined, { scroll: false });
 
     const target = e.target as FormTargetProps;
 
-    const formData = {
-      name: target.name.value,
+    // TODO: Validate form data
+    const userData = {
+      fullname: target.name.value,
       email: target.email.value,
     };
-    console.dir(formData);
+
+    // Creates Order
+    createOrder({
+      status: "pending",
+      user: userData,
+    });
+
     e?.preventDefault();
   }
 
@@ -51,12 +62,14 @@ const Home: NextPage = () => {
             label='Nombre Completo'
             name='name'
             placeholder='Nombre Completo'
+            value='Pepini'
           />
 
           <Input
             label='E-mail'
             name='email'
             type='email'
+            value='pepepep@aasdad.com'
             placeholder='E-mail'
           />
 

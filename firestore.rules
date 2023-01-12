@@ -1,25 +1,34 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-  	
-    // Functions
+    
+    //*************************//
+    //******** Functions ********//
+    //*************************//
+
 		function filterCreateOrder(orderData) {
       return
       	validateOrderSchema(orderData) &&
         orderData.status == 'pending';
     }
+
+    function filterUpdateOrder(orderData) {
+      return
+      	validateOrderSchema(orderData) &&
+        orderData.status in ['pending', 'processing'];
+    }
     
     function filterCreatePayment(paymentData) {
       return
       	validatePaymentSchema(paymentData) &&
-        paymentData.status == 'waiting';
+        paymentData.status == 'waiting' &&
+        get(/databases/$(database)/documents/orders/$(paymentData.orderId)).data.status == 'pending';
     }
     
     // Order Schema
     function validateOrderSchema(orderData) {
     	return
         validateUserSchema(orderData.user) &&
-        (!('payment' in orderData) || validatePaymentSchema(orderData.payment)) &&
         orderData.status in ['pending', 'processing', 'completed', 'cancelled'];
     }
     
@@ -32,9 +41,10 @@ service cloud.firestore {
     
     // Payment Schema
     function validatePaymentSchema(paymentData) {
-    	return paymentData.id is string &&
-      	paymentData.method is string &&
+    	return paymentData.orderId is string &&
+        paymentData.amount > 0 &&
       	paymentData.status is string &&
+      	paymentData.method in ['crypto', 'mercadopago', 'invitation'] &&
         paymentData.status in ['waiting', 'paid', 'cancelled'];
     }
     
@@ -48,25 +58,26 @@ service cloud.firestore {
     	return email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}$');
     }
     
-    // Read orders
-  	match /orders/{orderId} {
-    	// Applies to single document read requests
-      allow get: if true;
-
-      // Applies to queries and collection read requests
-      allow read: if isAdmin();
-    }
+    //*************************//
+    //******** Matches ********//
+    //*************************//
+		
+    // Admin full read access
+    allow read: if isAdmin();
     
-    // Write orders
+    // Orders
     match /orders/{orderId} {
-    	allow write: if isAdmin();
+    	allow get: if true;
       allow create: if filterCreateOrder(request.resource.data);
-      
-      // Create Payment conditions
-      match /payment/{document=**} {
-        allow create: if filterCreatePayment(request.resource.data);
-      }
-      
+      allow update: if filterUpdateOrder(request.resource.data);
+      allow write: if isAdmin() && validateOrderSchema(request.resource.data);
+    }
+
+    // Payments
+    match /payments/{paymentId} {
+      allow get: if true;
+      allow create: if filterCreatePayment(request.resource.data);
+      allow write: if isAdmin() && validatePaymentSchema(request.resource.data);
     }
   }
 }

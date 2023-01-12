@@ -62,14 +62,14 @@ const Home: NextPage = () => {
             label='Nombre Completo'
             name='name'
             placeholder='Nombre Completo'
-            value='Pepini'
+            defaultValue='Nombre de prueba'
           />
 
           <Input
             label='E-mail'
             name='email'
             type='email'
-            value='pepepep@aasdad.com'
+            defaultValue='preuba@email.com'
             placeholder='E-mail'
           />
 

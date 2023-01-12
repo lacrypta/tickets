@@ -33,10 +33,7 @@ const Home: NextPage = () => {
     };
 
     // Creates Order
-    createOrder({
-      status: "pending",
-      user: userData,
-    });
+    createOrder(userData);
 
     e?.preventDefault();
   }

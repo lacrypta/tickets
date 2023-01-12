@@ -1,6 +1,7 @@
 export interface IPayment {
   id: string;
   method: PaymentMethod;
+  amount: number;
   status: PaymentStatus;
 }
 
@@ -21,3 +22,8 @@ export interface IInvitacionPayment extends IPayment {
 
 export type PaymentMethod = "crypto" | "mercadopago" | "invitation";
 export type PaymentStatus = "waiting" | "paid" | "cancelled";
+
+export interface IPaymentHook {
+  payment?: IPayment;
+  createPayment: () => Promise<IPayment>;
+}

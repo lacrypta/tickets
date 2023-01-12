@@ -28,7 +28,7 @@ service cloud.firestore {
     function validateUserSchema(userData) {
     	return
       	userData.fullname is string &&
-      	userData.email is string;
+      	isValidEmail(userData.email);
     }
     
     // Payment Schema
@@ -42,6 +42,11 @@ service cloud.firestore {
     // Only Admin User
     function isAdmin() {
     	return request.auth.token.adminAccount == true;
+    }
+    
+    // Validate email
+    function isValidEmail(email) {
+    	return email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}$');
     }
     
     // Read orders

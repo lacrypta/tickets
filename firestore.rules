@@ -1,9 +1,68 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth.token.adminAccount == true;
+  	
+    // Functions
+		function filterCreateOrder(orderData) {
+      return
+      	validateOrderSchema(orderData) &&
+        orderData.status == 'pending' &&
+      	true;
+    }
+    
+    function filterCreatePayment(paymentData) {
+      return
+      	validatePaymentSchema(paymentData) &&
+        paymentData.status == 'waiting';
+    }
+    
+    // Order Schema
+    function validateOrderSchema(orderData) {
+    	return
+        validateUserSchema(orderData.user) &&
+        validatePaymentSchema(orderData.payment) &&
+        orderData.status in ['pending', 'processing', 'completed', 'cancelled'];
+    }
+    
+    // User Schema
+    function validateUserSchema(userData) {
+    	return
+      	userData.fullname is string &&
+      	userData.email is string;
+    }
+    
+    // Payment Schema
+    function validatePaymentSchema(paymentData) {
+    	return paymentData.id is string &&
+      	paymentData.method is string &&
+      	paymentData.status is string &&
+        paymentData.status in ['waiting', 'paid', 'cancelled'];
+    }
+    
+    // Only Admin User
+    function isAdmin() {
+    	return request.auth.token.adminAccount == true;
+    }
+    
+    // Read orders
+  	match /orders/{orderId} {
+    	// Applies to single document read requests
       allow get: if true;
+
+      // Applies to queries and collection read requests
+      allow read: if isAdmin();
+    }
+    
+    // Write orders
+    match /orders/{orderId} {
+    	allow write: if isAdmin();
+      allow create: if filterCreateOrder(resource.data);
+      
+      // Create Payment conditions
+      match /payment/{document=**} {
+        allow create: if filterCreatePayment(resource.data);
+      }
+      
     }
   }
 }

@@ -20,7 +20,7 @@ service cloud.firestore {
     function validateOrderSchema(orderData) {
     	return
         validateUserSchema(orderData.user) &&
-        validatePaymentSchema(orderData.payment) &&
+        (!('payment' in orderData) || validatePaymentSchema(orderData.payment)) &&
         orderData.status in ['pending', 'processing', 'completed', 'cancelled'];
     }
     

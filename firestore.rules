@@ -6,8 +6,7 @@ service cloud.firestore {
 		function filterCreateOrder(orderData) {
       return
       	validateOrderSchema(orderData) &&
-        orderData.status == 'pending' &&
-      	true;
+        orderData.status == 'pending';
     }
     
     function filterCreatePayment(paymentData) {

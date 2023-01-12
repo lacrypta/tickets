@@ -6,22 +6,32 @@ import Card from "../components/common/Card";
 import Button from "../components/Form/Button";
 
 import useLoading from "../hooks/useLoading";
-import { PaymentMethod } from "../types/payment";
+import { IPaymentHook, PaymentMethod } from "../types/payment";
 
 import MercadoPagoSvg from "../public/images/mercadopago.svg";
 import BitcoinSvg from "../public/images/bitcoin.svg";
 import Price from "../components/Checkout/Price";
+import useMercadoPago from "../hooks/payment/useMercadoPago";
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
+
+  // eslint-disable-next-line no-unused-vars
+  const paymentHooks: { [_key in PaymentMethod]: IPaymentHook } = {
+    crypto: useMercadoPago(),
+    mercadopago: useMercadoPago(),
+    invitation: useMercadoPago(),
+  };
 
   useEffect(() => {
     setActive(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function nextStep(method: PaymentMethod) {
+  async function nextStep(method: PaymentMethod) {
+    const { createPayment } = paymentHooks[method];
+    await createPayment();
     router.push("/pago/" + method);
   }
 

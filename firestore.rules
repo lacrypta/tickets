@@ -56,11 +56,11 @@ service cloud.firestore {
     // Write orders
     match /orders/{orderId} {
     	allow write: if isAdmin();
-      allow create: if filterCreateOrder(resource.data);
+      allow create: if filterCreateOrder(request.resource.data);
       
       // Create Payment conditions
       match /payment/{document=**} {
-        allow create: if filterCreatePayment(resource.data);
+        allow create: if filterCreatePayment(request.resource.data);
       }
       
     }

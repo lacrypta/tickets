@@ -3,7 +3,14 @@ import { OrderContext } from "./../contexts/Order";
 import { useContext } from "react";
 import { IOrder } from "../types/order";
 
-import { addDoc, updateDoc, collection, db, doc } from "../lib/public/firebase";
+import {
+  addDoc,
+  updateDoc,
+  collection,
+  db,
+  doc,
+  deleteDoc,
+} from "../lib/public/firebase";
 import { IUser } from "../types/user";
 
 export interface IUseOrderResult {
@@ -13,7 +20,7 @@ export interface IUseOrderResult {
 }
 
 const useOrder = (): IUseOrderResult => {
-  const { order, setOrder } = useContext(OrderContext);
+  const { order, payment: currentPayment, setOrder } = useContext(OrderContext);
 
   const createOrder = async (userData: IUser): Promise<IOrder> => {
     const order: IOrder = {
@@ -29,21 +36,20 @@ const useOrder = (): IUseOrderResult => {
 
   const createPayment = async (payment: IPayment): Promise<IPayment> => {
     // Create payment in firestore
-
     const data = {
       ...payment,
       status: "waiting", // Makes sure its in waiting status
       orderId: order?.id,
     };
 
-    console.dir(data);
-
-    const paymentRef = addDoc(collection(db, "payments"), data);
+    if (currentPayment) {
+      await deleteDoc(doc(db, "payments" + currentPayment.id));
+    }
+    const paymentRef = await addDoc(collection(db, "payments"), data);
     updateDoc(doc(db, "orders/" + order?.id), {
       status: "processing",
+      paymentId: paymentRef.id,
     });
-
-    console.dir(paymentRef);
 
     return payment;
   };

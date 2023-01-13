@@ -7,6 +7,9 @@ import {
   doc,
   addDoc,
   updateDoc,
+  deleteDoc,
+  query,
+  where,
 } from "@firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -25,4 +28,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db, collection, onSnapshot, doc, addDoc, updateDoc };
+export {
+  db,
+  collection,
+  onSnapshot,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+};

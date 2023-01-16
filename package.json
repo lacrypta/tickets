@@ -30,7 +30,7 @@
     "react-dom": "^18.1.0",
     "react-qr-code": "^2.0.8",
     "react-sdk-mercadopago": "^1.1.1",
-    "wagmi": "=0.6.8",
+    "wagmi": "=0.10.10",
     "web3": "^1.8.0",
     "zod": "^3.19.1"
   },

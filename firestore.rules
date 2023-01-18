@@ -35,11 +35,13 @@ service cloud.firestore {
     
     // Payment Schema
     function validatePaymentSchema(paymentData) {
-    	return paymentData.orderId is string &&
+    	let required = ['method', 'amount', 'preference_id', 'address', 'secret', 'status'];
+    	return
+      	paymentData.keys().hasOnly(required) &&
         paymentData.amount > 0 &&
-      	paymentData.status is string &&
       	paymentData.method in ['crypto', 'mercadopago', 'invitation'] &&
-        paymentData.status in ['waiting', 'paid', 'cancelled'];
+        paymentData.status in ['waiting', 'paid', 'cancelled'] &&
+        exists(/databases/$(database)/documents/orders/$(paymentData.orderId));
     }
     
     // Only Admin User

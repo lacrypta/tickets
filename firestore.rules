@@ -16,7 +16,7 @@ service cloud.firestore {
       return
       	validatePaymentSchema(paymentData) &&
         paymentData.status == 'waiting' &&
-        get(/databases/$(database)/documents/orders/$(paymentData.orderId)).data.status == 'pending';
+        get(/databases/$(database)/documents/orders/$(paymentData.orderId)).data.status in ['pending', 'processing'];
     }
     
     // Order Schema

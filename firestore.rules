@@ -29,7 +29,9 @@ service cloud.firestore {
     // User Schema
     function validateUserSchema(userData) {
     	return
+      	userData.keys().hasOnly(['fullname', 'email']) &&
       	userData.fullname is string &&
+        userData.fullname.size() > 3 &&
       	isValidEmail(userData.email);
     }
     

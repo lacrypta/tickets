@@ -22,6 +22,7 @@ service cloud.firestore {
     // Order Schema
     function validateOrderSchema(orderData) {
     	return
+      	orderData.keys().hasOnly(['user', 'status']) &&
         validateUserSchema(orderData.user) &&
         orderData.status in ['pending', 'processing', 'completed', 'cancelled'];
     }

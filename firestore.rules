@@ -22,8 +22,9 @@ service cloud.firestore {
     // Order Schema
     function validateOrderSchema(orderData) {
     	return
-      	orderData.keys().hasOnly(['user', 'status']) &&
+      	orderData.keys().hasOnly(['user', 'status', 'createdAt']) &&
         validateUserSchema(orderData.user) &&
+        orderData.createdAt == request.time &&
         orderData.status in ['pending', 'processing', 'completed', 'cancelled'];
     }
     
@@ -38,12 +39,13 @@ service cloud.firestore {
     
     // Payment Schema
     function validatePaymentSchema(paymentData) {
-    	let required = ['method', 'amount', 'preference_id', 'address', 'secret', 'status'];
+    	let required = ['method', 'amount', 'preference_id', 'address', 'secret', 'status', 'createdAt', 'orderId'];
     	return
       	paymentData.keys().hasOnly(required) &&
         paymentData.amount > 0 &&
       	paymentData.method in ['crypto', 'mercadopago', 'invitation'] &&
         paymentData.status in ['waiting', 'paid', 'cancelled'] &&
+        paymentData.createdAt == request.time &&
         exists(/databases/$(database)/documents/orders/$(paymentData.orderId));
     }
     

@@ -11,12 +11,6 @@ service cloud.firestore {
       	validateOrderSchema(orderData) &&
         orderData.status == 'pending';
     }
-
-    function filterUpdateOrder(orderData) {
-      return
-      	validateOrderSchema(orderData) &&
-        orderData.status in ['pending', 'processing'];
-    }
     
     function filterCreatePayment(paymentData) {
       return
@@ -69,7 +63,6 @@ service cloud.firestore {
     match /orders/{orderId} {
     	allow get: if true;
       allow create: if filterCreateOrder(request.resource.data);
-      allow update: if filterUpdateOrder(request.resource.data);
       allow write: if isAdmin() && validateOrderSchema(request.resource.data);
     }
 

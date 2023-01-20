@@ -10,6 +10,8 @@ import {
   deleteDoc,
   query,
   where,
+  Query,
+  QuerySnapshot,
 } from "@firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -38,4 +40,6 @@ export {
   deleteDoc,
   query,
   where,
+  Query,
+  QuerySnapshot,
 };

@@ -1,89 +1,170 @@
 import React, {
-  createContext,
-  useState,
   Dispatch,
   SetStateAction,
+  useState,
   useEffect,
   useCallback,
+  createContext,
 } from "react";
+
+import {
+  db,
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  onSnapshot,
+} from "../lib/public/firebase";
+
+import {
+  DocumentData,
+  DocumentSnapshot,
+  serverTimestamp,
+} from "@firebase/firestore";
+
+import { IPayment, IPaymentFirestore } from "../types/payment";
+import { IUser } from "../types/user";
 import { IOrder } from "../types/order";
-import { doc, onSnapshot, db } from "../lib/public/firebase";
-import { IPayment } from "../types/payment";
 
 interface OrderContextType {
   order?: IOrder;
-  payment?: IPayment;
+  payments?: IPayment[];
   setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
+  addOrder: (_user: IUser) => Promise<IOrder>;
+  addPayment: (_payment: IPayment) => Promise<IPayment>;
 }
 
 export const OrderContext = createContext<OrderContextType>({
   setOrder: () => {},
+  addOrder: () => Promise.resolve({} as IOrder),
+  addPayment: () => Promise.resolve({} as IPayment),
 });
 
 export const OrderProvider = ({ children }: any) => {
   const [order, setOrder] = useState<IOrder>();
+  const [payments, setPayments] = useState<IPayment[]>([]); // All payments
   const [payment, setPayment] = useState<IPayment>();
 
   const [listeningOrderId, setListeningOrderId] = useState<string>();
   const [paymentListener, setPaymentListener] = useState<any>();
 
-  const onOrderChange = (doc: any) => {
-    const data = doc.data() as IOrder;
-    data.id = doc.id;
+  // Event Listener for order changes
+  const onOrderChange = useCallback(
+    (doc: any) => {
+      const data = doc.data() as IOrder;
+      data.id = doc.id;
 
-    // If paymentId is found, subscribe payment listener
-    if (data.paymentId && data.paymentId !== payment?.id) {
-      console.dir("New PaymentId found!");
-      paymentListener && paymentListener(); // Unsubscribe previous payment listener
-      setPaymentListener(subscribePayment(data.paymentId));
-    }
+      // If paymentId is found, subscribe payment listener
+      if (data.paymentId && data.paymentId !== payment?.id) {
+        console.dir("New PaymentId found!");
+        paymentListener && paymentListener(); // Unsubscribe previous payment listener
+        setPaymentListener(subscribePayment(data.paymentId));
+      }
 
-    // If no payment is found, unsubscribe payment listener
-    if (!data.paymentId) {
-      paymentListener && paymentListener(); // Unsubscribe previous payment listener
-    }
+      setOrder(data);
+    },
+    [payment?.id]
+  );
 
-    setOrder(data);
-  };
-
-  const onPaymentChange = (doc: any) => {
-    const data = doc.data() as IPayment;
-    data.id = doc.id;
-    setPayment(data);
-    console.dir(data);
-  };
+  // Event Listener for payments changes
+  const onPaymentChange = useCallback((doc: DocumentSnapshot<DocumentData>) => {
+    const payment: IPayment = { id: doc.id, ...doc.data() } as IPayment;
+    setPayment(payment);
+    console.info("Payment updated");
+    console.dir(payment);
+  }, []);
 
   // Subscribe order snapshots
-  const subscribeOrder = useCallback(async () => {
-    const orderId = order?.id as string;
-    console.info(`Listening for changes (${orderId})...`);
+  const subscribeOrder = useCallback(
+    async (orderId: string) => {
+      console.info(`Listening for changes (${orderId})...`);
 
-    if (listeningOrderId === orderId) return;
-    setListeningOrderId(orderId);
+      if (listeningOrderId === orderId) return;
+      setListeningOrderId(orderId);
 
-    return onSnapshot(doc(db, "orders", orderId), onOrderChange);
+      return onSnapshot(doc(db, "orders", orderId), onOrderChange);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, listeningOrderId, paymentListener]);
+    [listeningOrderId]
+  );
 
   // Subscribe payment snapshots
-  const subscribePayment = async (paymentId: string) => {
-    console.info("Subscribe for PaymentID", paymentId);
+  const subscribePayment = useCallback(async (paymentId: string) => {
+    // get snapshot query firestore for order
     return onSnapshot(doc(db, "payments", paymentId), onPaymentChange);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Adds order
+  const addOrder = useCallback(async (userData: IUser): Promise<IOrder> => {
+    const order: IOrder = {
+      user: userData,
+      status: "pending",
+    };
+
+    console.info("Adding order");
+    console.dir(order);
+    const docRef = await addDoc(collection(db, "orders"), {
+      ...order,
+      createdAt: serverTimestamp(),
+    });
+    order.id = docRef.id;
+    setOrder(order);
+    return order;
+  }, []);
+
+  // Adds Payment
+  const addPayment = useCallback(
+    async (payment: IPayment): Promise<IPayment> => {
+      // Create payment in firestore
+      const data: IPaymentFirestore = {
+        ...payment,
+        status: "waiting", // Makes sure its in waiting status
+        orderId: order?.id as string,
+        createdAt: serverTimestamp(),
+      };
+
+      console.info("Adding payment");
+      console.dir(data);
+      const paymentRef = await addDoc(collection(db, "payments"), data);
+
+      // Updates order payment id
+      updateOrderPayment(paymentRef.id);
+      const _payment = { id: paymentRef.id, ...data } as IPayment;
+
+      // Updates payments list
+      setPayments((old) => old.concat(_payment));
+      return _payment;
+    },
+    [order]
+  );
+
+  const updateOrderPayment = useCallback(
+    async (paymentId: string) => {
+      const orderRef = doc(db, "orders", order?.id as string);
+      await updateDoc(orderRef, {
+        paymentId,
+      });
+    },
+    [order]
+  );
 
   useEffect(() => {
+    const orderId = order?.id as string;
     // Prevent subscribe if its already listening to the orderId
-    if (!order?.id || listeningOrderId === order?.id) {
+    if (!orderId || listeningOrderId === orderId) {
       return;
     }
-    subscribeOrder();
+
+    subscribeOrder(orderId);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, listeningOrderId]);
 
-  useEffect;
-
   return (
-    <OrderContext.Provider value={{ order, payment, setOrder }}>
+    <OrderContext.Provider
+      value={{ order, payments, setOrder, addOrder, addPayment }}
+    >
       {children}
     </OrderContext.Provider>
   );

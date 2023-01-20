@@ -1,8 +1,17 @@
-export interface IPayment {
-  id: string;
+import { FieldValue } from "@firebase/firestore";
+
+export interface IPaymentFirestore {
   method: PaymentMethod;
   amount: number;
   status: PaymentStatus;
+  preference_id?: string;
+  address?: string;
+  orderId: string;
+  createdAt: FieldValue;
+}
+
+export interface IPayment extends IPaymentFirestore {
+  id: string;
 }
 
 export interface ICryptoPayment extends IPayment {

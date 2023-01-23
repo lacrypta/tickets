@@ -29,6 +29,7 @@ import { IOrder } from "../types/order";
 interface OrderContextType {
   order?: IOrder;
   payments?: IPayment[];
+  payment?: IPayment;
   setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
   addOrder: (_user: IUser) => Promise<IOrder>;
   addPayment: (_payment: IPayment) => Promise<IPayment>;
@@ -63,7 +64,8 @@ export const OrderProvider = ({ children }: any) => {
 
       setOrder(data);
     },
-    [payment?.id]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [payment?.id, paymentListener]
   );
 
   // Event Listener for payments changes
@@ -136,7 +138,8 @@ export const OrderProvider = ({ children }: any) => {
       setPayments((old) => old.concat(_payment));
       return _payment;
     },
-    [order]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [order?.id]
   );
 
   const updateOrderPayment = useCallback(
@@ -163,7 +166,7 @@ export const OrderProvider = ({ children }: any) => {
 
   return (
     <OrderContext.Provider
-      value={{ order, payments, setOrder, addOrder, addPayment }}
+      value={{ order, payment, payments, setOrder, addOrder, addPayment }}
     >
       {children}
     </OrderContext.Provider>

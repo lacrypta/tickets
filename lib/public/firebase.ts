@@ -12,6 +12,7 @@ import {
   where,
   Query,
   QuerySnapshot,
+  connectFirestoreEmulator,
 } from "@firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -29,6 +30,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+//connectFirestoreEmulator(db, "localhost", 8080);
 
 export {
   db,

@@ -6,7 +6,7 @@
     "serve": "yarn build && firebase emulators:start --only functions",
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
-    "emulator": "firebase emulators:start",
+    "emulator": "yarn build && firebase emulators:start",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },

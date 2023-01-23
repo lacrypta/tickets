@@ -7,13 +7,15 @@ import { IUser } from "../types/user";
 export interface IUseOrderResult {
   order?: IOrder;
   payments?: IPayment[];
+  payment?: IPayment;
   activePayments?: IPayment[];
   createOrder: (_order: IUser) => Promise<IOrder>;
   createPayment: (_payment: IPayment) => Promise<IPayment>;
 }
 
 const useOrder = (): IUseOrderResult => {
-  const { order, payments, addOrder, addPayment } = useContext(OrderContext);
+  const { order, payment, payments, addOrder, addPayment } =
+    useContext(OrderContext);
 
   const activePayments = payments?.filter((payment) => {
     return payment.status === "waiting";
@@ -48,6 +50,7 @@ const useOrder = (): IUseOrderResult => {
   return {
     order,
     payments,
+    payment,
     activePayments,
     createOrder,
     createPayment,

@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./ --ext js,jsx,ts,tsx",
-    "fix": "yarn lint --fix"
+    "fix": "yarn lint --fix",
+    "rules": "firebase deploy --only firestore:rules"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

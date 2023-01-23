@@ -6,12 +6,12 @@ export interface IPaymentFirestore {
   status: PaymentStatus;
   preference_id?: string;
   address?: string;
-  orderId: string;
-  createdAt: FieldValue;
+  orderId?: string;
+  createdAt?: FieldValue;
 }
 
 export interface IPayment extends IPaymentFirestore {
-  id: string;
+  id?: string;
 }
 
 export interface ICryptoPayment extends IPayment {
@@ -21,7 +21,7 @@ export interface ICryptoPayment extends IPayment {
 
 export interface IMercadoPagoPayment extends IPayment {
   method: "mercadopago";
-  preference_id: string;
+  preference_id?: string;
 }
 
 export interface IInvitacionPayment extends IPayment {

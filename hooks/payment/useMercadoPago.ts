@@ -10,25 +10,17 @@ export interface IUseOrderResult extends IPaymentHook {
 const MERCADOPAGO_AMOUNT = 1000;
 
 export const useMercadoPago = (): IUseOrderResult => {
-  const { order, createPayment: createGenericPayment } = useOrder();
-  const payment: IPayment | undefined = order?.payment;
+  const { payment, createPayment: createGenericPayment } = useOrder();
   let mercadoPagoPayment: IMercadoPagoPayment | undefined;
 
   if (payment?.method === "mercadopago") {
     mercadoPagoPayment = payment as IMercadoPagoPayment;
   }
 
-  const getPreferenceId = async (): Promise<string> => {
-    return Math.random().toString().substring(2, 16);
-  };
-
   const createPayment = async (): Promise<IMercadoPagoPayment> => {
-    const preferenceId = await getPreferenceId();
     const payment: IMercadoPagoPayment = {
-      id: Math.random().toString().substring(2, 16),
       method: "mercadopago",
       amount: MERCADOPAGO_AMOUNT,
-      preference_id: preferenceId,
       status: "waiting",
     };
 

@@ -11,12 +11,21 @@ service cloud.firestore {
       	validateOrderSchema(orderData) &&
         orderData.status == 'pending';
     }
+
+    function filterUpdateOrder(orderData) {
+      return
+        orderData.diff(resource.data).affectedKeys().hasOnly(["paymentId"]) &&
+        orderData.paymentId is string &&
+        get(/databases/$(database)/documents/payments/$(orderData.paymentId)).data.orderId == resource.id;
+    }
     
     function filterCreatePayment(paymentData) {
       return
       	validatePaymentSchema(paymentData) &&
         paymentData.status == 'waiting' &&
+        !paymentData.keys().hasAny(["preference_id"]) &&
         get(/databases/$(database)/documents/orders/$(paymentData.orderId)).data.status in ['pending', 'processing'];
+        
     }
     
     // Order Schema
@@ -39,9 +48,9 @@ service cloud.firestore {
     
     // Payment Schema
     function validatePaymentSchema(paymentData) {
-    	let required = ['method', 'amount', 'preference_id', 'address', 'secret', 'status', 'createdAt', 'orderId'];
+    	let limitedKeys = ['method', 'amount', 'preference_id', 'address', 'secret', 'status', 'createdAt', 'orderId'];
     	return
-      	paymentData.keys().hasOnly(required) &&
+      	paymentData.keys().hasOnly(limitedKeys) &&
         paymentData.amount > 0 &&
       	paymentData.method in ['crypto', 'mercadopago', 'invitation'] &&
         paymentData.status in ['waiting', 'paid', 'cancelled'] &&
@@ -70,14 +79,14 @@ service cloud.firestore {
     match /orders/{orderId} {
     	allow get: if true;
       allow create: if filterCreateOrder(request.resource.data);
-      allow write: if isAdmin() && validateOrderSchema(request.resource.data);
+      allow update: if filterUpdateOrder(request.resource.data);
+      // allow write: if isAdmin() && validateOrderSchema(request.resource.data);
     }
 
     // Payments
     match /payments/{paymentId} {
       allow get: if true;
       allow create: if filterCreatePayment(request.resource.data);
-      allow write: if isAdmin() && validatePaymentSchema(request.resource.data);
     }
   }
 }

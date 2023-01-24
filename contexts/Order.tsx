@@ -106,11 +106,15 @@ export const OrderProvider = ({ children }: any) => {
 
     console.info("Adding order");
     console.dir(order);
-    const docRef = await addDoc(collection(db, "orders"), {
+    addDoc(collection(db, "orders"), {
       ...order,
       createdAt: serverTimestamp(),
+    }).then((docRef) => {
+      order.id = docRef.id;
+
+      setOrder({ ...order, id: docRef.id });
     });
-    order.id = docRef.id;
+
     setOrder(order);
     return order;
   }, []);

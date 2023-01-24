@@ -19,11 +19,11 @@ const MainButton = styled.button`
   background: none;
   filter: drop-shadow(0 0 0.75rem rgba(255, 255, 255, 0.1));
 
-  &:hover .container {
+  &:hover .container.enabled {
     transform: translateY(27px) rotateX(-90deg);
   }
 
-  &:active .container {
+  &:active .container.enabled {
     transition: transform 0.1s;
     transform: translateY(27px) translateZ(-60px) rotateX(-90deg);
   }
@@ -57,6 +57,13 @@ const Front = styled(Side)`
   color: #fff;
   background: #000;
   transform: rotateY(0deg) translateZ(25px);
+  transition: all 0.5s;
+
+  .disabled & {
+    background: #666;
+    border-color: #555;
+    opacity: 0.15;
+  }
 `;
 
 const Back = styled(Side)`
@@ -64,12 +71,18 @@ const Back = styled(Side)`
   background: #fff;
   border-color: #333;
   transform: rotateX(90deg) translateZ(25px);
+  transition: all 0.2s;
+
+  .disabled & {
+    opacity: 0;
+  }
 `;
 
 export const Button = ({ children, ...rest }: ButtonProps) => {
+  const className = "container " + (rest.disabled ? " disabled" : "enabled");
   return (
     <MainButton {...rest}>
-      <Container className='container'>
+      <Container className={className}>
         <Front>{children}</Front>
         <Back>{children}</Back>
       </Container>

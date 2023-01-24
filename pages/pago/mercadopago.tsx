@@ -1,20 +1,17 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import Price from "../../components/Checkout/Price";
 import Card from "../../components/common/Card";
 import Button from "../../components/Form/Button";
 
-import useLoading from "../../hooks/useLoading";
 import useOrder from "../../hooks/useOrder";
 import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
 
 const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
 const Home: NextPage = () => {
-  const { setActive } = useLoading();
-  const { order, payment } = useOrder();
+  const { payment } = useOrder();
   const router = useRouter();
 
   useRedirectOnEmpty(["order", "payment"]);

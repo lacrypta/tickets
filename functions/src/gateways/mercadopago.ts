@@ -3,7 +3,7 @@ import { MercadoPagoPreference } from "./../../../types/mercadopago";
 import { IPayment, IPaymentFirestore } from "./../../../types/payment";
 
 import * as functions from "firebase-functions";
-const admin = require("firebase-admin");
+import * as admin from "firebase-admin";
 
 import * as mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";

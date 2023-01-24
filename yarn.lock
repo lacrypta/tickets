@@ -2830,7 +2830,7 @@
   resolved "https://registry.yarnpkg.com/@types/mdurl/-/mdurl-1.0.2.tgz#e2ce9d83a613bacf284c7be7d491945e39e1f8e9"
   integrity sha512-eC4U9MlIcu2q0KQmXszyn5Akca/0jrQmwDRgpAMJai7qBWq4amIQhZyNau4VYGtCeALvW1/NtjzJJ567aZxfKA==
 
-"@types/mercadopago@^1.5.6":
+"@types/mercadopago@^1.5.8":
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/@types/mercadopago/-/mercadopago-1.5.8.tgz#baa64963c8e563c62ecbfc9cb1546af52cf7b9c8"
   integrity sha512-tamrRo4Z5IfLmWXDm72l7egxzQzhM5sJJtSH7n1z4EJsS71T0PddybGMZmMJp5GRiNJhbc9Ts6ZxIJ2jfxzM9Q==

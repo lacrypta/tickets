@@ -54,10 +54,13 @@ const Home: NextPage = () => {
 
         <div>{JSON.stringify(order)}</div>
         <div>
-          <Button onClick={nextStep.bind(this, "mercadopago")}>
+          <Button
+            disabled={!order?.id}
+            onClick={nextStep.bind(this, "mercadopago")}
+          >
             <MercadoPagoSvg height='60%' className='mr-2' /> MercadoPago
           </Button>
-          <Button onClick={nextStep.bind(this, "crypto")}>
+          <Button disabled={!order?.id} onClick={nextStep.bind(this, "crypto")}>
             {" "}
             <BitcoinSvg height='60%' className='mr-2' />
             Crypto

@@ -6,6 +6,7 @@
     "serve": "yarn build && firebase emulators:start --only functions",
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
+    "setup": "firebase functions:config:set gateways.mercadopago.access_token=`grep '^MP_SECRET_TOKEN=' ../.env | cut -d= -f2 | tr -d '\"'`",
     "emulator": "yarn build && firebase emulators:start",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"

@@ -7,10 +7,13 @@ import Card from "../../components/common/Card";
 import Button from "../../components/Form/Button";
 
 import useLoading from "../../hooks/useLoading";
+import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
+
+  useRedirectOnEmpty(["order", "payment"]);
 
   useEffect(() => {
     setActive(false);

@@ -12,10 +12,13 @@ import MercadoPagoSvg from "../public/images/mercadopago.svg";
 import BitcoinSvg from "../public/images/bitcoin.svg";
 import Price from "../components/Checkout/Price";
 import useMercadoPago from "../hooks/payment/useMercadoPago";
+import { useRedirectOnEmpty } from "../hooks/useRedirectOnEmpty";
+import useOrder from "../hooks/useOrder";
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
+  const { order } = useOrder();
 
   // eslint-disable-next-line no-unused-vars
   const paymentHooks: { [_key in PaymentMethod]: IPaymentHook } = {
@@ -23,6 +26,8 @@ const Home: NextPage = () => {
     mercadopago: useMercadoPago(),
     invitation: useMercadoPago(),
   };
+
+  useRedirectOnEmpty(["order"]);
 
   useEffect(() => {
     setActive(false);
@@ -47,6 +52,7 @@ const Home: NextPage = () => {
         <h1>Métodos de Pago</h1>
         <Price value={1000} />
 
+        <div>{JSON.stringify(order)}</div>
         <div>
           <Button onClick={nextStep.bind(this, "mercadopago")}>
             <MercadoPagoSvg height='60%' className='mr-2' /> MercadoPago

@@ -7,15 +7,17 @@ import Card from "../../components/common/Card";
 import Button from "../../components/Form/Button";
 
 import useLoading from "../../hooks/useLoading";
+import useOrder from "../../hooks/useOrder";
+import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
+
+const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
+  const { order, payment } = useOrder();
   const router = useRouter();
 
-  useEffect(() => {
-    setActive(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useRedirectOnEmpty(["order", "payment"]);
 
   function nextStep() {
     router.push("/pagado");
@@ -31,9 +33,12 @@ const Home: NextPage = () => {
 
       <Card>
         <h1>MercadoPago</h1>
-        <Price value={1000} />
+        <Price value={PRICE} />
+
         <div>
-          <Button onClick={nextStep}>Pagar</Button>
+          <Button disabled={!payment?.preference_id} onClick={nextStep}>
+            Pagar
+          </Button>
         </div>
       </Card>
     </div>

@@ -130,8 +130,8 @@ export const OrderProvider = ({ children }: any) => {
         createdAt: serverTimestamp(),
       };
 
-      console.info("Adding payment");
-      console.dir(data);
+      // Adds temporary payment
+      setPayment(data);
       const paymentRef = await addDoc(collection(db, "payments"), data);
 
       // Updates order payment id

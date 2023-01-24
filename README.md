@@ -44,6 +44,23 @@ yarn
 
 > Troubleshoot: Install the needed version with **"nvm install 19"**
 
+Copy **.env.sample** into local **.env** file
+
+```bash
+cp .env.sample .env
+```
+
+Set your config data
+
+```bash
+NEXT_PUBLIC_HOSTNAME=http://localhost:3000 # Your host
+
+NEXT_PUBLIC_TICKET_PRICE=2000 # Ticket price on ARS
+NEXT_PUBLIC_TICKET_PRICE_PE=1000 # Ticket price on PE
+
+NEXT_PUBLIC_LOCALHOST=1 # Enables Debug
+```
+
 Start the development server right away
 
 ```bash
@@ -67,6 +84,27 @@ Install **Cloud Functions** node modules
 ```bash
 nvm use ## Switch Node to version 16
 yarn
+```
+
+Copy **.env.sample** into local **.env** file
+
+```bash
+cp .env.sample .env
+```
+
+Set your config data
+
+```bash
+# MercadoPago
+MP_SECRET_TOKEN=TEST-MP_GENERATED_TOKEN # From MercadoPago Dev SDK Dashboard
+MP_NOTIFICATION_URL=https://entradas.lacrypta.com.ar/ # HTTP Webhook
+MP_ORDER_NAME="La Crypta - Your Order name" # User UI label
+
+# Email config
+SMTP_HOST="Your SMTP Host"
+SMTP_PORT=587
+SMTP_USERNAME="Your SMTP username"
+SMTP_PASSWORD="Your SMTP Password"
 ```
 
 Deploy Cloud Functions

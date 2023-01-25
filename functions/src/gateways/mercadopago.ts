@@ -1,5 +1,4 @@
 // Types
-import { MercadoPagoPreference } from "./../../../types/mercadopago";
 import { IPayment, IPaymentFirestore } from "./../../../types/payment";
 
 import * as functions from "firebase-functions";
@@ -33,7 +32,7 @@ export const onMercadopagoPayment = functions
 
     functions.logger.info(`Payment (${payment.id}) being updated:`);
 
-    let preference: MercadoPagoPreference;
+    let preference: any;
 
     try {
       preference = await getPreference(payment);
@@ -48,18 +47,20 @@ export const onMercadopagoPayment = functions
 
     // update order status
     functions.logger.info(`Update order (${payment.orderId}):`);
-    await admin.firestore().collection("orders").doc(payment.orderId).update({
-      status: "processing",
-    });
+    await admin
+      .firestore()
+      .collection("orders")
+      .doc(payment.orderId as string)
+      .update({
+        status: "processing",
+      });
 
     return snapshot.ref.update({
       preference_id: preference.id,
     });
   });
 
-async function getPreference(
-  payment: IPayment
-): Promise<MercadoPagoPreference> {
+async function getPreference(payment: IPayment): Promise<any> {
   return (
     await mercadopago.preferences.create({
       items: [
@@ -78,7 +79,7 @@ async function getPreference(
           payment.id,
       },
       additional_info: String(payment.id),
-      statement_descriptor: "La Crypta - Ticket",
+      statement_descriptor: MP_ORDER_NAME,
       auto_return: "all",
       notification_url: MP_NOTIFICATION_URL,
     })

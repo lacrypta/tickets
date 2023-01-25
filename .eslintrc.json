@@ -14,7 +14,7 @@
     "next/core-web-vitals"
   ],
   "parserOptions": {
-    "project": ["./tsconfig.json"],
+    "project": ["./tsconfig.json", "./functions/tsconfig.json"],
     "ecmaVersion": "latest",
     "sourceType": "module"
   },

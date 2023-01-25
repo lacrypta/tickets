@@ -60,6 +60,27 @@ export const onMercadopagoPayment = functions
     });
   });
 
+export const onMercadoPagoWebhook = functions
+  .region("southamerica-east1")
+  .https.onRequest(async (req, res) => {
+    functions.logger.info("Request:");
+    functions.logger.debug({
+      req: {
+        headers: req.headers,
+        ip: req.ip,
+        body: req.body,
+        method: req.method,
+        query: req.query,
+      },
+    });
+    res.status(200).send({
+      req: {
+        headers: req.headers,
+        ip: req.ip,
+      },
+    });
+  });
+
 async function getPreference(payment: IPayment): Promise<any> {
   return (
     await mercadopago.preferences.create({

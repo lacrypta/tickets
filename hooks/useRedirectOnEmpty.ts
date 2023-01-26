@@ -8,9 +8,7 @@ export const useRedirectOnEmpty = (object: RedirectObject[]) => {
   const { order, payment } = useOrder();
   const router = useRouter();
   useEffect(() => {
-    console.info("Hooo yeahhh");
     if (object.includes("order") && !order) {
-      console.info("Hooo yeahhh");
       router.push("/");
       return;
     }

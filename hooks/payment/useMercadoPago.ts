@@ -28,9 +28,11 @@ export const useMercadoPago = (): IUseOrderResult => {
     }
   );
 
-  // Set preference Id when available
+  // Set preference Id when available available
   useEffect(() => {
-    setPreferenceId(payment?.preference_id);
+    if (payment && payment?.method === "mercadopago") {
+      setPreferenceId(payment?.preference_id);
+    }
   }, [payment]);
 
   // Sets checkout object
@@ -45,14 +47,6 @@ export const useMercadoPago = (): IUseOrderResult => {
       setCheckoutObject(checkout);
     }
   }, [preferenceId, sdk, checkoutObject]);
-
-  let mercadoPagoPayment: IMercadoPagoPayment | undefined;
-
-  if (payment?.method === "mercadopago") {
-    mercadoPagoPayment = payment as IMercadoPagoPayment;
-  } else {
-    console.error("Not a MercadoPago payment");
-  }
 
   const createPayment = async (): Promise<IMercadoPagoPayment> => {
     const payment: IMercadoPagoPayment = {
@@ -82,7 +76,7 @@ export const useMercadoPago = (): IUseOrderResult => {
   };
 
   return {
-    payment: mercadoPagoPayment,
+    payment: payment as IMercadoPagoPayment,
     sdk,
     preferenceId,
     createPayment,

@@ -7,10 +7,11 @@ import * as admin from "firebase-admin";
 import * as mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";
 
-const HOSTNAME = process.env.HOSTNAME || "http://localhost:3000";
 const TICKET_PRICE = process.env.TICKET_PRICE || "2000";
 const MP_NOTIFICATION_URL = process.env.HOSTNAME || "http://localhost:3000";
 const MP_ORDER_NAME = process.env.MP_ORDER_NAME || "La Crypta - Order";
+const CLOUD_FUNCTIONS_REGION =
+  process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
 
 const config: ConfigTokenOption = {
   access_token: process.env.MP_SECRET_TOKEN || "",
@@ -21,7 +22,7 @@ mercadopago.configure(config);
 console.dir(config);
 
 export const onMercadopagoPayment = functions
-  .region("southamerica-east1")
+  .region(CLOUD_FUNCTIONS_REGION)
   .firestore.document("/payments/{paymentId}")
   .onCreate(async (snapshot, context) => {
     const payment: IPayment = snapshot.data() as IPaymentFirestore;
@@ -36,7 +37,7 @@ export const onMercadopagoPayment = functions
 
     try {
       preference = await getPreference(payment);
-      functions.logger.debug(preference);
+      functions.logger.debug("preference", preference);
     } catch (e: any) {
       functions.logger.error(`Error getting preference ID from MercadoPago`, e);
       return snapshot.ref.update({
@@ -61,7 +62,7 @@ export const onMercadopagoPayment = functions
   });
 
 export const onMercadoPagoWebhook = functions
-  .region("southamerica-east1")
+  .region(CLOUD_FUNCTIONS_REGION)
   .https.onRequest(async (req, res) => {
     functions.logger.info("Request:");
     functions.logger.debug({
@@ -82,6 +83,10 @@ export const onMercadoPagoWebhook = functions
   });
 
 async function getPreference(payment: IPayment): Promise<any> {
+  const webhookUrl =
+    process.env.FUNCTIONS_URL + "onMercadoPagoWebhook?payment_id=" + payment.id;
+
+  functions.logger.info(`Webhook URL: ${webhookUrl}`);
   return (
     await mercadopago.preferences.create({
       items: [
@@ -94,10 +99,7 @@ async function getPreference(payment: IPayment): Promise<any> {
         },
       ],
       back_urls: {
-        success:
-          HOSTNAME +
-          "/api/gateway/mercadopago/approve?payment_id=" +
-          payment.id,
+        success: webhookUrl,
       },
       additional_info: String(payment.id),
       statement_descriptor: MP_ORDER_NAME,

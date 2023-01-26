@@ -8,6 +8,7 @@ export interface IUseOrderResult extends IPaymentHook {
   payment?: IMercadoPagoPayment;
   sdk?: any;
   preferenceId?: string;
+  clearCheckout: () => void;
   checkout?: () => void;
   createPayment: () => Promise<IPayment>;
 }
@@ -65,10 +66,19 @@ export const useMercadoPago = (): IUseOrderResult => {
 
   const checkout = async () => {
     if (checkoutObject) {
+      console.dir(checkoutObject);
       checkoutObject.open();
     } else {
       console.error("Checkout object is not ready");
     }
+  };
+
+  const clearCheckout = () => {
+    document
+      .getElementsByClassName("mp-mercadopago-checkout-wrapper")[0]
+      ?.remove();
+
+    document.getElementsByTagName("body")[0].style.overflow = "auto";
   };
 
   return {
@@ -77,6 +87,7 @@ export const useMercadoPago = (): IUseOrderResult => {
     preferenceId,
     createPayment,
     checkout,
+    clearCheckout,
   };
 };
 

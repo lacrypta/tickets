@@ -7,19 +7,26 @@ import Button from "../../components/Form/Button";
 import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
 
 import useMercadoPago from "../../hooks/payment/useMercadoPago";
+import { useCallback, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
 const Home: NextPage = () => {
-  const { preferenceId, checkout } = useMercadoPago();
+  const router = useRouter();
+  const { preferenceId, payment, checkout, clearCheckout } = useMercadoPago();
 
   useRedirectOnEmpty(["order", "payment"]);
 
-  function nextStep() {
-    console.info("ENTRANDO!!");
+  const nextStep = useCallback(() => {
     checkout && checkout();
-    // router.push("/pagado");
-  }
+  }, [checkout]);
+
+  useEffect(() => {
+    clearCheckout();
+    payment?.status === "paid" && router.push("/pagado");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [payment?.status]);
 
   return (
     <div>

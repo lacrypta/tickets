@@ -52,7 +52,6 @@ const Home: NextPage = () => {
         <h1>Métodos de Pago</h1>
         <Price value={1000} />
 
-        <div>{JSON.stringify(order)}</div>
         <div>
           <Button
             disabled={!order?.id}

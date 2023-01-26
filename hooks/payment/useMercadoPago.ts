@@ -39,25 +39,6 @@ export const useMercadoPago = (): IUseOrderResult => {
         preference: {
           id: preferenceId,
         },
-        render: {
-          container: "#mercadopago-checkout",
-          label: "Pagar",
-        },
-        onApprove: (data: any) => {
-          console.log("onApprove", data);
-        },
-        onPayment: (data: any) => {
-          console.log("onPayment", data);
-        },
-        onPending: (data: any) => {
-          console.log("onPending", data);
-        },
-        onRejected: (data: any) => {
-          console.log("onRejected", data);
-        },
-        onClose: () => {
-          console.log("onClose");
-        },
       });
 
       setCheckoutObject(checkout);

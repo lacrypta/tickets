@@ -8,7 +8,7 @@ import * as mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";
 
 const TICKET_PRICE = process.env.TICKET_PRICE || "2000";
-const MP_NOTIFICATION_URL = process.env.HOSTNAME || "http://localhost:3000";
+const HOSTNAME = process.env.HOSTNAME || "http://localhost:3000";
 const MP_ORDER_NAME = process.env.MP_ORDER_NAME || "La Crypta - Order";
 const CLOUD_FUNCTIONS_REGION =
   process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
@@ -84,7 +84,8 @@ export const onMercadoPagoWebhook = functions
 
 async function getPreference(payment: IPayment): Promise<any> {
   const webhookUrl =
-    process.env.FUNCTIONS_URL + "onMercadoPagoWebhook?payment_id=" + payment.id;
+    // process.env.FUNCTIONS_URL + "onMercadoPagoWebhook?payment_id=" + payment.id;
+    process.env.FUNCTIONS_URL + "onMercadoPagoWebhook";
 
   functions.logger.info(`Webhook URL: ${webhookUrl}`);
   return (
@@ -99,12 +100,12 @@ async function getPreference(payment: IPayment): Promise<any> {
         },
       ],
       back_urls: {
-        success: webhookUrl,
+        success: HOSTNAME + "/pago/success",
       },
       additional_info: String(payment.id),
       statement_descriptor: MP_ORDER_NAME,
       auto_return: "all",
-      notification_url: MP_NOTIFICATION_URL,
+      notification_url: webhookUrl,
     })
   ).body;
 }

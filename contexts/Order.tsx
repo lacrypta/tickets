@@ -84,8 +84,7 @@ export const OrderProvider = ({ children }: any) => {
   const onPaymentChange = useCallback((doc: DocumentSnapshot<DocumentData>) => {
     const payment: IPayment = { id: doc.id, ...doc.data() } as IPayment;
     setPayment(payment);
-    console.info("Payment updated");
-    console.dir(payment);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Subscribe order snapshots
@@ -129,6 +128,7 @@ export const OrderProvider = ({ children }: any) => {
 
     setOrder(order);
     return order;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Adds Payment

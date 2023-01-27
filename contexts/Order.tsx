@@ -25,7 +25,7 @@ import {
 import { IPayment, IPaymentFirestore } from "../types/payment";
 import { IUser } from "../types/user";
 import { IOrder } from "../types/order";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useLocalStorage from "use-local-storage";
 
 interface OrderContextType {
   order?: IOrder;
@@ -53,10 +53,7 @@ export const OrderProvider = ({ children }: any) => {
     undefined
   );
 
-  const [payments, setPayments] = useLocalStorage<IPayment | []>(
-    "payments",
-    []
-  );
+  const [payments, setPayments] = useLocalStorage<IPayment[]>("payments", []);
 
   const [listeningOrderId, setListeningOrderId] = useState<string>();
   const [paymentListener, setPaymentListener] = useState<any>();
@@ -151,7 +148,7 @@ export const OrderProvider = ({ children }: any) => {
       const _payment = { id: paymentRef.id, ...data } as IPayment;
 
       // Updates payments list
-      setPayments((old) => old.concat(_payment));
+      setPayments((old) => (old as IPayment[]).concat(_payment));
       return _payment;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

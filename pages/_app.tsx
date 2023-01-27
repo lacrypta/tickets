@@ -19,6 +19,7 @@ import {
   Transition,
 } from "../components/common";
 import { OrderProvider } from "../contexts/Order";
+import { Debugger } from "../components/Debugger";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -71,6 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <Transition>
                   <Component {...pageProps} />
                 </Transition>
+                {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
               </div>
             </div>
 

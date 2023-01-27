@@ -25,6 +25,7 @@ import {
 import { IPayment, IPaymentFirestore } from "../types/payment";
 import { IUser } from "../types/user";
 import { IOrder } from "../types/order";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 interface OrderContextType {
   order?: IOrder;
@@ -42,9 +43,24 @@ export const OrderContext = createContext<OrderContextType>({
 });
 
 export const OrderProvider = ({ children }: any) => {
-  const [order, setOrder] = useState<IOrder>();
-  const [payments, setPayments] = useState<IPayment[]>([]); // All payments
-  const [payment, setPayment] = useState<IPayment>();
+  const [order, setOrder] = useLocalStorage<IOrder | undefined>(
+    "order",
+    undefined
+  );
+
+  const [payment, setPayment] = useLocalStorage<IPayment | undefined>(
+    "payment",
+    undefined
+  );
+
+  const [payments, setPayments] = useLocalStorage<IPayment | []>(
+    "payments",
+    []
+  );
+
+  // const [order, setOrder] = useState<IOrder>();
+  // const [payment, setPayment] = useState<IPayment>();
+  // const [payments, setPayments] = useState<IPayment[]>([]); // All payments
 
   const [listeningOrderId, setListeningOrderId] = useState<string>();
   const [paymentListener, setPaymentListener] = useState<any>();

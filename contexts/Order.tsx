@@ -58,10 +58,6 @@ export const OrderProvider = ({ children }: any) => {
     []
   );
 
-  // const [order, setOrder] = useState<IOrder>();
-  // const [payment, setPayment] = useState<IPayment>();
-  // const [payments, setPayments] = useState<IPayment[]>([]); // All payments
-
   const [listeningOrderId, setListeningOrderId] = useState<string>();
   const [paymentListener, setPaymentListener] = useState<any>();
 

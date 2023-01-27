@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Card from "../components/common/Card";
 import Button from "../components/Form/Button";
 
@@ -19,6 +19,7 @@ const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
   const { order } = useOrder();
+  const [hasMounted, setHasMounted] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const paymentHooks: { [_key in PaymentMethod]: IPaymentHook } = {
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     setActive(false);
+    setHasMounted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -38,6 +40,10 @@ const Home: NextPage = () => {
     const { createPayment } = paymentHooks[method];
     await createPayment();
     router.push("/pago/" + method);
+  }
+
+  if (!hasMounted) {
+    return null;
   }
 
   return (
@@ -51,7 +57,6 @@ const Home: NextPage = () => {
       <Card>
         <h1>Métodos de Pago</h1>
         <Price value={1000} />
-
         <div>
           <Button
             disabled={!order?.id}

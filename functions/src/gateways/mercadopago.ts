@@ -24,7 +24,7 @@ const config: ConfigTokenOption = {
 mercadopago.configure(config);
 console.dir(config);
 
-export const onMercadopagoPayment = functions
+export const onMercadoPagoPayment = functions
   .region(CLOUD_FUNCTIONS_REGION)
   .firestore.document("/payments/{paymentId}")
   .onCreate(async (snapshot, context) => {

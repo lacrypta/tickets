@@ -79,7 +79,14 @@ export const onMercadoPagoWebhook = functions
       },
     };
 
-    functions.logger.debug(debugData);
+    functions.logger.debug("Request", debugData);
+
+    if (req.query.type !== "payment") {
+      res.status(200).send({
+        content: "Method not implemented yet",
+      });
+      return;
+    }
     admin.firestore().collection("debug").add(debugData);
 
     try {

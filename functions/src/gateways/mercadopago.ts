@@ -22,7 +22,6 @@ const config: ConfigTokenOption = {
 
 // Setup MercadoPago
 mercadopago.configure(config);
-console.dir(config);
 
 export const onMercadoPagoPayment = functions
   .region(CLOUD_FUNCTIONS_REGION)
@@ -39,7 +38,9 @@ export const onMercadoPagoPayment = functions
     let preference: any;
 
     try {
+      functions.logger.info("START:MercadoPago getPreference");
       preference = await getPreference(payment);
+      functions.logger.info("FINISH:MercadoPago getPreference");
       functions.logger.debug("preference", preference);
     } catch (e: any) {
       functions.logger.error(`Error getting preference ID from MercadoPago`, e);
@@ -67,8 +68,6 @@ export const onMercadoPagoPayment = functions
 export const onMercadoPagoWebhook = functions
   .region(CLOUD_FUNCTIONS_REGION)
   .https.onRequest(async (req, res) => {
-    functions.logger.info("Request:");
-
     const debugData = {
       req: {
         headers: req.headers,
@@ -79,7 +78,7 @@ export const onMercadoPagoWebhook = functions
       },
     };
 
-    functions.logger.debug("Request", debugData);
+    functions.logger.debug("Request debug", debugData);
 
     if (req.query.type !== "payment") {
       res.status(200).send({
@@ -87,7 +86,6 @@ export const onMercadoPagoWebhook = functions
       });
       return;
     }
-    admin.firestore().collection("debug").add(debugData);
 
     try {
       const {
@@ -99,8 +97,9 @@ export const onMercadoPagoWebhook = functions
         throw new Error("Invalid action or payment ID");
       }
 
+      functions.logger.info("Start:MercadoPago getPayment");
       const { paymentId, amount } = await getPayment(mpPaymentId);
-
+      functions.logger.info("FINISH:MercadoPago getPayment");
       await setPaymentAsPaid({ paymentId, amount, method: "mercadopago" });
 
       res.status(200).send({
@@ -126,7 +125,7 @@ async function getPreference(payment: IPayment): Promise<any> {
     "&code=" +
     hash;
 
-  functions.logger.info(`Webhook URL: ${webhookUrl}`);
+  functions.logger.info("Webhook URL", webhookUrl);
   return (
     await mercadopago.preferences.create({
       items: [

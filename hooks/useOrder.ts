@@ -15,7 +15,7 @@ export interface IUseOrderResult {
 }
 
 const useOrder = (): IUseOrderResult => {
-  const { order, payment, payments, addOrder, addPayment, clear } =
+  const { order, payment, payments, addOrder, updateOrder, addPayment, clear } =
     useContext(OrderContext);
 
   const activePayments = payments?.filter((payment) => {
@@ -26,7 +26,7 @@ const useOrder = (): IUseOrderResult => {
   const createOrder = useCallback(
     async (user: IUser) => {
       if (order && ["pending", "processing"].includes(order.status)) {
-        console.warn("Order already exists");
+        updateOrder(user);
         return order;
       }
       return addOrder(user);

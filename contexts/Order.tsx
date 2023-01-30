@@ -33,6 +33,7 @@ interface OrderContextType {
   payment?: IPayment;
   setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
   addOrder: (_user: IUser) => Promise<IOrder>;
+  updateOrder: (_user: IUser) => Promise<void>;
   addPayment: (_payment: IPayment) => Promise<IPayment>;
   clear: () => void;
 }
@@ -40,6 +41,7 @@ interface OrderContextType {
 export const OrderContext = createContext<OrderContextType>({
   setOrder: () => {},
   addOrder: () => Promise.resolve({} as IOrder),
+  updateOrder: () => Promise.resolve(),
   addPayment: () => Promise.resolve({} as IPayment),
   clear: () => {},
 });
@@ -127,6 +129,17 @@ export const OrderProvider = ({ children }: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const updateOrder = useCallback(
+    async (userData: IUser): Promise<void> => {
+      if (!order?.id) {
+        return;
+      }
+      const orderRef = doc(db, "orders", order.id);
+      updateDoc(orderRef, { user: userData });
+    },
+    [order?.id]
+  );
+
   // Adds Payment
   const addPayment = useCallback(
     async (payment: IPayment): Promise<IPayment> => {
@@ -193,6 +206,7 @@ export const OrderProvider = ({ children }: any) => {
         setOrder,
         addOrder,
         addPayment,
+        updateOrder,
         clear,
       }}
     >

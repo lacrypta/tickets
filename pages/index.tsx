@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../components/common/Card";
 import Button from "../components/Form/Button";
 import Input from "../components/Form/Input";
@@ -16,7 +16,9 @@ interface FormTargetProps extends EventTarget {
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
-  const { createOrder } = useOrder();
+  const { order, createOrder } = useOrder();
+  const [fullname, setFullname] = useState(order?.user.fullname);
+  const [email, setEmail] = useState(order?.user.email);
 
   const router = useRouter();
 
@@ -60,6 +62,8 @@ const Home: NextPage = () => {
             name='name'
             placeholder='Nombre Completo'
             defaultValue='Nombre de prueba'
+            onChange={(e) => setFullname(e.target.value)}
+            value={fullname}
           />
 
           <Input
@@ -68,6 +72,8 @@ const Home: NextPage = () => {
             type='email'
             defaultValue='preuba@email.com'
             placeholder='E-mail'
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
 
           <div className='space-y-2'></div>

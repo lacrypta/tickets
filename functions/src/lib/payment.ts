@@ -3,6 +3,9 @@ import { IPurchase } from "./../../../types/purchase";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { IOrder } from "../../../types/order";
+import { sendEmail } from "./email";
+
+const HOSTNAME = process.env.HOSTNAME || "http://localhost:3000";
 
 export const setPaymentAsPaid = async ({
   paymentId,
@@ -59,6 +62,15 @@ export const setPaymentAsPaid = async ({
     t.create(purchaseRef, purchase);
     t.update(paymentRef, { status: "paid" });
     t.update(orderRef, { status: "completed", purchaseId: purchaseRef.id });
+  });
+
+  functions.logger.info(`Sending Mail to (${order.user.email})`);
+  sendEmail({
+    email: order.user.email,
+    fullname: order.user.fullname,
+    url: HOSTNAME + "/pagado/" + purchaseRef.id,
+  }).then(() => {
+    functions.logger.info(`E-mail sent to (${order.user.email})`);
   });
 
   functions.logger.info(`Payment (${paymentId}) updated:`);

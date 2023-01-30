@@ -13,10 +13,11 @@ service cloud.firestore {
     }
 
     function filterUpdateOrder(orderData) {
+    let affectedKeys = orderData.diff(resource.data).affectedKeys();
       return
-        orderData.diff(resource.data).affectedKeys().hasOnly(["paymentId"]) &&
-        orderData.paymentId is string &&
-        get(/databases/$(database)/documents/payments/$(orderData.paymentId)).data.orderId == resource.id;
+        affectedKeys.hasOnly(["paymentId", "user"]) &&
+        !(affectedKeys.hasAny(["user"]) && !validateUserSchema(orderData.user)) &&
+        !(affectedKeys.hasAny(["paymentId"]) && !validatePaymentId(orderData.paymentId, resource.id));
     }
     
     function filterCreatePayment(paymentData) {
@@ -56,6 +57,10 @@ service cloud.firestore {
         paymentData.status in ['waiting', 'paid', 'cancelled'] &&
         paymentData.createdAt == request.time &&
         exists(/databases/$(database)/documents/orders/$(paymentData.orderId));
+    }
+
+    function validatePaymentId(paymentId, orderId) {
+      return get(/databases/$(database)/documents/payments/$(paymentId)).data.orderId == orderId;
     }
     
     // Only Admin User

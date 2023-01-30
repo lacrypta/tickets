@@ -4,6 +4,7 @@ export interface IOrder {
   id?: string;
   user: IUser;
   paymentId?: string;
+  purchaseId?: string;
   status: OrderStatus;
 }
 

@@ -36,9 +36,11 @@ export const PurchaseProvider = ({
   // Event: On Purchase change
   const onPurchaseChange = useCallback(
     async (snapshot: DocumentSnapshot<DocumentData>) => {
-      !isLoading && setIsLoading(true);
       const purchase = snapshot.data() as IPurchase;
-      setPurchase(purchase);
+      setPurchase(() => {
+        isLoading && setIsLoading(false);
+        return purchase;
+      });
     },
     [isLoading]
   );
@@ -55,7 +57,6 @@ export const PurchaseProvider = ({
 
     // Sets loading off if purchaseId is not found
     if (!purchaseId) {
-      setIsLoading(false);
       return;
     }
 

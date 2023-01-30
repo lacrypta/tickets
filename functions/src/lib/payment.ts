@@ -1,3 +1,5 @@
+import { IPayment } from "./../../../types/payment";
+import { IPurchase } from "./../../../types/purchase";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
@@ -35,16 +37,26 @@ export const setPaymentAsPaid = async ({
   functions.logger.debug(`Order stored`, order);
 
   // Validate order
-  if (!["pending", "processing"].includes(order?.status)) {
+  if (!order || !["pending", "processing"].includes(order.status)) {
     throw new Error(
       "Order must be pending or processing, must be " + order?.status
     );
   }
 
+  // Create from Purchase element
+  const purchaseRef = admin.firestore().collection("purchases").doc();
+  const purchase: IPurchase = {
+    id: purchaseRef.id,
+    user: order.user,
+    payment: payment as IPayment,
+    status: "ready",
+  };
+
   // Update order and payment
   admin.firestore().runTransaction(async (t) => {
+    t.create(purchaseRef, purchase);
     t.update(paymentRef, { status: "paid" });
-    t.update(orderRef, { status: "completed" });
+    t.update(orderRef, { status: "completed", purchaseId: purchaseRef.id });
   });
 
   functions.logger.info(`Payment (${paymentId}) updated:`);

@@ -11,10 +11,11 @@ export interface IUseOrderResult {
   activePayments?: IPayment[];
   createOrder: (_order: IUser) => Promise<IOrder>;
   createPayment: (_payment: IPayment) => Promise<IPayment>;
+  clear: () => void;
 }
 
 const useOrder = (): IUseOrderResult => {
-  const { order, payment, payments, addOrder, addPayment } =
+  const { order, payment, payments, addOrder, addPayment, clear } =
     useContext(OrderContext);
 
   const activePayments = payments?.filter((payment) => {
@@ -54,6 +55,7 @@ const useOrder = (): IUseOrderResult => {
     activePayments,
     createOrder,
     createPayment,
+    clear,
   };
 };
 

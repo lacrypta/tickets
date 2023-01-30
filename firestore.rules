@@ -88,5 +88,10 @@ service cloud.firestore {
       allow get: if true;
       allow create: if filterCreatePayment(request.resource.data);
     }
+
+    // Purchases
+    match /purchases/{purchaseId} {
+      allow get: if true;
+    }
   }
 }

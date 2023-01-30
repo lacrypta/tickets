@@ -34,12 +34,14 @@ interface OrderContextType {
   setOrder: Dispatch<SetStateAction<IOrder | undefined>>;
   addOrder: (_user: IUser) => Promise<IOrder>;
   addPayment: (_payment: IPayment) => Promise<IPayment>;
+  clear: () => void;
 }
 
 export const OrderContext = createContext<OrderContextType>({
   setOrder: () => {},
   addOrder: () => Promise.resolve({} as IOrder),
   addPayment: () => Promise.resolve({} as IPayment),
+  clear: () => {},
 });
 
 export const OrderProvider = ({ children }: any) => {
@@ -66,7 +68,6 @@ export const OrderProvider = ({ children }: any) => {
 
       // If paymentId is found, subscribe payment listener
       if (data.paymentId && data.paymentId !== payment?.id) {
-        console.dir("New PaymentId found!");
         paymentListener && paymentListener(); // Unsubscribe previous payment listener
         setPaymentListener(subscribePayment(data.paymentId));
       }
@@ -112,8 +113,6 @@ export const OrderProvider = ({ children }: any) => {
       status: "pending",
     };
 
-    console.info("Adding order");
-    console.dir(order);
     addDoc(collection(db, "orders"), {
       ...order,
       createdAt: serverTimestamp(),
@@ -165,6 +164,14 @@ export const OrderProvider = ({ children }: any) => {
     [order]
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const clear = useCallback(() => {
+    setOrder(undefined);
+    setPayment(undefined);
+    setPayments([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const orderId = order?.id as string;
     // Prevent subscribe if its already listening to the orderId
@@ -179,7 +186,15 @@ export const OrderProvider = ({ children }: any) => {
 
   return (
     <OrderContext.Provider
-      value={{ order, payment, payments, setOrder, addOrder, addPayment }}
+      value={{
+        order,
+        payment,
+        payments,
+        setOrder,
+        addOrder,
+        addPayment,
+        clear,
+      }}
     >
       {children}
     </OrderContext.Provider>

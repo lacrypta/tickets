@@ -60,7 +60,6 @@ export const useMercadoPago = (): IUseOrderResult => {
 
   const checkout = async () => {
     if (checkoutObject) {
-      console.dir(checkoutObject);
       checkoutObject.open();
     } else {
       console.error("Checkout object is not ready");

@@ -2,6 +2,7 @@ import { IPayment } from "./../../../types/payment";
 import { IPurchase } from "./../../../types/purchase";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import { IOrder } from "../../../types/order";
 
 export const setPaymentAsPaid = async ({
   paymentId,
@@ -48,7 +49,8 @@ export const setPaymentAsPaid = async ({
   const purchase: IPurchase = {
     id: purchaseRef.id,
     user: order.user,
-    payment: payment as IPayment,
+    payment: { ...(payment as IPayment), status: "paid" },
+    order: { ...(order as IOrder), status: "completed" },
     status: "ready",
   };
 

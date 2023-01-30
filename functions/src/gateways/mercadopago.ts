@@ -3,8 +3,8 @@ import { IPayment, IPaymentFirestore } from "./../../../types/payment";
 
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-
 import * as mercadopago from "mercadopago";
+
 import { ConfigTokenOption } from "mercadopago/configuration";
 import { setPaymentAsPaid } from "../lib/payment";
 

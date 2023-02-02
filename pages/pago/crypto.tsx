@@ -1,17 +1,27 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Price from "../../components/Checkout/Price";
 import Card from "../../components/common/Card";
 import Button from "../../components/Form/Button";
+import { ConnectWallet } from "@thirdweb-dev/react";
+import { useAddress } from "@thirdweb-dev/react";
 
 import useLoading from "../../hooks/useLoading";
 import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
+import CryptoModal from "../../components/Crypto/CryptoModal";
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
+  const address = useAddress();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClose = () => {
+    setIsOpen(false);
+  };
 
   useRedirectOnEmpty(["order", "payment"]);
 
@@ -35,9 +45,18 @@ const Home: NextPage = () => {
       <Card>
         <h1>Crypto</h1>
         <Price value={1000} />
-        <div>
-          <Button onClick={nextStep}>Pagar</Button>
-        </div>
+        {!address ? (
+          <div>
+            <ConnectWallet />
+          </div>
+        ) : (
+          <div>
+            <div>
+              <CryptoModal isOpen={isOpen} onClose={onClose} />
+              <Button onClick={() => setIsOpen(true)}>Pagar</Button>
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );

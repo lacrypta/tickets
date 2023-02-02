@@ -12,12 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@ethereumjs/common": "^3.0.0",
-    "@ethereumjs/tx": "^4.0.0",
-    "@ethersproject/bytes": "^5.7.0",
     "@firebase/firestore": "^3.5.0",
     "@headlessui/react": "^1.7.7",
-    "@rainbow-me/rainbowkit": "^0.8.1",
     "ethers": "^5.7.1",
     "firebase": "^9.10.0",
     "firebase-admin": "^11.0.1",
@@ -30,8 +26,6 @@
     "react-qr-code": "^2.0.8",
     "react-sdk-mercadopago": "^1.1.1",
     "use-local-storage": "^2.3.6",
-    "wagmi": "=0.6.8",
-    "web3": "^1.8.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {

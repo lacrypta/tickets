@@ -1,15 +1,6 @@
 import "../styles/globals.css";
-import "@rainbow-me/rainbowkit/styles.css";
 export { reportWebVitals } from "next-axiom";
 import type { AppProps } from "next/app";
-import {
-  RainbowKitProvider,
-  getDefaultWallets,
-  darkTheme,
-} from "@rainbow-me/rainbowkit";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-// import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { publicProvider } from "wagmi/providers/public";
 
 import { LoadingProvider } from "../contexts/Loading";
 import {
@@ -21,64 +12,22 @@ import {
 import { OrderProvider } from "../contexts/Order";
 import { Debugger } from "../components/Debugger";
 
-const { chains, provider, webSocketProvider } = configureChains(
-  [
-    chain.polygon,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-      ? [chain.polygonMumbai]
-      : []),
-  ],
-  [
-    // alchemyProvider({
-    //   // This is Alchemy's default API key.
-    //   // You can get your own at https://dashboard.alchemyapi.io
-    //   apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
-    // }),
-    publicProvider(),
-    // jsonRpcProvider({
-    //   rpc: () => ({
-    //     http: process.env.NEXT_PUBLIC_RPC_ADDRESS || `http://127.0.0.1:8545/`,
-    //   }),
-    // }),
-  ]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: "La Crypta - Entradas",
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-  webSocketProvider,
-});
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <LoadingProvider>
       <OrderProvider>
-        <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider
-            modalSize='compact'
-            theme={darkTheme()}
-            chains={chains}
-          >
-            <div className='flex justify-center relative w-full min-h-screen'>
-              <Background />
-              <div className='w-[42rem] mt-5 md:mt-20'>
-                <HeaderLogo />
-                <Transition>
-                  <Component {...pageProps} />
-                </Transition>
-                {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
-              </div>
-            </div>
+        <div className='flex justify-center relative w-full min-h-screen'>
+          <Background />
+          <div className='w-[42rem] mt-5 md:mt-20'>
+            <HeaderLogo />
+            <Transition>
+              <Component {...pageProps} />
+            </Transition>
+            {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
+          </div>
+        </div>
 
-            <Footer />
-          </RainbowKitProvider>
-        </WagmiConfig>
+        <Footer />
       </OrderProvider>
     </LoadingProvider>
   );

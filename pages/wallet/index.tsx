@@ -2,11 +2,13 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useEffect } from "react";
 import Card from "../../components/common/Card";
+import WalletMain from "../../components/Wallet/WalletMain";
+import { PurchaseProvider } from "../../contexts/Purchase";
 
 import useLoading from "../../hooks/useLoading";
 
 const Home: NextPage = () => {
-  const { setActive } = useLoading();
+  const { setActive, active } = useLoading();
 
   useEffect(() => {
     setActive(false);
@@ -14,7 +16,7 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <div>
+    <PurchaseProvider>
       <Head>
         <title>La Crypta - Pagar con MercadoPago</title>
         <meta name='description' content='Entradas de La Crypta' />
@@ -23,9 +25,9 @@ const Home: NextPage = () => {
 
       <Card>
         <h1>Configurar Wallet</h1>
-        <div>Alguna data</div>
+        {active ? "Cargando..." : <WalletMain />}
       </Card>
-    </div>
+    </PurchaseProvider>
   );
 };
 

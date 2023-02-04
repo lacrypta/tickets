@@ -24,7 +24,7 @@ export const PurchaseContext = createContext<PurchaseContextType>({
 
 interface PurchaseProviderProps {
   children: ReactNode;
-  purchaseId: string;
+  purchaseId?: string;
 }
 
 export const PurchaseProvider = ({
@@ -36,6 +36,7 @@ export const PurchaseProvider = ({
     undefined
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   // Event: On Purchase change
   const onPurchaseChange = useCallback(
@@ -43,6 +44,8 @@ export const PurchaseProvider = ({
       const purchase = snapshot.data() as IPurchase;
       setPurchase(() => {
         isLoading && setIsLoading(false);
+        purchase.id = snapshot.id;
+        console.info("changed");
         return purchase;
       });
     },
@@ -52,6 +55,7 @@ export const PurchaseProvider = ({
 
   // Subscribe purchase snapshots
   const subscribePurchase = useCallback(async (paymentId: string) => {
+    console.info("subscribePurchase");
     // get snapshot query firestore for order
     return onSnapshot(doc(db, "purchases", paymentId), onPurchaseChange);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,6 +71,8 @@ export const PurchaseProvider = ({
 
     setPurchase(undefined);
 
+    console.info("INSIDE SECOND CALL");
+    setIsSubscribed(true);
     subscribePurchase(purchaseId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchaseId]);

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Router, useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { PurchaseContext } from "../../contexts/Purchase";
@@ -8,11 +9,19 @@ import TextAttention from "./TextAttention";
 export const Details = () => {
   const { isLoading, purchase } = useContext(PurchaseContext);
   const { clear } = useOrder();
+  const router = useRouter();
 
   useEffect(() => {
     if (purchase) {
+      if (purchase.status === "claimed") {
+        console.info("****** ROUTER");
+        console.dir(router);
+        router.push("/wallet");
+      }
+
       clear(); // Clear order
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchase]);
 

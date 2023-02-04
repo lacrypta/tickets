@@ -19,7 +19,7 @@ const Home: NextPage = () => {
   return (
     <PurchaseProvider purchaseId={router.query.pid as string}>
       <Head>
-        <title>La Crypta - Pagado</title>
+        <title>La Crypta - entrada</title>
         <meta name='description' content='Entradas de La Crypta' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

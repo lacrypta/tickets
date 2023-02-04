@@ -40,7 +40,7 @@ const Home: NextPage = () => {
     (purchaseId: string) => {
       clearCheckout();
       setRedirectOn([]); // Prevents redirect while clearing order and payment
-      router.push("/pagado/" + purchaseId);
+      router.push("/entrada/" + purchaseId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clearCheckout]

@@ -23,7 +23,7 @@ import {
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyC62592R46yS8ubM6eCiY0QZN6n7hBjGSk",
   authDomain: "la-crypta---eventos-c5209.firebaseapp.com",
   projectId: "la-crypta---eventos-c5209",

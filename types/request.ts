@@ -52,3 +52,9 @@ export const ClaimCodeRequestSchema = z.object({
   orderId: z.string(),
   code: z.string(),
 });
+
+export type ResponseType = {
+  success: boolean;
+  message?: string;
+  data?: any;
+};

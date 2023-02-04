@@ -37,12 +37,10 @@ export const CryptoModal = ({ isOpen, onClose }: ICryptoModalProps) => {
             leaveTo='opacity-0 scale-95'
           >
             <Dialog.Panel className='w-full max-w-sm rounded bg-white text-black p-5'>
-              <h1 className='mb-2'>Wallet detector</h1>
-              <Dialog.Description>Qué tokens tenemos?</Dialog.Description>
+              <h1 className='mb-2'>Pago con crypto</h1>
+              <Dialog.Description>En construcción....</Dialog.Description>
 
-              <p>Lista de tokens</p>
-
-              <Button>Pagar</Button>
+              <Button disabled={true}>Pagar</Button>
             </Dialog.Panel>
           </Transition.Child>
         </div>

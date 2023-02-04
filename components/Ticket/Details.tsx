@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useContext, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { PurchaseContext } from "../../contexts/Purchase";
@@ -34,9 +35,15 @@ export const Details = ({ nextStep }: IDetailsProps) => {
       <div>E-mail : {purchase?.user.email}</div>
       <div>Te enviamos por por mail el QR</div>
       <div className='flex justify-center'>
-        <div className='bg-white p-2'>
-          <QRCode value={document.location.href} />
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+        >
+          <div className='bg-white p-2'>
+            <QRCode value={document.location.href} />
+          </div>
+        </motion.div>
       </div>
       <div>
         <Button onClick={nextStep}>Preparar Wallet</Button>

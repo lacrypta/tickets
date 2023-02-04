@@ -17,8 +17,8 @@ import {
 
 import {
   getAuth,
-  onAuthStateChanged,
   signInWithCustomToken,
+  onAuthStateChanged,
 } from "@firebase/auth";
 
 // Your web app's Firebase configuration
@@ -53,8 +53,8 @@ export {
   query,
   where,
   Query,
-  getAuth,
-  onAuthStateChanged,
-  signInWithCustomToken,
   QuerySnapshot,
+  getAuth,
+  signInWithCustomToken,
+  onAuthStateChanged,
 };

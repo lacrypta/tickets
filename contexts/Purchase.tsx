@@ -10,6 +10,7 @@ import { IPurchase } from "../types/purchase";
 
 import { onSnapshot, doc, db } from "../lib/public/firebase";
 import { DocumentData, DocumentSnapshot } from "@firebase/firestore";
+import useLocalStorage from "use-local-storage";
 
 interface PurchaseContextType {
   purchase?: IPurchase;
@@ -30,7 +31,10 @@ export const PurchaseProvider = ({
   children,
   purchaseId,
 }: PurchaseProviderProps) => {
-  const [purchase, setPurchase] = useState<IPurchase | undefined>();
+  const [purchase, setPurchase] = useLocalStorage<IPurchase | undefined>(
+    "purchase",
+    undefined
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Event: On Purchase change
@@ -42,6 +46,7 @@ export const PurchaseProvider = ({
         return purchase;
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isLoading]
   );
 
@@ -59,6 +64,8 @@ export const PurchaseProvider = ({
     if (!purchaseId) {
       return;
     }
+
+    setPurchase(undefined);
 
     subscribePurchase(purchaseId);
     // eslint-disable-next-line react-hooks/exhaustive-deps

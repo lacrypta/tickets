@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Price from "../../components/Checkout/Price";
 import Card from "../../components/common/Card";
@@ -14,7 +13,6 @@ import CryptoModal from "../../components/Crypto/CryptoModal";
 
 const Home: NextPage = () => {
   const { setActive } = useLoading();
-  const router = useRouter();
   const address = useAddress();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -29,10 +27,6 @@ const Home: NextPage = () => {
     setActive(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function nextStep() {
-    router.push("/pagado");
-  }
 
   return (
     <div>

@@ -11,10 +11,6 @@ const Home: NextPage = () => {
   const router = useRouter();
   const { setActive } = useLoading();
 
-  function nextStep() {
-    router.push("/wallet");
-  }
-
   useEffect(() => {
     setActive(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,7 +24,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Card>
-        <Details nextStep={nextStep} />
+        <Details />
       </Card>
     </PurchaseProvider>
   );

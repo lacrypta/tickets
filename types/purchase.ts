@@ -7,6 +7,7 @@ export interface IPurchase {
   user: IUser;
   payment?: IPayment;
   order?: IOrder;
+  lnUrlw?: string;
   status: OrderStatus;
 }
 

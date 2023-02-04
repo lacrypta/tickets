@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { PurchaseContext } from "../../contexts/Purchase";

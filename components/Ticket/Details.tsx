@@ -3,13 +3,9 @@ import { useContext, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { PurchaseContext } from "../../contexts/Purchase";
 import useOrder from "../../hooks/useOrder";
-import Button from "../Form/Button";
+import TextAttention from "./TextAttention";
 
-interface IDetailsProps {
-  nextStep: () => void;
-}
-
-export const Details = ({ nextStep }: IDetailsProps) => {
+export const Details = () => {
   const { isLoading, purchase } = useContext(PurchaseContext);
   const { clear } = useOrder();
 
@@ -30,7 +26,7 @@ export const Details = ({ nextStep }: IDetailsProps) => {
 
   return (
     <>
-      <h1>Pagado!</h1>
+      <h1>Entrada</h1>
       <div>Nombre : {purchase?.user.fullname}</div>
       <div>E-mail : {purchase?.user.email}</div>
       <div>Te enviamos por por mail el QR</div>
@@ -45,9 +41,13 @@ export const Details = ({ nextStep }: IDetailsProps) => {
           </div>
         </motion.div>
       </div>
-      <div>
-        <Button onClick={nextStep}>Preparar Wallet</Button>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
+      >
+        <TextAttention>Mostralo en la entrada</TextAttention>
+      </motion.div>
     </>
   );
 };

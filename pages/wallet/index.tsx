@@ -7,7 +7,7 @@ import { PurchaseProvider } from "../../contexts/Purchase";
 
 import useLoading from "../../hooks/useLoading";
 
-const Home: NextPage = () => {
+const WalletPage: NextPage = () => {
   const { setActive, active } = useLoading();
 
   useEffect(() => {
@@ -31,4 +31,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default WalletPage;

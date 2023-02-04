@@ -15,7 +15,7 @@ import useMercadoPago from "../hooks/payment/useMercadoPago";
 import { useRedirectOnEmpty } from "../hooks/useRedirectOnEmpty";
 import useOrder from "../hooks/useOrder";
 
-const Home: NextPage = () => {
+const PaymentPage: NextPage = () => {
   const { setActive } = useLoading();
   const router = useRouter();
   const { order } = useOrder();
@@ -75,4 +75,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default PaymentPage;

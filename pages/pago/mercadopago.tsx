@@ -17,7 +17,7 @@ import useOrder from "../../hooks/useOrder";
 
 const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
-const Home: NextPage = () => {
+const MercadoPagoPage: NextPage = () => {
   const router = useRouter();
   const { preferenceId, checkout, clearCheckout } = useMercadoPago();
   const { order } = useOrder();
@@ -82,4 +82,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default MercadoPagoPage;

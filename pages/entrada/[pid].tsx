@@ -7,7 +7,7 @@ import { Details } from "../../components/Ticket/Details";
 import { PurchaseProvider } from "../../contexts/Purchase";
 import useLoading from "../../hooks/useLoading";
 
-const Home: NextPage = () => {
+const TicketPage: NextPage = () => {
   const router = useRouter();
   const { setActive } = useLoading();
 
@@ -30,4 +30,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default TicketPage;

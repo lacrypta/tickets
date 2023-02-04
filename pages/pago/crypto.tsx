@@ -11,7 +11,7 @@ import useLoading from "../../hooks/useLoading";
 import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
 import CryptoModal from "../../components/Crypto/CryptoModal";
 
-const Home: NextPage = () => {
+const CryptoPage: NextPage = () => {
   const { setActive } = useLoading();
   const address = useAddress();
 
@@ -56,4 +56,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default CryptoPage;

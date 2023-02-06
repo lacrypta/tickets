@@ -62,8 +62,6 @@ export const PurchaseProvider = ({
   }, []);
 
   useEffect(() => {
-    console.info("Purchase ID", purchaseId);
-
     // Sets loading off if purchaseId is not found
     if (!purchaseId) {
       return;

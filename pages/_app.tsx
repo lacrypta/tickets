@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 export { reportWebVitals } from "next-axiom";
+import ReactGA from "react-ga";
 import type { AppProps } from "next/app";
 
 import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
@@ -13,8 +14,19 @@ import {
 } from "../components/common";
 import { OrderProvider } from "../contexts/Order";
 import { Debugger } from "../components/Debugger";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  useEffect(() => {
+    ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_ID as string);
+  }, []);
+
+  useEffect(() => {
+    ReactGA.pageview(router.asPath);
+  }, [router.asPath]);
+
   return (
     <LoadingProvider>
       <OrderProvider>

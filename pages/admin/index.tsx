@@ -17,6 +17,8 @@ const AdminPage: NextPage = () => {
   onAuthStateChanged(auth, (user: any) => {
     if (user) {
       setIsLogged(true);
+    } else {
+      setIsLogged(false);
     }
   });
 

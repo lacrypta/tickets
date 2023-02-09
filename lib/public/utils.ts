@@ -8,4 +8,9 @@ const randomString = (length: number = 10): string => {
   return outString;
 };
 
-export { randomString };
+const getTicketId = (text: string): string | null => {
+  const matched = text.match(/\/entrada\/([\d\w]+)$/);
+  return matched ? matched[1] : null;
+};
+
+export { randomString, getTicketId };

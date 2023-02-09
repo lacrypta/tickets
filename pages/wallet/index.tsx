@@ -1,22 +1,41 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 import Card from "../../components/common/Card";
-import WalletMain from "../../components/Wallet/WalletMain";
-import { PurchaseProvider } from "../../contexts/Purchase";
+import WalletStep1 from "../../components/Wallet/WalletStep1";
+import { PurchaseContext } from "../../contexts/Purchase";
 
 import useLoading from "../../hooks/useLoading";
 
 const WalletPage: NextPage = () => {
-  const { setActive, active } = useLoading();
+  const { purchase } = useContext(PurchaseContext);
+  const router = useRouter();
+  const { setActive } = useLoading();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setActive(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!purchase) {
+      router.push("/");
+      return;
+    }
+
+    if (purchase.status === "ready") {
+      router.push("/entrada/" + purchase.id);
+      return;
+    }
+
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [purchase]);
+
   return (
-    <PurchaseProvider>
+    <>
       <Head>
         <title>La Crypta - Pagar con MercadoPago</title>
         <meta name='description' content='Entradas de La Crypta' />
@@ -25,9 +44,9 @@ const WalletPage: NextPage = () => {
 
       <Card>
         <h1>Configurar Wallet</h1>
-        {active ? "Cargando..." : <WalletMain />}
+        {isLoading ? "Cargando..." : <WalletStep1 />}
       </Card>
-    </PurchaseProvider>
+    </>
   );
 };
 

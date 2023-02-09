@@ -17,6 +17,7 @@ import { Debugger } from "../components/Debugger";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { QrScannerProvider } from "../contexts/QrScanner";
+import { PurchaseProvider } from "../contexts/Purchase";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -30,24 +31,26 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <LoadingProvider>
-      <QrScannerProvider>
-        <OrderProvider>
-          <ThirdwebProvider desiredChainId={ChainId.Polygon}>
-            <div className='flex justify-center relative w-full min-h-screen'>
-              <Background />
-              <div className='w-[42rem] mt-5 md:mt-20'>
-                <HeaderLogo />
-                <Transition>
-                  <Component {...pageProps} />
-                </Transition>
-                {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
+      <PurchaseProvider>
+        <QrScannerProvider>
+          <OrderProvider>
+            <ThirdwebProvider desiredChainId={ChainId.Polygon}>
+              <div className='flex justify-center relative w-full min-h-screen'>
+                <Background />
+                <div className='w-[42rem] mt-5 md:mt-20'>
+                  <HeaderLogo />
+                  <Transition>
+                    <Component {...pageProps} />
+                  </Transition>
+                  {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
+                </div>
               </div>
-            </div>
 
-            <Footer />
-          </ThirdwebProvider>
-        </OrderProvider>
-      </QrScannerProvider>
+              <Footer />
+            </ThirdwebProvider>
+          </OrderProvider>
+        </QrScannerProvider>
+      </PurchaseProvider>
     </LoadingProvider>
   );
 }

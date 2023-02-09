@@ -38,11 +38,6 @@ export const QrScannerProvider = ({ children }: QrScannerProviderProps) => {
     async (purchaseId: string): Promise<IPurchase | undefined> => {
       const purchaseRef = doc(db, "purchases", purchaseId);
       const purchase = await getDoc(purchaseRef);
-
-      console.info("From Database");
-      console.dir(purchase);
-      console.dir(purchase.data());
-
       if (!purchase) {
         return;
       }
@@ -54,7 +49,7 @@ export const QrScannerProvider = ({ children }: QrScannerProviderProps) => {
   // Sets purchase as claimed
   const setPurchaseAsClaimed = useCallback(
     async (purchaseId: string): Promise<void> => {
-      const purchaseRef = doc(db, "orders", purchaseId);
+      const purchaseRef = doc(db, "purchases", purchaseId);
       return await updateDoc(purchaseRef, {
         status: "claimed",
       });

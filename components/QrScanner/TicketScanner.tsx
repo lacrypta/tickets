@@ -27,8 +27,6 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       }
       const purchase = await getPurchaseById(id);
 
-      console.info("purchase info");
-      console.dir(purchase);
       if (!purchase) {
         throw new Error("Ticket not found");
       }
@@ -42,6 +40,7 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
     } catch (e: any) {
       setErrorMessage(e.message);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onResult = useCallback((result: any, error: any) => {

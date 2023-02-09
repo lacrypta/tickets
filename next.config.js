@@ -3,7 +3,7 @@
 const { withAxiom } = require("next-axiom");
 
 const nextConfig = withAxiom({
-  reactStrictMode: true,
+  reactStrictMode: false,
 
   webpack(config) {
     config.module.rules.push({

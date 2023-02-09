@@ -13,5 +13,19 @@
       ],
       "predeploy": ["yarn --cwd functions build"]
     }
-  ]
+  ],
+  "emulators": {
+    "functions": {
+      "port": 5001,
+      "host": "0.0.0.0"
+    },
+    "firestore": {
+      "port": 8080,
+      "host": "0.0.0.0"
+    },
+    "hosting": {
+      "port": 4000,
+      "host": "0.0.0.0"
+    }
+  }
 }

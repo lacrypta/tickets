@@ -1,7 +1,7 @@
 const ids = {
   order: "NwAgiWiN6CrTtgzrS5Ck",
   payment: "igxZPqX9tcHP0Xl6cJk4",
-  purchase: "0LgFD7JIV8SICxj4eBJ4",
+  purchase: "mock1234",
 };
 
 export const user = {

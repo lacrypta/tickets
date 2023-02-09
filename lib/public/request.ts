@@ -1,6 +1,9 @@
 import { ResponseType } from "../../types/request";
 
-const ajaxCall = async (path: string, data: any): Promise<ResponseType> => {
+const ajaxCall = async (
+  path: string,
+  data: any = {}
+): Promise<ResponseType> => {
   const res = await fetch("/api/" + path, {
     method: "POST",
     headers: {

@@ -1,7 +1,15 @@
 import { initializeApp, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
 
+// Import service accounts from environment
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
+
+// Set emulator variables if present
+process.env.FIREBASE_AUTH_EMULATOR_HOST =
+  process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST;
+process.env.FIRESTORE_EMULATOR_HOST =
+  process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST;
 
 // Initialize Firebase
 try {
@@ -16,4 +24,7 @@ try {
   }
 }
 
-export { getAuth };
+const db = getFirestore();
+const auth = getAuth();
+
+export { auth, db };

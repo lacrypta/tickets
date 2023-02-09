@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getAuth } from "../../lib/private/firebase";
+import { auth } from "../../lib/private/firebase";
 import { ResponseType } from "../../types/request";
 
 export default async function handler(
@@ -20,7 +20,7 @@ export default async function handler(
       adminAccount: true,
     };
 
-    const token = await getAuth().createCustomToken(userId, additionalClaims);
+    const token = await auth.createCustomToken(userId, additionalClaims);
 
     res.status(200).json({ success: true, data: { token } });
   } catch (e: any) {

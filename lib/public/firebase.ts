@@ -42,7 +42,7 @@ const db = getFirestore(app);
 // Firestore emulator config
 if (process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST) {
   const [host, port] =
-    process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST.split("//")[1].split(":");
+    process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST.split(":");
   connectFirestoreEmulator(db, host, parseInt(port));
   console.info("Connected to local firestore");
 }

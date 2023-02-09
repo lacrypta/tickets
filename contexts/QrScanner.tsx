@@ -3,24 +3,27 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useState,
 } from "react";
 import TicketScanner from "../components/QrScanner/TicketScanner";
-
-import type { CallbackFunction } from "../components/QrScanner/TicketScanner";
+import { getDoc, db, doc, updateDoc } from "../lib/public/firebase";
+import { IPurchase } from "../types/purchase";
 
 export interface QrScannerContextType {
   isLoading: boolean;
   active: boolean;
+  getPurchaseById: (_purchaseId: string) => Promise<IPurchase | undefined>;
+  setPurchaseAsClaimed: (_purchaseId: string) => Promise<void>;
   setActive: Dispatch<SetStateAction<boolean>>;
-  setCallback: Dispatch<SetStateAction<CallbackFunction>>;
 }
 
 export const QrScannerContext = createContext<QrScannerContextType>({
   isLoading: true,
   active: false,
+  setPurchaseAsClaimed: async () => {},
+  getPurchaseById: async () => undefined,
   setActive: () => {},
-  setCallback: () => {},
 });
 
 export interface QrScannerProviderProps {
@@ -29,18 +32,52 @@ export interface QrScannerProviderProps {
 
 export const QrScannerProvider = ({ children }: QrScannerProviderProps) => {
   const [active, setActive] = useState<boolean>(false);
-  const [callback, setCallback] = useState<CallbackFunction>(() => {});
+
+  // Get purchase by ID
+  const getPurchaseById = useCallback(
+    async (purchaseId: string): Promise<IPurchase | undefined> => {
+      const purchaseRef = doc(db, "purchases", purchaseId);
+      const purchase = await getDoc(purchaseRef);
+
+      console.info("From Database");
+      console.dir(purchase);
+      console.dir(purchase.data());
+
+      if (!purchase) {
+        return;
+      }
+      return { id: purchase.id, ...purchase.data() } as IPurchase;
+    },
+    []
+  );
+
+  // Sets purchase as claimed
+  const setPurchaseAsClaimed = useCallback(
+    async (purchaseId: string): Promise<void> => {
+      const purchaseRef = doc(db, "orders", purchaseId);
+      return await updateDoc(purchaseRef, {
+        status: "claimed",
+      });
+    },
+    []
+  );
+
+  const onClose = useCallback(() => {
+    setActive(false);
+  }, []);
+
   return (
     <QrScannerContext.Provider
       value={{
         isLoading: true,
         active,
+        setPurchaseAsClaimed,
+        getPurchaseById,
         setActive,
-        setCallback,
       }}
     >
       <>
-        {active && <TicketScanner onFound={callback} />}
+        {active && <TicketScanner onClose={onClose} />}
         {children}
       </>
     </QrScannerContext.Provider>

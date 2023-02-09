@@ -20,6 +20,7 @@ import {
   getAuth,
   signInWithCustomToken,
   onAuthStateChanged,
+  connectAuthEmulator,
 } from "@firebase/auth";
 
 // Your web app's Firebase configuration
@@ -38,9 +39,19 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-if (process.env.NEXT_PUBLIC_LOCALHOST) {
-  connectFirestoreEmulator(db, "192.168.1.168", 8080);
+// Firestore emulator config
+if (process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST) {
+  const [host, port] =
+    process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST.split("//")[1].split(":");
+  connectFirestoreEmulator(db, host, parseInt(port));
   console.info("Connected to local firestore");
+}
+
+// Firebase Auth emulator config
+if (process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST) {
+  const url = process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST;
+  connectAuthEmulator(getAuth(app), url as string);
+  console.info("Connected to local Auth");
 }
 
 export {

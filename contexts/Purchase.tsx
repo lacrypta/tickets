@@ -1,6 +1,8 @@
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useCallback,
   useEffect,
   useState,
@@ -15,28 +17,26 @@ import useLocalStorage from "use-local-storage";
 interface PurchaseContextType {
   purchase?: IPurchase;
   isLoading: boolean;
+  setPurchaseId: Dispatch<SetStateAction<string | undefined>>;
 }
 
 // create Purchase context
 export const PurchaseContext = createContext<PurchaseContextType>({
   isLoading: true,
+  setPurchaseId: () => {},
 });
 
 interface PurchaseProviderProps {
   children: ReactNode;
-  purchaseId?: string;
 }
 
-export const PurchaseProvider = ({
-  children,
-  purchaseId,
-}: PurchaseProviderProps) => {
+export const PurchaseProvider = ({ children }: PurchaseProviderProps) => {
   const [purchase, setPurchase] = useLocalStorage<IPurchase | undefined>(
     "purchase",
     undefined
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [purchaseId, setPurchaseId] = useState<string>();
 
   // Event: On Purchase change
   const onPurchaseChange = useCallback(
@@ -45,7 +45,6 @@ export const PurchaseProvider = ({
       setPurchase(() => {
         isLoading && setIsLoading(false);
         purchase.id = snapshot.id;
-        console.info("changed");
         return purchase;
       });
     },
@@ -55,7 +54,7 @@ export const PurchaseProvider = ({
 
   // Subscribe purchase snapshots
   const subscribePurchase = useCallback(async (paymentId: string) => {
-    console.info("subscribePurchase");
+    setIsLoading(true);
     // get snapshot query firestore for order
     return onSnapshot(doc(db, "purchases", paymentId), onPurchaseChange);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,9 +67,6 @@ export const PurchaseProvider = ({
     }
 
     setPurchase(undefined);
-
-    console.info("INSIDE SECOND CALL");
-    setIsSubscribed(true);
     subscribePurchase(purchaseId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchaseId]);
@@ -80,6 +76,7 @@ export const PurchaseProvider = ({
       value={{
         purchase,
         isLoading,
+        setPurchaseId,
       }}
     >
       {children}

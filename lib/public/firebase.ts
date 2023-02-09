@@ -11,6 +11,7 @@ import {
   query,
   where,
   Query,
+  getDoc,
   QuerySnapshot,
   connectFirestoreEmulator,
 } from "@firebase/firestore";
@@ -38,7 +39,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 if (process.env.NEXT_PUBLIC_LOCALHOST) {
-  connectFirestoreEmulator(db, "localhost", 8080);
+  connectFirestoreEmulator(db, "192.168.1.168", 8080);
   console.info("Connected to local firestore");
 }
 
@@ -50,6 +51,7 @@ export {
   addDoc,
   updateDoc,
   deleteDoc,
+  getDoc,
   query,
   where,
   Query,

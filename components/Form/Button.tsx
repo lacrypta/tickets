@@ -78,11 +78,11 @@ const Back = styled(Side)`
   }
 `;
 
-export const Button = ({ children, ...rest }: ButtonProps) => {
-  const className = "container " + (rest.disabled ? " disabled" : "enabled");
+export const Button = ({ children, className, ...rest }: ButtonProps) => {
+  const enabledClass = "container " + (rest.disabled ? " disabled" : "enabled");
   return (
-    <MainButton {...rest}>
-      <Container className={className}>
+    <MainButton className={className} {...rest}>
+      <Container className={enabledClass}>
         <Front>{children}</Front>
         <Back>{children}</Back>
       </Container>

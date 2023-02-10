@@ -1,15 +1,34 @@
 import React from "react";
+import { IPurchase } from "../../types/purchase";
 import ModalMessage from "./ModalMessage";
+import { motion } from "framer-motion";
+import CheckIcon from "./CheckIcon";
 
 interface ITicketDetailsProps {
-  children: React.ReactNode;
+  purchase: IPurchase;
 }
 
-export const TicketDetails = ({ children }: ITicketDetailsProps) => {
+export const TicketDetails = ({ purchase }: ITicketDetailsProps) => {
   return (
     <ModalMessage>
-      <h1 className='block'>Exitoso</h1>
-      <div>{children}</div>
+      <div className='text-3xl bg-black/[0.60] text-white rounded-sm mb-4 p-2'>
+        Exitoso
+      </div>
+      <div className='flex flex-col space-y-4 text-left pl-3'>
+        <div>
+          Nombre: <b>{purchase.user.fullname}</b>
+        </div>
+        <div>
+          Email: <b>{purchase.user.email}</b>
+        </div>
+      </div>
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ bounce: 0.25, duration: 0.5, delay: 0.3 }}
+      >
+        <CheckIcon />
+      </motion.div>
     </ModalMessage>
   );
 };

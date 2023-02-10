@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { QrScannerContext } from "../../contexts/QrScanner";
 import { getTicketId } from "../../lib/public/utils";
@@ -12,12 +12,13 @@ interface ITicketsProps {
   onClose: () => void;
 }
 
+let paused = false;
+
 export const TicketScanner = ({ onClose }: ITicketsProps) => {
   const { getPurchaseById, setPurchaseAsClaimed } =
     useContext(QrScannerContext);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [claimedTicked, setClaimedTicket] = useState<IPurchase | undefined>();
-  const [paused, setPaused] = useState<boolean>(false);
 
   // Event Handlers
   const onFound = useCallback(async (text: string) => {
@@ -40,13 +41,13 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       setClaimedTicket(purchase);
       setTimeout(() => {
         setClaimedTicket(undefined);
-        setPaused(false);
+        paused = false;
       }, 3000);
     } catch (e: any) {
       setErrorMessage(e.message);
       setTimeout(() => {
         setErrorMessage(undefined);
-        setPaused(false);
+        paused = false;
       }, 6000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,7 +58,7 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       if (error || paused) {
         return;
       }
-      setPaused(true);
+      paused = true;
 
       if (result) {
         onFound && onFound(result.text);
@@ -85,6 +86,10 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
   //   }, 1000);
   // }, []);
 
+  useEffect(() => {
+    paused = false;
+  }, []);
+
   // DOM
   return (
     <div className='fixed h-screen w-screen top-0 left-0 z-10 bg-black overflow-hidden'>
@@ -95,7 +100,7 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
         constraints={{ facingMode: "environment" }}
         scanDelay={200}
         videoContainerStyle={{ width: "100%", position: "static" }}
-        onResult={!paused ? onResult : undefined}
+        onResult={onResult}
       />
 
       <AnimatePresence>

@@ -1,38 +1,21 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import Card from "../../components/common/Card";
 import WalletStep1 from "../../components/Wallet/WalletStep1";
-import { PurchaseContext } from "../../contexts/Purchase";
+import useFilterWalletRoute from "../../hooks/useFilterWalletRoute";
 
 import useLoading from "../../hooks/useLoading";
 
 const WalletPage: NextPage = () => {
-  const { purchase } = useContext(PurchaseContext);
-  const router = useRouter();
   const { setActive } = useLoading();
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setActive(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!purchase) {
-      router.push("/");
-      return;
-    }
-
-    if (purchase.status === "ready") {
-      router.push("/entrada/" + purchase.id);
-      return;
-    }
-
-    setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [purchase]);
+  const { isLoading } = useFilterWalletRoute({ status: "ready" });
 
   return (
     <>

@@ -15,8 +15,8 @@ interface ITicketsProps {
 export const TicketScanner = ({ onClose }: ITicketsProps) => {
   const { getPurchaseById, setPurchaseAsClaimed } =
     useContext(QrScannerContext);
-  const [errorMessage, setErrorMessage] = useState();
-  const [claimedTicked, setClaimedTicket] = useState<IPurchase>();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [claimedTicked, setClaimedTicket] = useState<IPurchase | undefined>();
 
   // Event Handlers
   const onFound = useCallback(async (text: string) => {
@@ -37,6 +37,10 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       await setPurchaseAsClaimed(id);
 
       setClaimedTicket(purchase);
+
+      setTimeout(() => {
+        setClaimedTicket(undefined);
+      }, 1000);
     } catch (e: any) {
       setErrorMessage(e.message);
     }
@@ -54,6 +58,24 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Testing
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     // setClaimedTicket({
+  //     //   status: "claimed",
+  //     //   user: { email: "asdas@asda.com", fullname: "adasd" },
+  //     // });
+  //     // setTimeout(() => {
+  //     //   setClaimedTicket(undefined);
+  //     // }, 3000);
+
+  //     setErrorMessage("Inválido");
+  //     setTimeout(() => {
+  //       setErrorMessage(undefined);
+  //     }, 6000);
+  //   }, 1000);
+  // }, []);
+
   // DOM
   return (
     <div className='fixed h-screen w-screen top-0 left-0 z-10 bg-black overflow-hidden'>
@@ -69,11 +91,7 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
 
       <AnimatePresence>
         {errorMessage ? <ErrorMessage message={errorMessage} /> : ""}
-        {claimedTicked ? (
-          <TicketDetails>{JSON.stringify(claimedTicked)}</TicketDetails>
-        ) : (
-          ""
-        )}
+        {claimedTicked ? <TicketDetails purchase={claimedTicked} /> : ""}
       </AnimatePresence>
     </div>
   );

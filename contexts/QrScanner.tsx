@@ -4,6 +4,7 @@ import {
   ReactNode,
   SetStateAction,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import TicketScanner from "../components/QrScanner/TicketScanner";
@@ -56,10 +57,13 @@ export const QrScannerProvider = ({ children }: QrScannerProviderProps) => {
     },
     []
   );
-
   const onClose = useCallback(() => {
     setActive(false);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = active ? "hidden" : "initial";
+  }, [active]);
 
   return (
     <QrScannerContext.Provider

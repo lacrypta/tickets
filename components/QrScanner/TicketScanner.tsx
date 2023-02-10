@@ -56,11 +56,10 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
 
   // DOM
   return (
-    <div className='absolute inset-0 z-10 bg-black'>
+    <div className='fixed h-screen w-screen top-0 left-0 z-10 bg-black overflow-hidden'>
       <div
         className='absolute inset-x-0 top-0 h-[30%] z-20
-      flex flex-col justify-center text-center
-      bg-white/[0.25] backdrop-blur-md'
+      flex flex-col justify-center text-center'
       >
         <div className='absolute top-10 right-10'>
           <CloseButton onClick={onClose} />

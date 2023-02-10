@@ -57,13 +57,8 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
   // DOM
   return (
     <div className='fixed h-screen w-screen top-0 left-0 z-10 bg-black overflow-hidden'>
-      <div
-        className='absolute inset-x-0 top-0 h-[30%] z-20
-      flex flex-col justify-center text-center'
-      >
-        <div className='absolute top-10 right-10'>
-          <CloseButton onClick={onClose} />
-        </div>
+      <div className='absolute top-10 right-10 z-20'>
+        <CloseButton onClick={onClose} />
       </div>
       <QrReader
         constraints={{}}

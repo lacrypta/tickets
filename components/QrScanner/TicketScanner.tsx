@@ -93,7 +93,7 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       </div>
       <QrReader
         constraints={{ facingMode: "environment" }}
-        scanDelay={300}
+        scanDelay={100}
         videoContainerStyle={{ width: "100%", position: "static" }}
         onResult={onResult}
       />

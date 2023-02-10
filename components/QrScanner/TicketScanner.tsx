@@ -62,8 +62,8 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       if (result) {
         onFound && onFound(result.text);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [paused]
   );
 
@@ -93,9 +93,9 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       </div>
       <QrReader
         constraints={{ facingMode: "environment" }}
-        scanDelay={100}
+        scanDelay={200}
         videoContainerStyle={{ width: "100%", position: "static" }}
-        onResult={onResult}
+        onResult={!paused ? onResult : undefined}
       />
 
       <AnimatePresence>

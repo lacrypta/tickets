@@ -21,7 +21,6 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
 
   // Event Handlers
   const onFound = useCallback(async (text: string) => {
-    setPaused(true);
     try {
       const id = getTicketId(text);
       if (!id) {
@@ -58,6 +57,7 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       if (error || paused) {
         return;
       }
+      setPaused(true);
 
       if (result) {
         onFound && onFound(result.text);

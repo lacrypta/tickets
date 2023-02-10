@@ -44,7 +44,9 @@ export const PurchaseProvider = ({ children }: PurchaseProviderProps) => {
       const purchase = snapshot.data() as IPurchase;
       setPurchase(() => {
         isLoading && setIsLoading(false);
-        purchase.id = snapshot.id;
+        if (purchase) {
+          purchase.id = snapshot.id;
+        }
         return purchase;
       });
     },

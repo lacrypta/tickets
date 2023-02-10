@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IPurchase } from "../../types/purchase";
 import ModalMessage from "./ModalMessage";
 import { motion } from "framer-motion";
 import CheckIcon from "./CheckIcon";
+
+import useSound from "use-sound";
 
 interface ITicketDetailsProps {
   purchase: IPurchase;
 }
 
 export const TicketDetails = ({ purchase }: ITicketDetailsProps) => {
+  const [play] = useSound("/sounds/success.mp3", { volume: 0.5 });
+
+  useEffect(() => {
+    play();
+  }, [play]);
+
   return (
     <ModalMessage>
       <div className='text-3xl bg-black/[0.60] text-white rounded-sm mb-4 p-2'>

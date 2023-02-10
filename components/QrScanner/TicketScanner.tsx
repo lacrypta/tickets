@@ -17,9 +17,11 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
     useContext(QrScannerContext);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [claimedTicked, setClaimedTicket] = useState<IPurchase | undefined>();
+  const [paused, setPaused] = useState<boolean>(false);
 
   // Event Handlers
   const onFound = useCallback(async (text: string) => {
+    setPaused(true);
     try {
       const id = getTicketId(text);
       if (!id) {
@@ -37,26 +39,33 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
       await setPurchaseAsClaimed(id);
 
       setClaimedTicket(purchase);
-
       setTimeout(() => {
         setClaimedTicket(undefined);
-      }, 1000);
+        setPaused(false);
+      }, 3000);
     } catch (e: any) {
       setErrorMessage(e.message);
+      setTimeout(() => {
+        setErrorMessage(undefined);
+        setPaused(false);
+      }, 6000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onResult = useCallback((result: any, error: any) => {
-    if (error) {
-      return;
-    }
+  const onResult = useCallback(
+    (result: any, error: any) => {
+      if (error || paused) {
+        return;
+      }
 
-    if (result) {
-      onFound && onFound(result.text);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      if (result) {
+        onFound && onFound(result.text);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [paused]
+  );
 
   // Testing
   // useEffect(() => {

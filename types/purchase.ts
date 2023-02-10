@@ -8,7 +8,7 @@ export interface IPurchase {
   payment?: IPayment;
   order?: IOrder;
   lnUrlw?: string;
-  status: OrderStatus;
+  status: PurchaseStatus;
 }
 
-export type OrderStatus = "ready" | "claimed";
+export type PurchaseStatus = "ready" | "claimed";

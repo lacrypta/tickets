@@ -138,7 +138,7 @@ async function getPreference(payment: IPayment): Promise<any> {
         },
       ],
       back_urls: {
-        success: HOSTNAME + "/pago/mercadopago",
+        success: HOSTNAME + "pago/mercadopago",
       },
       additional_info: String(payment.id),
       statement_descriptor: MP_ORDER_NAME,

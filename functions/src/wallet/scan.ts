@@ -30,7 +30,6 @@ export const onTicketScan = functions
       // Request for LNURL to lnbits
       const lnUrl = await generateWithdrawLink(SAT_AMOUNT);
 
-      console.info;
       // update purchase lnUrl
       await admin.firestore().collection("purchases").doc(purchaseId).update({
         lnUrlw: lnUrl,

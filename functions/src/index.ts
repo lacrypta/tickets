@@ -3,3 +3,6 @@ admin.initializeApp();
 
 // Gateways
 export * from "./gateways/mercadopago";
+
+// Wallet
+export * from "./wallet/scan";

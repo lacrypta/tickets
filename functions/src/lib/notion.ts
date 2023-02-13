@@ -45,3 +45,41 @@ export const addUserToNotion = async (purchase: IPurchase) => {
 
   return response;
 };
+
+export const updateNotionEntry = async (
+  id: string,
+  { lnurl }: { lnurl: string }
+) => {
+  const response = await notion.blocks.children.append({
+    block_id: id,
+    children: [
+      {
+        heading_2: {
+          rich_text: [
+            {
+              text: {
+                content: "Ready",
+              },
+            },
+          ],
+        },
+      },
+      {
+        paragraph: {
+          rich_text: [
+            {
+              text: {
+                content: "Link for Lightning network.",
+                link: {
+                  url: "https://lacrypta.com.ar/" + lnurl,
+                },
+              },
+            },
+          ],
+        },
+      },
+    ],
+  });
+  console.log(response);
+  return response;
+};

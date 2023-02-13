@@ -6,3 +6,6 @@ export * from "./gateways/mercadopago";
 
 // Wallet
 export * from "./wallet/scan";
+
+// Notion
+export * from "./notion/create";

@@ -10,7 +10,7 @@ export const WalletClaim = () => {
   const sats = 4324234;
   const router = useRouter();
   const claim = useCallback(() => {
-    router.push("lightning:" + (purchase as IPurchase).lnUrlw);
+    router.push("lightning://" + (purchase as IPurchase).lnUrlw);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchase]);
 

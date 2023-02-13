@@ -55,10 +55,9 @@ export const PurchaseProvider = ({ children }: PurchaseProviderProps) => {
   );
 
   // Subscribe purchase snapshots
-  const subscribePurchase = useCallback(async (paymentId: string) => {
-    setIsLoading(true);
+  const subscribePurchase = useCallback(async (purchaseId: string) => {
     // get snapshot query firestore for order
-    return onSnapshot(doc(db, "purchases", paymentId), onPurchaseChange);
+    return onSnapshot(doc(db, "purchases", purchaseId), onPurchaseChange);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -67,7 +66,7 @@ export const PurchaseProvider = ({ children }: PurchaseProviderProps) => {
     if (!purchaseId) {
       return;
     }
-
+    setIsLoading(true);
     setPurchase(undefined);
     subscribePurchase(purchaseId);
     // eslint-disable-next-line react-hooks/exhaustive-deps

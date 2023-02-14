@@ -1,10 +1,11 @@
 import { Client } from "@notionhq/client";
+import { IOrder } from "../../../types/order";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-import { IPurchase } from "../../../types/purchase";
+import { PurchaseStatus } from "../../../types/purchase";
 
-export const addUserToNotion = async (purchase: IPurchase) => {
+export const addUserToNotion = async (order: IOrder) => {
   const response = await notion.pages.create({
     parent: {
       type: "database_id",
@@ -15,17 +16,17 @@ export const addUserToNotion = async (purchase: IPurchase) => {
         title: [
           {
             text: {
-              content: purchase.user.fullname,
+              content: order.user.fullname,
             },
           },
         ],
       },
       "E-mail": {
-        email: purchase.user.email,
+        email: order.user.email,
       },
-      "Link de Entrada": {
-        url: "https://entradas.lacrypta.com.ar/entrada/" + purchase.id,
-      },
+      // "Link de Entrada": {
+      //   url: "https://entradas.lacrypta.com.ar/entrada/" + purchase.id,
+      // },
     },
     children: [
       {
@@ -34,7 +35,7 @@ export const addUserToNotion = async (purchase: IPurchase) => {
           rich_text: [
             {
               text: {
-                content: "Pavarotti",
+                content: "Formulario llenado",
               },
             },
           ],
@@ -46,7 +47,7 @@ export const addUserToNotion = async (purchase: IPurchase) => {
   return response;
 };
 
-export const updateNotionEntry = async (
+export const updateNotionLNURL = async (
   id: string,
   { lnurl }: { lnurl: string }
 ) => {
@@ -73,6 +74,58 @@ export const updateNotionEntry = async (
                 link: {
                   url: "https://lacrypta.com.ar/" + lnurl,
                 },
+              },
+            },
+          ],
+        },
+      },
+    ],
+  });
+  console.log(response);
+  return response;
+};
+
+interface NotionMeta {
+  lnUrl?: string;
+  preference_id?: string;
+}
+
+export const updateNotionStatus = async (
+  id: string,
+  status: PurchaseStatus,
+  meta: NotionMeta
+) => {
+  const response = await notion.blocks.children.append({
+    block_id: id,
+    children: [
+      {
+        heading_2: {
+          rich_text: [
+            {
+              text: {
+                content: "Status:" + status,
+              },
+            },
+          ],
+        },
+      },
+      {
+        heading_2: {
+          rich_text: [
+            {
+              text: {
+                content: "Meta",
+              },
+            },
+          ],
+        },
+      },
+      {
+        paragraph: {
+          rich_text: [
+            {
+              text: {
+                content: JSON.stringify(meta),
               },
             },
           ],

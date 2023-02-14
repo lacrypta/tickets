@@ -1,35 +1,27 @@
-// Types
-
 import * as functions from "firebase-functions";
-import { IPurchase } from "../../../types/purchase";
-import { addUserToNotion, updateNotionEntry } from "../lib/notion";
+import { IOrder } from "../../../types/order";
+import { addUserToNotion } from "../lib/notion";
 
 const CLOUD_FUNCTIONS_REGION =
   process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
 
-export const onPurchaseCreate = functions
+export const onOrderCreate = functions
   .region(CLOUD_FUNCTIONS_REGION)
-  .firestore.document("/purchases/{purchaseId}")
+  .firestore.document("/orders/{orderId}")
   .onCreate(async (snapshot, context) => {
-    const purchase: IPurchase = snapshot.data() as IPurchase;
-
-    const purchaseId = context.params.purchaseId;
+    const order: IOrder = snapshot.data() as IOrder;
+    const orderId = context.params.orderId;
 
     try {
-      // Request for LNURL to lnbits
-      purchase.id = purchaseId;
-      const { id: notionId } = await addUserToNotion(purchase);
-
-      const updated = await updateNotionEntry(notionId, {
-        lnurl: "LNURL234242334",
+      const { id: notionId } = await addUserToNotion({
+        id: orderId,
+        ...order,
       });
-
-      console.info("updated:");
-      console.dir(updated);
-      // update purchase notionId
       await snapshot.ref.update({
         notion_id: notionId,
       });
+
+      console.info("******* ORDER UPDATED !!!");
     } catch (e: any) {
       functions.logger.error(`Error creating database on Notion`, e);
       return;

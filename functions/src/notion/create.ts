@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import { IOrder } from "../../../types/order";
-import { addUserToNotion } from "../lib/notion";
+import { addUser } from "../lib/notion";
 
 const CLOUD_FUNCTIONS_REGION =
   process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
@@ -13,7 +13,7 @@ export const onOrderCreate = functions
     const orderId = context.params.orderId;
 
     try {
-      const { id: notionId } = await addUserToNotion({
+      const { id: notionId } = await addUser({
         id: orderId,
         ...order,
       });

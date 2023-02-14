@@ -1,11 +1,10 @@
+import { IPurchase } from "./../../../types/purchase";
 import { Client } from "@notionhq/client";
 import { IOrder } from "../../../types/order";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-import { PurchaseStatus } from "../../../types/purchase";
-
-export const addUserToNotion = async (order: IOrder) => {
+export const addUser = async (order: IOrder) => {
   const response = await notion.pages.create({
     parent: {
       type: "database_id",
@@ -24,9 +23,6 @@ export const addUserToNotion = async (order: IOrder) => {
       "E-mail": {
         email: order.user.email,
       },
-      // "Link de Entrada": {
-      //   url: "https://entradas.lacrypta.com.ar/entrada/" + purchase.id,
-      // },
     },
     children: [
       {
@@ -47,7 +43,7 @@ export const addUserToNotion = async (order: IOrder) => {
   return response;
 };
 
-export const updateNotionLNURL = async (
+export const setUserLNURL = async (
   id: string,
   { lnurl }: { lnurl: string }
 ) => {
@@ -85,36 +81,32 @@ export const updateNotionLNURL = async (
   return response;
 };
 
-interface NotionMeta {
-  lnUrl?: string;
-  preference_id?: string;
-}
+export const setUserAsPaid = async (notion_id: string, purchase: IPurchase) => {
+  const { id: purchaseId, payment } = purchase;
+  const preferenceId = payment?.preference_id;
+  notion.pages.update({
+    page_id: notion_id,
+    properties: {
+      Estado: {
+        status: {
+          name: "Reservado",
+        },
+      },
+      "Link de Entrada": {
+        url: "https://entradas.lacrypta.com.ar/entrada/" + purchaseId,
+      },
+    },
+  });
 
-export const updateNotionStatus = async (
-  id: string,
-  status: PurchaseStatus,
-  meta: NotionMeta
-) => {
-  const response = await notion.blocks.children.append({
-    block_id: id,
+  return notion.blocks.children.append({
+    block_id: notion_id,
     children: [
       {
         heading_2: {
           rich_text: [
             {
               text: {
-                content: "Status:" + status,
-              },
-            },
-          ],
-        },
-      },
-      {
-        heading_2: {
-          rich_text: [
-            {
-              text: {
-                content: "Meta",
+                content: "MercadoPago",
               },
             },
           ],
@@ -125,7 +117,7 @@ export const updateNotionStatus = async (
           rich_text: [
             {
               text: {
-                content: JSON.stringify(meta),
+                content: "Preference ID: " + preferenceId,
               },
             },
           ],
@@ -133,6 +125,4 @@ export const updateNotionStatus = async (
       },
     ],
   });
-  console.log(response);
-  return response;
 };

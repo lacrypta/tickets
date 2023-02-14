@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import { IPurchase } from "../../../types/purchase";
-import { updateNotionStatus } from "../lib/notion";
+import { setUserAsPaid } from "../lib/notion";
 
 const CLOUD_FUNCTIONS_REGION =
   process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
@@ -15,9 +15,7 @@ export const onPurchaseCreate = functions
     console.info("--- purchase: ");
     console.dir(purchase);
     try {
-      await updateNotionStatus(notionId, "ready", {
-        preference_id: purchase.payment?.preference_id,
-      });
+      await setUserAsPaid(notionId, purchase);
 
       await snapshot.ref.update({
         notion_id: notionId,

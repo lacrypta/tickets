@@ -5,6 +5,7 @@ export interface IOrder {
   user: IUser;
   paymentId?: string;
   purchaseId?: string;
+  notion_id?: string;
   status: OrderStatus;
 }
 

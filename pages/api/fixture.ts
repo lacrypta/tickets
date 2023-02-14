@@ -16,19 +16,19 @@ export default async function handler(
 
     // Add orders to database
     orders.forEach((order) => {
-      const orderRef = db.collection("orders").doc(order._id);
+      const orderRef = db.collection("orders").doc(order.id);
       orderRef.set(order);
     });
 
     // Add payments to database
     payments.forEach((payment) => {
-      const paymentRef = db.collection("payments").doc(payment._id);
+      const paymentRef = db.collection("payments").doc(payment.id);
       paymentRef.set(payment);
     });
 
     // Add purchases to database
     purchases.forEach((purchase) => {
-      const purchaseRef = db.collection("purchases").doc(purchase._id);
+      const purchaseRef = db.collection("purchases").doc(purchase.id);
       purchaseRef.set(purchase);
     });
 

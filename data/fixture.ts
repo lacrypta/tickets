@@ -10,7 +10,7 @@ export const user = {
 };
 
 export const order = {
-  _id: ids.order,
+  id: ids.order,
   createdAt: "2019-01-01T00:00:00.000Z",
   paymentId: ids.payment,
   purchaseId: ids.purchase,
@@ -19,7 +19,7 @@ export const order = {
 };
 
 export const payment = {
-  _id: ids.payment,
+  id: ids.payment,
   amount: 2000,
   createdAt: "2019-01-01T00:00:00.000Z",
   method: "mercadopago",
@@ -29,7 +29,7 @@ export const payment = {
 };
 
 export const purchase = {
-  _id: ids.purchase,
+  id: ids.purchase,
   status: "ready",
   user,
   order,

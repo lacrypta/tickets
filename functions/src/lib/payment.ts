@@ -52,8 +52,8 @@ export const setPaymentAsPaid = async ({
   const purchase: IPurchase = {
     id: purchaseRef.id,
     user: order.user,
-    payment: { ...(payment as IPayment), status: "paid" },
-    order: { ...(order as IOrder), status: "completed" },
+    payment: { id: paymentId, ...(payment as IPayment), status: "paid" },
+    order: { id: payment.orderId, ...(order as IOrder), status: "completed" },
     status: "ready",
   };
 

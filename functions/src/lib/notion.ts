@@ -27,11 +27,11 @@ export const addUser = async (order: IOrder) => {
     children: [
       {
         object: "block",
-        heading_2: {
+        heading_1: {
           rich_text: [
             {
               text: {
-                content: "Formulario llenado",
+                content: "Datos de Usuario",
               },
             },
           ],
@@ -43,61 +43,23 @@ export const addUser = async (order: IOrder) => {
   return response;
 };
 
-export const setUserLNURL = async (
-  id: string,
-  { lnurl }: { lnurl: string }
-) => {
-  const response = await notion.blocks.children.append({
-    block_id: id,
-    children: [
-      {
-        heading_2: {
-          rich_text: [
-            {
-              text: {
-                content: "Ready",
-              },
-            },
-          ],
-        },
-      },
-      {
-        paragraph: {
-          rich_text: [
-            {
-              text: {
-                content: "Link for Lightning network.",
-                link: {
-                  url: "https://lacrypta.com.ar/" + lnurl,
-                },
-              },
-            },
-          ],
-        },
-      },
-    ],
-  });
-  console.log(response);
-  return response;
-};
-
-export const setUserAsPaid = async (notion_id: string, purchase: IPurchase) => {
-  const { id: purchaseId, payment } = purchase;
-  const preferenceId = payment?.preference_id;
+export const setUserStatus = async (notion_id: string, status: string) => {
   notion.pages.update({
     page_id: notion_id,
     properties: {
       Estado: {
         status: {
-          name: "Reservado",
+          name: status,
         },
-      },
-      "Link de Entrada": {
-        url: "https://entradas.lacrypta.com.ar/entrada/" + purchaseId,
       },
     },
   });
+};
+export const setUserAsPaid = async (notion_id: string, purchase: IPurchase) => {
+  const { id: purchaseId, payment } = purchase;
+  const preferenceId = payment?.preference_id;
 
+  setUserStatus(notion_id, "Reservado");
   return notion.blocks.children.append({
     block_id: notion_id,
     children: [
@@ -123,6 +85,63 @@ export const setUserAsPaid = async (notion_id: string, purchase: IPurchase) => {
           ],
         },
       },
+      {
+        heading_2: {
+          rich_text: [
+            {
+              text: {
+                content: "Link de entrada",
+              },
+            },
+          ],
+        },
+      },
+      {
+        paragraph: {
+          rich_text: [
+            {
+              text: {
+                content:
+                  "https://entradas.lacrypta.com.ar/entrada/" + purchaseId,
+              },
+            },
+          ],
+        },
+      },
     ],
   });
+};
+
+export const setUserLNURL = async (notion_id: string, lnurl: string) => {
+  const response = await notion.blocks.children.append({
+    block_id: notion_id,
+    children: [
+      {
+        heading_2: {
+          rich_text: [
+            {
+              text: {
+                content: "Link de Lightning Network",
+              },
+            },
+          ],
+        },
+      },
+      {
+        paragraph: {
+          rich_text: [
+            {
+              text: {
+                content: "Link for Lightning network.",
+                link: {
+                  url: "lightning://" + lnurl,
+                },
+              },
+            },
+          ],
+        },
+      },
+    ],
+  });
+  return response;
 };

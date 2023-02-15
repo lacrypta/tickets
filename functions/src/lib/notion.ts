@@ -24,20 +24,6 @@ export const addUser = async (order: IOrder) => {
         email: order.user.email,
       },
     },
-    children: [
-      {
-        object: "block",
-        heading_1: {
-          rich_text: [
-            {
-              text: {
-                content: "Datos de Usuario",
-              },
-            },
-          ],
-        },
-      },
-    ],
   });
 
   return response;

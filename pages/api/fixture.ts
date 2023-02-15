@@ -39,7 +39,7 @@ export default async function handler(
           order: { id: purchase.order.id, ...order },
         });
       });
-    }, 3000);
+    }, 5000);
 
     res.status(200).json({ success: true, data: { fixture } });
   } catch (e: any) {

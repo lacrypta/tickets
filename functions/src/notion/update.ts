@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import { IPurchase } from "../../../types/purchase";
-import { setUserAsPaid } from "../lib/notion";
+import { setUserAsPaid, setUserLNURL, setUserStatus } from "../lib/notion";
 
 const CLOUD_FUNCTIONS_REGION =
   process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
@@ -26,27 +26,26 @@ export const onPurchaseCreate = functions
     }
   });
 
-// // export const onTicketScan = functions
-// //   .region(CLOUD_FUNCTIONS_REGION)
-// //   .firestore.document("/purchases/{purchaseId}")
-// //   .onUpdate(async (change, context) => {
-// //     const currentPurchase: IPurchase = change.before.data() as IPurchase;
-// //     const updatedPurchase: IPurchase = change.after.data() as IPurchase;
-// //     if (
-// //       currentPurchase.status !== "ready" ||
-// //       currentPurchase.lnUrlw ||
-// //       updatedPurchase.status !== "claimed"
-// //     ) {
-// //       return;
-// //     }
-// //     const purchaseId = context.params.purchaseId;
+export const onPurchaseUpdate = functions
+  .region(CLOUD_FUNCTIONS_REGION)
+  .firestore.document("/purchases/{purchaseId}")
+  .onUpdate(async (change) => {
+    const currentPurchase: IPurchase = change.before.data() as IPurchase;
+    const updatedPurchase: IPurchase = change.after.data() as IPurchase;
+    const notion_id = currentPurchase.notion_id;
+    if (
+      currentPurchase.status !== "claimed" &&
+      updatedPurchase.status == "claimed"
+    ) {
+      setUserStatus(notion_id as string, "Check-in");
+      return;
+    }
 
-// //     // const updated = await updateNotionEntry(notionId, {
-// //       //   lnurl: "LNURL234242334",
-// //       // });
-
-// //       // console.info("updated:");
-// //       // console.dir(updated);
-// //       // update purchase notionId
-
-// //   });
+    if (!currentPurchase.lnUrlw && updatedPurchase.lnUrlw) {
+      setUserStatus(notion_id as string, "Check-in");
+      await setUserLNURL(
+        currentPurchase.notion_id as string,
+        updatedPurchase.lnUrlw as string
+      );
+    }
+  });

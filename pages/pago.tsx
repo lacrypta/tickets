@@ -9,11 +9,13 @@ import useLoading from "../hooks/useLoading";
 import { IPaymentHook, PaymentMethod } from "../types/payment";
 
 import MercadoPagoSvg from "../public/images/mercadopago.svg";
-import BitcoinSvg from "../public/images/bitcoin.svg";
+// import BitcoinSvg from "../public/images/bitcoin.svg";
 import Price from "../components/Checkout/Price";
 import useMercadoPago from "../hooks/payment/useMercadoPago";
 import { useRedirectOnEmpty } from "../hooks/useRedirectOnEmpty";
 import useOrder from "../hooks/useOrder";
+
+const ticketPrice = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "1000");
 
 const PaymentPage: NextPage = () => {
   const { setActive } = useLoading();
@@ -56,19 +58,29 @@ const PaymentPage: NextPage = () => {
 
       <Card>
         <h1>Métodos de Pago</h1>
-        <Price value={1000} />
+
+        <div className='flex flex-col text-center space-y-4 text-2xl'>
+          <div className='text-lg text-right'>10 de Marzo, Belgrano, CABA</div>
+          <Price value={ticketPrice} />
+          <div>
+            Entras con <b>MercadoPago</b> y te vas con <b>Bitcoin</b>
+          </div>
+          <div>
+            La mitad se te devuelve en <b>Bitcoin</b> cuando venis
+          </div>
+        </div>
         <div>
           <Button
             disabled={!order?.id}
             onClick={nextStep.bind(this, "mercadopago")}
           >
-            <MercadoPagoSvg height='60%' className='mr-2' /> MercadoPago
+            <MercadoPagoSvg height='60%' className='mr-2' /> Reservar
           </Button>
-          <Button disabled={!order?.id} onClick={nextStep.bind(this, "crypto")}>
+          {/* <Button disabled={!order?.id} onClick={nextStep.bind(this, "crypto")}>
             {" "}
             <BitcoinSvg height='60%' className='mr-2' />
             Crypto
-          </Button>
+          </Button> */}
         </div>
       </Card>
     </div>

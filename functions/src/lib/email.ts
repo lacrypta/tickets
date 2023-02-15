@@ -8,6 +8,7 @@ const EMAIL_SUBJECT =
 const EMAIL_TEXT = process.env.EMAIL_TEXT || EMAIL_SUBJECT;
 
 export const sendEmail = async ({ fullname, email, url }: MailParams) => {
+  console.info("Sending email...");
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -34,7 +35,13 @@ export const sendEmail = async ({ fullname, email, url }: MailParams) => {
 };
 
 const generateMailHTML = ({ fullname, email, url }: MailParams) => {
-  let html = require("../email_templates/ticket.html");
+  // import html file with fs
+  const fs = require("fs");
+  const emailTemplate = fs.readFileSync(
+    "../email_templates/ticket.html",
+    "utf8"
+  );
+  let html = emailTemplate;
   html = html.replace(/%FULLNAME%/g, fullname);
   html = html.replace(/%EMAIL%/g, email);
   html = html.replace(/%URL%/g, url);

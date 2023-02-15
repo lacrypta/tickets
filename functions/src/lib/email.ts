@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 import { MailParams } from "../../../types/email";
+import emailTemplate from "../email_templates/ticket";
 
 const EMAIL_SUBJECT =
   process.env.EMAIL_SUBJECT ||
@@ -36,11 +37,6 @@ export const sendEmail = async ({ fullname, email, url }: MailParams) => {
 
 const generateMailHTML = ({ fullname, email, url }: MailParams) => {
   // import html file with fs
-  const fs = require("fs");
-  const emailTemplate = fs.readFileSync(
-    "../email_templates/ticket.html",
-    "utf8"
-  );
   let html = emailTemplate;
   html = html.replace(/%FULLNAME%/g, fullname);
   html = html.replace(/%EMAIL%/g, email);

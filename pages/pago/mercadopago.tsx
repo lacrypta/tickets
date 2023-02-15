@@ -70,12 +70,16 @@ const MercadoPagoPage: NextPage = () => {
         <Price value={PRICE} />
 
         <div>
-          <Button
-            disabled={!preferenceId}
-            onClick={() => checkout && checkout()}
-          >
-            Pagar
-          </Button>
+          {!preferenceId ? (
+            "Conectando con MercadoPago..."
+          ) : (
+            <Button
+              disabled={!preferenceId}
+              onClick={() => checkout && checkout()}
+            >
+              Pagar
+            </Button>
+          )}
         </div>
       </Card>
     </div>

@@ -8,6 +8,7 @@ export interface IPurchase {
   payment?: IPayment;
   order?: IOrder;
   lnUrlw?: string;
+  notion_id?: string;
   status: PurchaseStatus;
 }
 

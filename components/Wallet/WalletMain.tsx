@@ -22,7 +22,7 @@ export const WalletMain = () => {
         </p>
         <p>Volvé a esta página</p>
 
-        <Button onClick={nextStep}>
+        <Button onClick={() => window.open("/api/download/muun")}>
           {" "}
           Descargar <MuunSvg height='48' className='mr-2' />
         </Button>

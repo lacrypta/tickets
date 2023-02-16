@@ -68,24 +68,6 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
     [paused]
   );
 
-  // Testing
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     // setClaimedTicket({
-  //     //   status: "claimed",
-  //     //   user: { email: "asdas@asda.com", fullname: "adasd" },
-  //     // });
-  //     // setTimeout(() => {
-  //     //   setClaimedTicket(undefined);
-  //     // }, 3000);
-
-  //     setErrorMessage("Inválido");
-  //     setTimeout(() => {
-  //       setErrorMessage(undefined);
-  //     }, 6000);
-  //   }, 1000);
-  // }, []);
-
   useEffect(() => {
     paused = false;
   }, []);

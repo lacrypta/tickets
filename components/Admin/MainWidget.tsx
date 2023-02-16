@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { QrScannerContext } from "../../contexts/QrScanner";
 import { getAuth } from "../../lib/public/firebase";
 import { ajaxCall } from "../../lib/public/request";
@@ -8,20 +8,20 @@ export const MainWidget = () => {
   const auth = getAuth();
   const qrScanner = useContext(QrScannerContext);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     console.info("Cerrado!");
     auth.signOut();
-  };
+  }, [auth]);
 
-  const handleScan = () => {
+  const handleScan = useCallback(() => {
     qrScanner.setActive(true);
-  };
+  }, [qrScanner]);
 
-  const handlePopulate = async () => {
+  const handlePopulate = useCallback(async () => {
     console.info("Populating fixture...");
     const res = await ajaxCall("fixture");
     console.dir(res);
-  };
+  }, []);
 
   return (
     <div>

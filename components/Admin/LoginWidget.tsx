@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import { getAuth, signInWithCustomToken } from "../../lib/public/firebase";
 import { ajaxCall } from "../../lib/public/request";
@@ -15,7 +15,7 @@ const Container = styled.div`
 const LoginWidget = () => {
   const [password, setPassword] = useState("");
 
-  const signIn = async (token: string) => {
+  const signIn = useCallback(async (token: string) => {
     const auth = getAuth();
     signInWithCustomToken(auth, token)
       .then((userCredential) => {
@@ -28,9 +28,9 @@ const LoginWidget = () => {
         console.info("Error!");
         console.dir(error);
       });
-  };
+  }, []);
 
-  const startLogin = async (password: string) => {
+  const startLogin = useCallback(async (password: string) => {
     console.info("password", password);
     try {
       const res = await ajaxCall("login", { password });
@@ -44,12 +44,17 @@ const LoginWidget = () => {
     } catch (error: any) {
       alert("No se pudo conectar");
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleLogin = (e: any) => {
-    startLogin(password);
-    e.preventDefault();
-  };
+  const handleLogin = useCallback(
+    (e: any) => {
+      startLogin(password);
+      e.preventDefault();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [password]
+  );
 
   return (
     <Container>

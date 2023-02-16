@@ -1,6 +1,6 @@
 import { IPayment } from "./../types/payment";
 import { OrderContext } from "./../contexts/Order";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { IOrder } from "../types/order";
 import { IUser } from "../types/user";
 
@@ -17,10 +17,15 @@ export interface IUseOrderResult {
 const useOrder = (): IUseOrderResult => {
   const { order, payment, payments, addOrder, updateOrder, addPayment, clear } =
     useContext(OrderContext);
+  const [activePayments, setActivePayments] = useState<IPayment[]>([]);
 
-  const activePayments = payments?.filter((payment) => {
-    return payment.status === "waiting";
-  });
+  // Updates active payments
+  useEffect(() => {
+    const _activePayments = payments?.filter((payment) => {
+      return payment.status === "waiting";
+    });
+    setActivePayments(_activePayments || []);
+  }, [payments]);
 
   // Creates order if it doesn't exist
   const createOrder = useCallback(

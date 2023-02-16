@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IPayment, IPaymentHook } from "./../../types/payment";
 import { IMercadoPagoPayment } from "../../types/payment";
 import useOrder from "../useOrder";
@@ -48,7 +48,7 @@ export const useMercadoPago = (): IUseOrderResult => {
     }
   }, [preferenceId, sdk, checkoutObject]);
 
-  const createPayment = async (): Promise<IMercadoPagoPayment> => {
+  const createPayment = useCallback(async (): Promise<IMercadoPagoPayment> => {
     const payment: IMercadoPagoPayment = {
       method: "mercadopago",
       amount: MERCADOPAGO_AMOUNT,
@@ -56,23 +56,24 @@ export const useMercadoPago = (): IUseOrderResult => {
     };
 
     return (await createGenericPayment(payment)) as IMercadoPagoPayment;
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const checkout = async () => {
+  const checkout = useCallback(async () => {
     if (checkoutObject) {
       checkoutObject.open();
     } else {
       console.error("Checkout object is not ready");
     }
-  };
+  }, [checkoutObject]);
 
-  const clearCheckout = () => {
+  const clearCheckout = useCallback(() => {
     document
       .getElementsByClassName("mp-mercadopago-checkout-wrapper")[0]
       ?.remove();
 
     document.getElementsByTagName("body")[0].style.overflow = "auto";
-  };
+  }, []);
 
   return {
     payment: payment as IMercadoPagoPayment,

@@ -61,7 +61,6 @@ const Home: NextPage = () => {
             label='Nombre Completo'
             name='name'
             placeholder='Nombre Completo'
-            defaultValue='Nombre de prueba'
             onChange={(e) => setFullname(e.target.value)}
             value={fullname}
           />
@@ -70,7 +69,6 @@ const Home: NextPage = () => {
             label='E-mail'
             name='email'
             type='email'
-            defaultValue='preuba@email.com'
             placeholder='E-mail'
             onChange={(e) => setEmail(e.target.value)}
             value={email}

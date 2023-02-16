@@ -148,6 +148,9 @@ export const OrderProvider = ({ children }: any) => {
   // Adds Payment
   const addPayment = useCallback(
     async (payment: IPayment): Promise<IPayment> => {
+      console.info("order ");
+      console.dir(order);
+
       // Create payment in firestore
       const data: IPaymentFirestore = {
         ...payment,
@@ -155,6 +158,9 @@ export const OrderProvider = ({ children }: any) => {
         orderId: order?.id as string,
         createdAt: serverTimestamp(),
       };
+
+      console.info("data: ");
+      console.dir(data);
 
       // Adds temporary payment
       setPayment(data);

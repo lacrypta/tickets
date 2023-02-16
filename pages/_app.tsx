@@ -23,6 +23,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   useEffect(() => {
     ReactGA.initialize(process.env.NEXT_PUBLIC_GA_TRACKING_ID as string);
+    console.info("process.env:");
+    console.dir(process.env);
   }, []);
 
   useEffect(() => {

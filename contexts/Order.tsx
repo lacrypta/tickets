@@ -66,6 +66,11 @@ export const OrderProvider = ({ children }: any) => {
   const onOrderChange = useCallback(
     (doc: any) => {
       const data = doc.data() as IOrder;
+      if (!data) {
+        setOrder(undefined);
+        setPaymentListener(undefined);
+        return;
+      }
       data.id = doc.id;
 
       // If paymentId is found, subscribe payment listener
@@ -164,7 +169,7 @@ export const OrderProvider = ({ children }: any) => {
       return _payment;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [order?.id]
+    [order?.id, setPayment, setPayments]
   );
 
   const updateOrderPayment = useCallback(

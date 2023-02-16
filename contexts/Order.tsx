@@ -175,7 +175,7 @@ export const OrderProvider = ({ children }: any) => {
       return _payment;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [order?.id, setPayment, setPayments]
+    [order, order?.id, setPayment, setPayments]
   );
 
   const updateOrderPayment = useCallback(

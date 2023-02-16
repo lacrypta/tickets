@@ -13,17 +13,18 @@ const AdminPage: NextPage = () => {
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user: any) => {
-    if (user) {
-      setIsLogged(true);
-    } else {
-      setIsLogged(false);
-    }
-  });
-
   useEffect(() => {
     setActive(false);
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user: any) => {
+      if (user) {
+        setIsLogged(true);
+      } else {
+        setIsLogged(false);
+      }
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

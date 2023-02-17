@@ -4,25 +4,27 @@ import { useEffect, useState } from "react";
 import LoginWidget from "../../components/Admin/LoginWidget";
 import MainWidget from "../../components/Admin/MainWidget";
 import Card from "../../components/common/Card";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 import useLoading from "../../hooks/useLoading";
 import { getAuth, onAuthStateChanged } from "../../lib/public/firebase";
 
 const AdminPage: NextPage = () => {
-  const { setActive } = useLoading();
+  const { active, setActive } = useLoading();
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
   useEffect(() => {
-    setActive(false);
-
     const auth = getAuth();
     onAuthStateChanged(auth, (user: any) => {
       if (user) {
+        console.info("Loggeado!");
         setIsLogged(true);
       } else {
+        console.info("Not logged");
         setIsLogged(false);
       }
+      setActive(false);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,8 +40,13 @@ const AdminPage: NextPage = () => {
 
       <Card>
         <h1>Admin</h1>
-
-        {isLogged ? <MainWidget /> : <LoginWidget />}
+        {active ? (
+          <LoadingSpinner />
+        ) : isLogged ? (
+          <MainWidget />
+        ) : (
+          <LoginWidget />
+        )}
       </Card>
     </>
   );

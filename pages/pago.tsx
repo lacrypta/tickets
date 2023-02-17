@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Card from "../components/common/Card";
+import Card from "../components/Common/Card";
 import Button from "../components/Form/Button";
 
 import useLoading from "../hooks/useLoading";
@@ -14,7 +14,7 @@ import Price from "../components/Checkout/Price";
 import useMercadoPago from "../hooks/payment/useMercadoPago";
 import { useRedirectOnEmpty } from "../hooks/useRedirectOnEmpty";
 import useOrder from "../hooks/useOrder";
-import LoadingSpinner from "../components/common/LoadingSpinner";
+import LoadingSpinner from "../components/Common/LoadingSpinner";
 
 const ticketPrice = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "1000");
 

@@ -11,7 +11,7 @@ import {
   Footer,
   HeaderLogo,
   Transition,
-} from "../components/common";
+} from "../components/Common";
 import { OrderProvider } from "../contexts/Order";
 import Debugger from "../components/Debugger";
 import { useEffect } from "react";

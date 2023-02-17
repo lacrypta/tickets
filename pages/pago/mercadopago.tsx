@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Price from "../../components/Checkout/Price";
-import Card from "../../components/common/Card";
+import Card from "../../components/Common/Card";
 import Button from "../../components/Form/Button";
 
 import {
@@ -14,7 +14,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useLoading from "../../hooks/useLoading";
 import useOrder from "../../hooks/useOrder";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../components/Common/LoadingSpinner";
 
 const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 

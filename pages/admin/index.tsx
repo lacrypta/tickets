@@ -3,8 +3,8 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import LoginWidget from "../../components/Admin/LoginWidget";
 import MainWidget from "../../components/Admin/MainWidget";
-import Card from "../../components/common/Card";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
+import Card from "../../components/Common/Card";
+import LoadingSpinner from "../../components/Common/LoadingSpinner";
 
 import useLoading from "../../hooks/useLoading";
 import { getAuth, onAuthStateChanged } from "../../lib/public/firebase";

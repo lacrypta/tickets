@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Price from "../../components/Checkout/Price";
-import Card from "../../components/common/Card";
+import Card from "../../components/Common/Card";
 import Button from "../../components/Form/Button";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { useAddress } from "@thirdweb-dev/react";

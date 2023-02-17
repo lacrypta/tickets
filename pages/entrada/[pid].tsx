@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import Card from "../../components/common/Card";
+import Card from "../../components/Common/Card";
 import Details from "../../components/Ticket/Details";
 import { PurchaseContext } from "../../contexts/Purchase";
 import useLoading from "../../hooks/useLoading";

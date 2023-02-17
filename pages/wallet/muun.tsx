@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import { useEffect } from "react";
-import Card from "../../components/Common/Card";
+import Card from "../../components/common/Card";
 import WalletClaim from "../../components/Wallet/WalletClaim";
 import useFilterWalletRoute from "../../hooks/useFilterWalletRoute";
 

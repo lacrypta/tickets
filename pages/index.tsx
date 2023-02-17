@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Card from "../components/Common/Card";
+import Card from "../components/common/Card";
 import Button from "../components/Form/Button";
 import Input from "../components/Form/Input";
 

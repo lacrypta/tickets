@@ -1,7 +1,6 @@
 // import { Backdrop } from "@mui/material";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
-import Backdrop from "../components/Common/Backdrop";
-import LoadingLogo from "../components/Common/LoadingLogo";
+import { Backdrop, LoadingLogo } from "../components/Common";
 
 interface ILoadingContext {
   active: boolean;

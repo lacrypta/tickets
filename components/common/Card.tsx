@@ -4,7 +4,7 @@ interface ICardProps {
   children: React.ReactNode;
 }
 
-const Card = ({ children }: ICardProps) => {
+export const Card = ({ children }: ICardProps) => {
   return (
     <div
       className='bg-white/[0.08] backdrop-blur-sm

@@ -6,7 +6,7 @@ interface IBackdropProps {
   open: boolean;
 }
 
-const Backdrop = ({ children, open = false }: IBackdropProps) => {
+export const Backdrop = ({ children, open = false }: IBackdropProps) => {
   return (
     <Transition
       show={open}

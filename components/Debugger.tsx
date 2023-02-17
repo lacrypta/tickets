@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-import { Suspense, useEffect, useState } from "react";
+import { memo, Suspense, useEffect, useState } from "react";
 import useOrder from "../hooks/useOrder";
 import { IOrder } from "../types/order";
 import { IPayment } from "../types/payment";
@@ -65,3 +65,5 @@ export const Debugger = () => {
     </Suspense>
   );
 };
+
+export default memo(Debugger);

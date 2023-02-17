@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { QrScannerContext } from "../../contexts/QrScanner";
 import { getTicketId } from "../../lib/public/utils";
@@ -93,4 +93,4 @@ export const TicketScanner = ({ onClose }: ITicketsProps) => {
   );
 };
 
-export default TicketScanner;
+export default memo(TicketScanner);

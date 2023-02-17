@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { memo } from "react";
 import SVGLogo from "../../public/images/lacrypta.svg";
 
 const FlipBox = styled.div`
@@ -58,4 +59,4 @@ export const LoadingLogo = () => {
   );
 };
 
-export default LoadingLogo;
+export default memo(LoadingLogo);

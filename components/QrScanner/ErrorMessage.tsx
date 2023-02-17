@@ -1,7 +1,7 @@
 import ModalMessage from "./ModalMessage";
 import { motion } from "framer-motion";
 import ErrorIcon from "./ErrorIcon";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import useSound from "use-sound";
 
 export const ErrorMessage = ({ message }: { message: string }) => {
@@ -31,4 +31,4 @@ export const ErrorMessage = ({ message }: { message: string }) => {
   );
 };
 
-export default ErrorMessage;
+export default memo(ErrorMessage);

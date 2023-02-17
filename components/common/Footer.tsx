@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 export const Footer = () => {
   return (
     <div className='flex justify-center text-black bg-white p-5'>
@@ -8,4 +10,4 @@ export const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

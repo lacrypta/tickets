@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { IPurchase } from "../../types/purchase";
 import ModalMessage from "./ModalMessage";
 import { motion } from "framer-motion";
@@ -41,4 +41,4 @@ export const TicketDetails = ({ purchase }: ITicketDetailsProps) => {
   );
 };
 
-export default TicketDetails;
+export default memo(TicketDetails);

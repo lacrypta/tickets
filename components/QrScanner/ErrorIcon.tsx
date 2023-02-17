@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Lottie from "react-lottie";
 import * as animationData from "../../public/images/lottie/error.json";
 
@@ -11,4 +12,4 @@ export const ErrorIcon = () => {
   return <Lottie options={defaultOptions} />;
 };
 
-export default ErrorIcon;
+export default memo(ErrorIcon);

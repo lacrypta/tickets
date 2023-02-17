@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -21,4 +21,4 @@ export const Input = ({ label, type = "text", ...props }: InputProps) => {
   );
 };
 
-export default Input;
+export default memo(Input);

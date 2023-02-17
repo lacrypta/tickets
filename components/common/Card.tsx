@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 interface ICardProps {
   children: React.ReactNode;
@@ -17,4 +17,4 @@ const Card = ({ children }: ICardProps) => {
   );
 };
 
-export default Card;
+export default memo(Card);

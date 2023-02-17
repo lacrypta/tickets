@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { PurchaseContext } from "../../contexts/Purchase";
 import useOrder from "../../hooks/useOrder";
@@ -60,3 +60,5 @@ export const Details = () => {
     </>
   );
 };
+
+export default memo(Details);

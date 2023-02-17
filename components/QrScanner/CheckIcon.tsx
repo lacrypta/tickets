@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Lottie from "react-lottie";
 import * as animationData from "../../public/images/lottie/check.json";
 
@@ -11,4 +12,4 @@ export const CheckIcon = () => {
   return <Lottie options={defaultOptions} />;
 };
 
-export default CheckIcon;
+export default memo(CheckIcon);

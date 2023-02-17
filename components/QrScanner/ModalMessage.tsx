@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { memo } from "react";
 
 interface IModalMessageProps {
   children: React.ReactNode;
@@ -22,4 +22,4 @@ export const ModalMessage = ({ children }: IModalMessageProps) => {
   );
 };
 
-export default ModalMessage;
+export default memo(ModalMessage);

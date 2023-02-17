@@ -1,3 +1,4 @@
+import { memo } from "react";
 import SVGSkin from "../../public/images/skin.svg";
 
 export const Background = () => {
@@ -8,4 +9,4 @@ export const Background = () => {
   );
 };
 
-export default Background;
+export default memo(Background);

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import BrandLogo from "../../public/images/lacrypta-title.svg";
 
 // const Container = styled.div`
@@ -15,4 +16,4 @@ export const HeaderLogo = () => {
   );
 };
 
-export default HeaderLogo;
+export default memo(HeaderLogo);

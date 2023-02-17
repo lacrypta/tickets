@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Lottie, { Options } from "react-lottie";
 import * as loadingAnimationData from "../../public/images/lottie/loading-egg.json";
 
@@ -23,4 +24,4 @@ export const LoadingSpinner = () => {
   );
 };
 
-export default LoadingSpinner;
+export default memo(LoadingSpinner);

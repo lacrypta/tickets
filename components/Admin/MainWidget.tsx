@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { memo, useCallback, useContext } from "react";
 import { QrScannerContext } from "../../contexts/QrScanner";
 import { getAuth } from "../../lib/public/firebase";
 import { ajaxCall } from "../../lib/public/request";
@@ -34,4 +34,4 @@ export const MainWidget = () => {
   );
 };
 
-export default MainWidget;
+export default memo(MainWidget);

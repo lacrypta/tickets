@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 export const CloseButton = (
   props: React.DetailedHTMLProps<
@@ -16,4 +16,4 @@ export const CloseButton = (
   );
 };
 
-export default CloseButton;
+export default memo(CloseButton);

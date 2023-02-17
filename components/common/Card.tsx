@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 
 interface ICardProps {
   children: React.ReactNode;
 }
 
-const Card = ({ children }: ICardProps) => {
+export const Card = ({ children }: ICardProps) => {
   return (
     <div
       className='bg-white/[0.08] backdrop-blur-sm
@@ -17,4 +17,4 @@ const Card = ({ children }: ICardProps) => {
   );
 };
 
-export default Card;
+export default memo(Card);

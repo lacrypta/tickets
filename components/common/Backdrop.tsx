@@ -1,12 +1,12 @@
 import { Transition } from "@headlessui/react";
-import { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 
 interface IBackdropProps {
   children?: ReactNode;
   open: boolean;
 }
 
-const Backdrop = ({ children, open = false }: IBackdropProps) => {
+export const Backdrop = ({ children, open = false }: IBackdropProps) => {
   return (
     <Transition
       show={open}
@@ -26,4 +26,4 @@ const Backdrop = ({ children, open = false }: IBackdropProps) => {
   );
 };
 
-export default Backdrop;
+export default memo(Backdrop);

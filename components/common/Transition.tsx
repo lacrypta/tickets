@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { memo } from "react";
 
 interface ITransitionProps {
   children: React.ReactNode;
@@ -61,4 +61,4 @@ export const Transition = ({ children }: ITransitionProps) => {
   );
 };
 
-export default Transition;
+export default memo(Transition);

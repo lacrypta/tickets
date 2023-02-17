@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 interface PriceProps {
   value: number;
 }
@@ -13,4 +15,4 @@ export const Price = ({ value }: PriceProps) => {
   );
 };
 
-export default Price;
+export default memo(Price);

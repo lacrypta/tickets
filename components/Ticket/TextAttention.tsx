@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { memo } from "react";
 
 export interface ITextAttentionProps {
   children: React.ReactNode;
@@ -26,4 +26,4 @@ const TextAttention = ({ children }: ITextAttentionProps) => {
   );
 };
 
-export default TextAttention;
+export default memo(TextAttention);

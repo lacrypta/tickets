@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "@emotion/styled";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -90,4 +90,4 @@ export const Button = ({ children, className, ...rest }: ButtonProps) => {
   );
 };
 
-export default Button;
+export default memo(Button);

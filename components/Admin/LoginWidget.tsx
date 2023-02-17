@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import { getAuth, signInWithCustomToken } from "../../lib/public/firebase";
 import { ajaxCall } from "../../lib/public/request";
@@ -76,4 +76,4 @@ const LoginWidget = () => {
   );
 };
 
-export default LoginWidget;
+export default memo(LoginWidget);

@@ -14,6 +14,7 @@ import Price from "../components/Checkout/Price";
 import useMercadoPago from "../hooks/payment/useMercadoPago";
 import { useRedirectOnEmpty } from "../hooks/useRedirectOnEmpty";
 import useOrder from "../hooks/useOrder";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 const ticketPrice = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "1000");
 
@@ -70,12 +71,17 @@ const PaymentPage: NextPage = () => {
           </div>
         </div>
         <div>
-          <Button
-            disabled={!order?.id}
-            onClick={nextStep.bind(this, "mercadopago")}
-          >
-            <MercadoPagoSvg height='60%' className='mr-2' /> Reservar
-          </Button>
+          {!order?.id ? (
+            <LoadingSpinner />
+          ) : (
+            <Button
+              disabled={!order?.id}
+              onClick={nextStep.bind(this, "mercadopago")}
+            >
+              <MercadoPagoSvg height='60%' className='mr-2' /> Reservar
+            </Button>
+          )}
+
           {/* <Button disabled={!order?.id} onClick={nextStep.bind(this, "crypto")}>
             {" "}
             <BitcoinSvg height='60%' className='mr-2' />

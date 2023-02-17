@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useContext } from "react";
+import { memo, useCallback, useContext } from "react";
 import { PurchaseContext } from "../../contexts/Purchase";
 import Button from "../Form/Button";
 import MuunSvg from "../../public/images/muun.svg";
@@ -33,4 +33,4 @@ export const WalletClaim = () => {
   );
 };
 
-export default WalletClaim;
+export default memo(WalletClaim);

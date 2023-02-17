@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, memo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "../Form/Button";
 
@@ -49,4 +49,4 @@ export const CryptoModal = ({ isOpen, onClose }: ICryptoModalProps) => {
   );
 };
 
-export default CryptoModal;
+export default memo(CryptoModal);

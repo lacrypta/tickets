@@ -14,6 +14,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useLoading from "../../hooks/useLoading";
 import useOrder from "../../hooks/useOrder";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
@@ -71,7 +72,7 @@ const MercadoPagoPage: NextPage = () => {
 
         <div>
           {!preferenceId ? (
-            "Conectando con MercadoPago..."
+            <LoadingSpinner />
           ) : (
             <Button
               disabled={!preferenceId}

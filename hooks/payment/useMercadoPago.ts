@@ -13,7 +13,9 @@ export interface IUseOrderResult extends IPaymentHook {
   createPayment: () => Promise<IPayment>;
 }
 
-const MERCADOPAGO_AMOUNT = parseFloat(process.env.TICKET_PRICE || "2000");
+const MERCADOPAGO_AMOUNT = parseFloat(
+  process.env.NEXT_PUBLIC_TICKET_PRICE || "2000"
+);
 
 export const useMercadoPago = (): IUseOrderResult => {
   const { payment, createPayment: createGenericPayment } = useOrder();

@@ -7,6 +7,8 @@ import * as mercadopago from "mercadopago";
 
 import { ConfigTokenOption } from "mercadopago/configuration";
 import { setPaymentAsPaid } from "../lib/payment";
+import { addSeconds } from "../lib/database";
+import { serverTimestamp } from "@firebase/firestore";
 
 const TICKET_PRICE = process.env.TICKET_PRICE || "2000";
 const HOSTNAME = process.env.HOSTNAME || "http://localhost:3000";
@@ -61,7 +63,7 @@ export const onMercadoPagoPayment = functions
       });
 
     return snapshot.ref.update({
-      preference_id: preference.id,
+      preference_id: preference,
     });
   });
 
@@ -116,12 +118,52 @@ export const onMercadoPagoWebhook = functions
     }
   });
 
-async function getPreference(payment: IPayment): Promise<any> {
+async function getPreference(payment: IPayment): Promise<string> {
+  const preferencesRef = admin.firestore().collection("preferences");
+
+  const query = preferencesRef
+    .where("updated", "<", addSeconds(new Date(), -300)) // Used less than 5 minutes ago
+    .where("link", "!=", null) // Has link
+    .orderBy("updated", "asc")
+    .limit(1);
+
+  let preferenceId;
+
+  try {
+    // START transaction
+    await admin.firestore().runTransaction(async (t) => {
+      const snapshot = await t.get(query);
+
+      if (!snapshot.empty) {
+        const preferenceRef = snapshot.docs[0].ref;
+        // update
+        preferenceRef.update({
+          paymentId: payment.id,
+          updated: new Date(),
+        });
+        preferenceId = preferenceRef.id;
+        return;
+      }
+    });
+    // END transaction
+  } catch (e: any) {
+    console.info("------- ERROR EN TRANSACCión");
+    console.dir(e);
+    throw e;
+  }
+
+  if (preferenceId) {
+    return preferenceId;
+  }
+  return createPreference(payment);
+}
+
+async function createPreference(payment: IPayment): Promise<string> {
   const webhookUrl =
     FUNCTIONS_URL + "onMercadoPagoWebhook?payment_id=" + payment.id;
 
   functions.logger.info("Webhook URL", webhookUrl);
-  return (
+  const preference = (
     await mercadopago.preferences.create({
       items: [
         {
@@ -141,6 +183,18 @@ async function getPreference(payment: IPayment): Promise<any> {
       notification_url: webhookUrl,
     })
   ).body;
+
+  const preferencesRef = admin
+    .firestore()
+    .collection("preferences")
+    .doc(preference.id);
+
+  preferencesRef.set({
+    id: preference.id,
+    updated: serverTimestamp(),
+  });
+
+  return preference.id;
 }
 
 async function getPayment(

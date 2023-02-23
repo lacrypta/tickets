@@ -117,13 +117,8 @@ export const onMercadoPagoWebhook = functions
   });
 
 async function getPreference(payment: IPayment): Promise<any> {
-  const hash = payment.id + (process.env.HASH_SALT || "");
   const webhookUrl =
-    FUNCTIONS_URL +
-    "onMercadoPagoWebhook?payment_id=" +
-    payment.id +
-    "&code=" +
-    hash;
+    FUNCTIONS_URL + "onMercadoPagoWebhook?payment_id=" + payment.id;
 
   functions.logger.info("Webhook URL", webhookUrl);
   return (

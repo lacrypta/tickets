@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Button from "../Form/Button";
+import Button from "../../Form/Button";
 import LinksLoader from "./LinksLoader";
 
 interface IModalMessageProps {

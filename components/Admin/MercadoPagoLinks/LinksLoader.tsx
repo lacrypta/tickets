@@ -1,22 +1,8 @@
-import { preferences } from "mercadopago";
 import { useCallback, useEffect, useState } from "react";
+import ProcessingLink, { LinkProcess } from "./ProcessingLink";
 
 interface LinksLoaderProps {
   links?: string[];
-}
-
-type LinkProcessStatus =
-  | "pending"
-  | "processing"
-  | "saving"
-  | "ready"
-  | "cancelled"
-  | "invalid";
-
-interface LinkProcess {
-  url: string;
-  preference_id?: string;
-  status: LinkProcessStatus;
 }
 
 export const LinksLoader = ({ links = [] }: LinksLoaderProps) => {
@@ -48,7 +34,7 @@ export const LinksLoader = ({ links = [] }: LinksLoaderProps) => {
   return (
     <div>
       {processingLinks.map((link, k) => (
-        <div key={k}>{link.url}</div>
+        <ProcessingLink link={link} key={k} />
       ))}
     </div>
   );

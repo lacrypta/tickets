@@ -3,7 +3,7 @@ import { QrScannerContext } from "../../contexts/QrScanner";
 import { getAuth } from "../../lib/public/firebase";
 import { ajaxCall } from "../../lib/public/request";
 import Button from "../Form/Button";
-import LinksModal from "./LinksModal";
+import LinksModal from "./MercadoPagoLinks/LinksModal";
 
 export const MainWidget = () => {
   const auth = getAuth();

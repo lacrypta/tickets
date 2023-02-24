@@ -123,7 +123,7 @@ async function getPreference(payment: IPayment): Promise<string> {
 
   const query = preferencesRef
     .where("updated", "<", addSeconds(new Date(), -300)) // Used less than 5 minutes ago
-    .where("link", "!=", null) // Has link
+    .where("type", "==", "link") // Has link
     .orderBy("updated", "asc")
     .limit(1);
 
@@ -191,7 +191,8 @@ async function createPreference(payment: IPayment): Promise<string> {
 
   preferencesRef.set({
     id: preference.id,
-    updated: serverTimestamp(),
+    type: "fallback",
+    updated: new Date(),
   });
 
   return preference.id;

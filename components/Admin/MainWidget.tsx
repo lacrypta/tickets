@@ -1,12 +1,14 @@
-import { memo, useCallback, useContext } from "react";
+import { memo, useCallback, useContext, useState } from "react";
 import { QrScannerContext } from "../../contexts/QrScanner";
 import { getAuth } from "../../lib/public/firebase";
 import { ajaxCall } from "../../lib/public/request";
 import Button from "../Form/Button";
+import LinksModal from "./MercadoPagoLinks/LinksModal";
 
 export const MainWidget = () => {
   const auth = getAuth();
   const qrScanner = useContext(QrScannerContext);
+  const [showLinksModal, setShowLinksModal] = useState(false);
 
   const handleLogout = useCallback(() => {
     console.info("Cerrado!");
@@ -23,12 +25,24 @@ export const MainWidget = () => {
     console.dir(res);
   }, []);
 
+  const handleAddLinks = useCallback(async () => {
+    setShowLinksModal(true);
+  }, []);
+
   return (
     <div>
       <Button onClick={handleLogout}>Cerrar</Button>
       <Button onClick={handleScan}>Scan</Button>
       {process.env.NEXT_PUBLIC_DEBUG && (
-        <Button onClick={handlePopulate}>Populate Fixture</Button>
+        <>
+          <Button onClick={handlePopulate}>Populate Fixture</Button>
+          <Button onClick={handleAddLinks}>Agregar Links de MercadoPago</Button>
+
+          <LinksModal
+            show={showLinksModal}
+            onClose={() => setShowLinksModal(false)}
+          />
+        </>
       )}
     </div>
   );

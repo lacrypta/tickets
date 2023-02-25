@@ -44,11 +44,15 @@ export const ProcessingLink = ({
     }, 500);
 
     console.dir(res);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <motion.div
-      className='flex items-center pl-4 overflow-hidden relative'
+      className={
+        "flex items-center pl-4 overflow-hidden relative transition-all " +
+        (status === "ready" && "bg-white")
+      }
       initial={{ height: 0, opacity: 0 }}
       animate={{ height: 40, opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}

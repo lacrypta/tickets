@@ -44,7 +44,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                   <Transition>
                     <Component {...pageProps} />
                   </Transition>
-                  {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
                 </div>
               </div>
 

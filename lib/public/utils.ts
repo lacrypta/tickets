@@ -13,4 +13,12 @@ const getTicketId = (text: string): string | null => {
   return matched ? matched[1] : null;
 };
 
-export { randomString, getTicketId };
+const removeDuplicates = (list: string[]) => {
+  const seen: any = {};
+  return list.filter(function (item) {
+    // eslint-disable-next-line no-prototype-builtins
+    return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+  });
+};
+
+export { randomString, getTicketId, removeDuplicates };

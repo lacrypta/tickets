@@ -9,7 +9,6 @@ export default async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   try {
-    console.info("1");
     if (req.method !== "POST") {
       throw new Error("Invalid Method`");
     }
@@ -19,7 +18,6 @@ export default async function handler(
       throw new Error("Invalid Link");
     }
 
-    console.info("2");
     const response = await axios({
       url: link,
       maxRedirects: 0, // default
@@ -28,12 +26,10 @@ export default async function handler(
       },
     });
 
-    console.info("3");
     const preferenceId = new URL(response.headers.location).searchParams.get(
       "preference-id"
     ) as string;
 
-    console.dir(response.headers);
     if (preferenceId === null) {
       throw new Error("Its fucking null");
     }

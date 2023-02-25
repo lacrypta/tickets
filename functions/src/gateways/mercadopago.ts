@@ -8,7 +8,6 @@ import * as mercadopago from "mercadopago";
 import { ConfigTokenOption } from "mercadopago/configuration";
 import { setPaymentAsPaid } from "../lib/payment";
 import { addSeconds } from "../lib/database";
-import { serverTimestamp } from "@firebase/firestore";
 
 const TICKET_PRICE = process.env.TICKET_PRICE || "2000";
 const HOSTNAME = process.env.HOSTNAME || "http://localhost:3000";
@@ -129,28 +128,22 @@ async function getPreference(payment: IPayment): Promise<string> {
 
   let preferenceId;
 
-  try {
-    // START transaction
-    await admin.firestore().runTransaction(async (t) => {
-      const snapshot = await t.get(query);
+  // START transaction
+  await admin.firestore().runTransaction(async (t) => {
+    const snapshot = await t.get(query);
 
-      if (!snapshot.empty) {
-        const preferenceRef = snapshot.docs[0].ref;
-        // update
-        preferenceRef.update({
-          paymentId: payment.id,
-          updated: new Date(),
-        });
-        preferenceId = preferenceRef.id;
-        return;
-      }
-    });
-    // END transaction
-  } catch (e: any) {
-    console.info("------- ERROR EN TRANSACCión");
-    console.dir(e);
-    throw e;
-  }
+    if (!snapshot.empty) {
+      const preferenceRef = snapshot.docs[0].ref;
+      // update
+      preferenceRef.update({
+        paymentId: payment.id,
+        updated: new Date(),
+      });
+      preferenceId = preferenceRef.id;
+      return;
+    }
+  });
+  // END transaction
 
   if (preferenceId) {
     return preferenceId;

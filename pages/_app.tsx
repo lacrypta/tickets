@@ -13,7 +13,6 @@ import {
   Transition,
 } from "../components/common";
 import { OrderProvider } from "../contexts/Order";
-import Debugger from "../components/Debugger";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { QrScannerProvider } from "../contexts/QrScanner";

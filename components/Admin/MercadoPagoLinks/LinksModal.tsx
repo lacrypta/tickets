@@ -56,11 +56,13 @@ export const LinksModal = ({ show, onClose }: IModalMessageProps) => {
 
               <form onSubmit={handleSubmit} className='mt-4'>
                 <div>
-                  <textarea
-                    id='links'
-                    name='links'
-                    className='w-full'
-                  ></textarea>
+                  <textarea id='links' name='links' className='w-full'>
+                    {`https://mpago.la/15Ehn22
+https://mpago.la/15Ehn23
+https://mpago.la/15Ehn24
+https://mpago.la/15Ehn25
+https://mpago.la/15Ehn26`}
+                  </textarea>
                 </div>
                 <Button type='submit'>Agregar Links</Button>
               </form>

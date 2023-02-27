@@ -15,7 +15,7 @@
     "@firebase/firestore": "^3.5.0",
     "@headlessui/react": "^1.7.7",
     "@thirdweb-dev/react": "^3.7.3",
-    "@thirdweb-dev/sdk": "^3.7.3",
+    "@thirdweb-dev/sdk": "^3.9.5",
     "ethers": "^5.7.2",
     "firebase": "^9.10.0",
     "firebase-admin": "^11.5.0",

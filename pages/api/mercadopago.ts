@@ -38,7 +38,7 @@ export default async function handler(
       id: preferenceId,
       link,
       type: "link",
-      updated: null,
+      updated: new Date(0),
     };
 
     const preferenceRef = db.collection("preferences").doc(preferenceId);

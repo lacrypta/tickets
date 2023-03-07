@@ -131,6 +131,8 @@ async function getPreference(payment: IPayment): Promise<string> {
   // START transaction
   await admin.firestore().runTransaction(async (t) => {
     const snapshot = await t.get(query);
+    console.info("---- snapshot: ");
+    console.dir(snapshot);
 
     if (!snapshot.empty) {
       const preferenceRef = snapshot.docs[0].ref;
@@ -170,13 +172,14 @@ async function createPreference(payment: IPayment): Promise<string> {
       back_urls: {
         success: HOSTNAME + "pago/mercadopago",
       },
-      additional_info: String(payment.id),
       statement_descriptor: MP_ORDER_NAME,
       auto_return: "all",
       notification_url: webhookUrl,
     })
   ).body;
 
+  console.info("preference:");
+  console.dir(preference);
   const preferencesRef = admin
     .firestore()
     .collection("preferences")

@@ -20,7 +20,7 @@ const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
 const MercadoPagoPage: NextPage = () => {
   const router = useRouter();
-  const { preferenceId, checkout, clearCheckout } = useMercadoPago();
+  const { preferenceId, link, checkout, clearCheckout } = useMercadoPago();
   const { order } = useOrder();
   const [hasMounted, setHasMounted] = useState(false);
   const { setActive } = useLoading();
@@ -46,6 +46,14 @@ const MercadoPagoPage: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clearCheckout]
   );
+
+  const initPayment = useCallback(() => {
+    if (link) {
+      window.open(link, "_blank");
+    } else {
+      checkout && checkout();
+    }
+  }, [checkout, link]);
 
   useEffect(() => {
     if (order?.status !== "completed" && !order?.purchaseId) {
@@ -74,12 +82,11 @@ const MercadoPagoPage: NextPage = () => {
           {!preferenceId ? (
             <LoadingSpinner />
           ) : (
-            <Button
-              disabled={!preferenceId}
-              onClick={() => checkout && checkout()}
-            >
-              Pagar
-            </Button>
+            <>
+              <Button disabled={!preferenceId} onClick={initPayment}>
+                Pagar
+              </Button>
+            </>
           )}
         </div>
       </Card>

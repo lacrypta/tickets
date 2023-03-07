@@ -1,3 +1,4 @@
+import { IPreference } from "./../../../types/preference";
 // Types
 import { IPayment, IPaymentFirestore } from "./../../../types/payment";
 
@@ -36,7 +37,7 @@ export const onMercadoPagoPayment = functions
 
     functions.logger.info(`Payment (${payment.id}) being updated:`);
 
-    let preference: any;
+    let preference: IPreference;
 
     try {
       functions.logger.info("START:MercadoPago getPreference");
@@ -62,7 +63,8 @@ export const onMercadoPagoPayment = functions
       });
 
     return snapshot.ref.update({
-      preference_id: preference,
+      preference_id: preference.id,
+      link: preference.link,
     });
   });
 
@@ -117,7 +119,7 @@ export const onMercadoPagoWebhook = functions
     }
   });
 
-async function getPreference(payment: IPayment): Promise<string> {
+async function getPreference(payment: IPayment): Promise<IPreference> {
   const preferencesRef = admin.firestore().collection("preferences");
 
   const query = preferencesRef
@@ -126,7 +128,7 @@ async function getPreference(payment: IPayment): Promise<string> {
     .orderBy("updated", "asc")
     .limit(1);
 
-  let preferenceId;
+  let preferenceData;
 
   // START transaction
   await admin.firestore().runTransaction(async (t) => {
@@ -136,24 +138,33 @@ async function getPreference(payment: IPayment): Promise<string> {
 
     if (!snapshot.empty) {
       const preferenceRef = snapshot.docs[0].ref;
-      // update
+      preferenceData = snapshot.docs[0].data() as IPreference;
+      const paymentRef = admin
+        .firestore()
+        .collection("payments")
+        .doc(payment.id as string);
+      // Update Preference
       preferenceRef.update({
         paymentId: payment.id,
         updated: new Date(),
       });
-      preferenceId = preferenceRef.id;
+
+      // Update Payment
+      paymentRef.update({
+        link: preferenceData.link,
+      });
       return;
     }
   });
   // END transaction
 
-  if (preferenceId) {
-    return preferenceId;
+  if (preferenceData) {
+    return preferenceData;
   }
   return createPreference(payment);
 }
 
-async function createPreference(payment: IPayment): Promise<string> {
+async function createPreference(payment: IPayment): Promise<IPreference> {
   const webhookUrl =
     FUNCTIONS_URL + "onMercadoPagoWebhook?payment_id=" + payment.id;
 
@@ -185,13 +196,15 @@ async function createPreference(payment: IPayment): Promise<string> {
     .collection("preferences")
     .doc(preference.id);
 
-  preferencesRef.set({
+  const preferenceData: IPreference = {
     id: preference.id,
     type: "fallback",
+    paymentId: payment.id as string,
     updated: new Date(),
-  });
+  };
+  preferencesRef.set(preferenceData);
 
-  return preference.id;
+  return preferenceData;
 }
 
 async function getPayment(

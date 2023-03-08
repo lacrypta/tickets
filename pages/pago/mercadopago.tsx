@@ -49,11 +49,11 @@ const MercadoPagoPage: NextPage = () => {
 
   const initPayment = useCallback(() => {
     if (link) {
-      window.open(link, "_blank");
+      router.push(link);
     } else {
       checkout && checkout();
     }
-  }, [checkout, link]);
+  }, [checkout, link, router]);
 
   useEffect(() => {
     if (order?.status !== "completed" && !order?.purchaseId) {

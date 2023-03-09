@@ -64,7 +64,7 @@ export const onMercadoPagoPayment = functions
 
     return snapshot.ref.update({
       preference_id: preference.id,
-      link: preference.link,
+      link: preference.link ? preference.link : null,
     });
   });
 
@@ -133,8 +133,6 @@ async function getPreference(payment: IPayment): Promise<IPreference> {
   // START transaction
   await admin.firestore().runTransaction(async (t) => {
     const snapshot = await t.get(query);
-    console.info("---- snapshot: ");
-    console.dir(snapshot);
 
     if (!snapshot.empty) {
       const preferenceRef = snapshot.docs[0].ref;
@@ -189,8 +187,6 @@ async function createPreference(payment: IPayment): Promise<IPreference> {
     })
   ).body;
 
-  console.info("preference:");
-  console.dir(preference);
   const preferencesRef = admin
     .firestore()
     .collection("preferences")
@@ -202,6 +198,7 @@ async function createPreference(payment: IPayment): Promise<IPreference> {
     paymentId: payment.id as string,
     updated: new Date(),
   };
+
   preferencesRef.set(preferenceData);
 
   return preferenceData;
@@ -213,6 +210,9 @@ async function getPayment(
   const payment = (await mercadopago.payment.get(mercadoPagoPaymentId)).body;
   const paymentId = payment.additional_info.items[0].id;
   const amount = payment.transaction_details.total_paid_amount;
+
+  console.info("MercadoPago Payment:");
+  console.dir(payment);
   return {
     payment,
     paymentId,

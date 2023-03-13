@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { QrScannerProvider } from "../contexts/QrScanner";
 import { PurchaseProvider } from "../contexts/Purchase";
+import WhatsAppButton from "../components/common/WhatsAppButton";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -45,7 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   </Transition>
                 </div>
               </div>
-
+              <WhatsAppButton />
               <Footer />
             </ThirdwebProvider>
           </OrderProvider>

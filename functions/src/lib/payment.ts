@@ -31,6 +31,8 @@ export const setPaymentAsPaid = async ({
     throw new Error("Invalid payment method");
   }
   if (payment?.amount !== amount) {
+    console.info("Payment amount:", payment?.amount);
+    console.info("amount:", amount);
     throw new Error("Invalid amount");
   }
 

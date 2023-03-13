@@ -78,7 +78,6 @@ const MercadoPagoPage: NextPage = () => {
       <Card>
         <h1>MercadoPago</h1>
         <Price value={PRICE} />
-        <div>{JSON.stringify(payment)}</div>
         <div>
           {!preferenceId ? (
             <LoadingSpinner />

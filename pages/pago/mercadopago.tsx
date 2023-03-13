@@ -20,8 +20,7 @@ const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
 const MercadoPagoPage: NextPage = () => {
   const router = useRouter();
-  const { preferenceId, link, checkout, clearCheckout, payment } =
-    useMercadoPago();
+  const { preferenceId, link, checkout, clearCheckout } = useMercadoPago();
   const { order } = useOrder();
   const [hasMounted, setHasMounted] = useState(false);
   const { setActive } = useLoading();

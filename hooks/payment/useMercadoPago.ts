@@ -8,6 +8,7 @@ export interface IUseOrderResult extends IPaymentHook {
   payment?: IMercadoPagoPayment;
   sdk?: any;
   preferenceId?: string;
+  link?: string;
   clearCheckout: () => void;
   checkout?: () => void;
   createPayment: () => Promise<IPayment>;
@@ -20,6 +21,7 @@ const MERCADOPAGO_AMOUNT = parseFloat(
 export const useMercadoPago = (): IUseOrderResult => {
   const { payment, createPayment: createGenericPayment } = useOrder();
   const [preferenceId, setPreferenceId] = useState<string>();
+  const [link, setLink] = useState<string>();
   const [checkoutObject, setCheckoutObject] = useState<any>();
 
   // Load MercadoPago SDK
@@ -33,6 +35,10 @@ export const useMercadoPago = (): IUseOrderResult => {
   // Set preference Id when available available
   useEffect(() => {
     if (payment && payment?.method === "mercadopago") {
+      const mpPayment = payment as IMercadoPagoPayment;
+      if (mpPayment.link) {
+        setLink(mpPayment.link);
+      }
       setPreferenceId(payment?.preference_id);
     }
   }, [payment]);
@@ -81,6 +87,7 @@ export const useMercadoPago = (): IUseOrderResult => {
     payment: payment as IMercadoPagoPayment,
     sdk,
     preferenceId,
+    link,
     createPayment,
     checkout,
     clearCheckout,

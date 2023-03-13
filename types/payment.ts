@@ -22,6 +22,7 @@ export interface ICryptoPayment extends IPayment {
 export interface IMercadoPagoPayment extends IPayment {
   method: "mercadopago";
   preference_id?: string;
+  link?: string;
 }
 
 export interface IInvitacionPayment extends IPayment {

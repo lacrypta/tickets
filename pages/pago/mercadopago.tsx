@@ -20,7 +20,7 @@ const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
 
 const MercadoPagoPage: NextPage = () => {
   const router = useRouter();
-  const { preferenceId, checkout, clearCheckout } = useMercadoPago();
+  const { preferenceId, link, checkout, clearCheckout } = useMercadoPago();
   const { order } = useOrder();
   const [hasMounted, setHasMounted] = useState(false);
   const { setActive } = useLoading();
@@ -47,6 +47,14 @@ const MercadoPagoPage: NextPage = () => {
     [clearCheckout]
   );
 
+  const initPayment = useCallback(() => {
+    if (link) {
+      router.push(link);
+    } else {
+      checkout && checkout();
+    }
+  }, [checkout, link, router]);
+
   useEffect(() => {
     if (order?.status !== "completed" && !order?.purchaseId) {
       return;
@@ -69,17 +77,15 @@ const MercadoPagoPage: NextPage = () => {
       <Card>
         <h1>MercadoPago</h1>
         <Price value={PRICE} />
-
         <div>
           {!preferenceId ? (
             <LoadingSpinner />
           ) : (
-            <Button
-              disabled={!preferenceId}
-              onClick={() => checkout && checkout()}
-            >
-              Pagar
-            </Button>
+            <>
+              <Button disabled={!preferenceId} onClick={initPayment}>
+                Pagar
+              </Button>
+            </>
           )}
         </div>
       </Card>

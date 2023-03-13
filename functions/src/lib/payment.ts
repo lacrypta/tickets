@@ -31,6 +31,8 @@ export const setPaymentAsPaid = async ({
     throw new Error("Invalid payment method");
   }
   if (payment?.amount !== amount) {
+    console.info("Payment amount:", payment?.amount);
+    console.info("amount:", amount);
     throw new Error("Invalid amount");
   }
 
@@ -68,7 +70,7 @@ export const setPaymentAsPaid = async ({
   sendEmail({
     email: order.user.email,
     fullname: order.user.fullname,
-    url: HOSTNAME + "/entrada/" + purchaseRef.id,
+    url: HOSTNAME + "entrada/" + purchaseRef.id,
   }).then(() => {
     functions.logger.info(`E-mail sent to (${order.user.email})`);
   });

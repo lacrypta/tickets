@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Button from "../../Form/Button";
 import LinksLoader from "./LinksLoader";
+import { isMercadoPagoLink } from "../../../lib/public/mercadopago";
+import { removeDuplicates } from "../../../lib/public/utils";
 
 interface IModalMessageProps {
   show: boolean;
@@ -24,7 +26,13 @@ export const LinksModal = ({ show, onClose }: IModalMessageProps) => {
   const [links, setLinks] = useState<string[]>([]);
 
   const handleSubmit = useCallback((e: any) => {
-    setLinks(e.target.links.value.split("\n"));
+    let links: string[] = e.target.links.value
+      .split("\n")
+      .filter(isMercadoPagoLink);
+
+    links = removeDuplicates(links);
+
+    setLinks(links);
     e.preventDefault();
     return false;
   }, []);
@@ -48,11 +56,13 @@ export const LinksModal = ({ show, onClose }: IModalMessageProps) => {
 
               <form onSubmit={handleSubmit} className='mt-4'>
                 <div>
-                  <textarea
-                    id='links'
-                    name='links'
-                    className='w-full'
-                  ></textarea>
+                  <textarea id='links' name='links' className='w-full'>
+                    {`https://mpago.la/15Ehn22
+https://mpago.la/15Ehn23
+https://mpago.la/15Ehn24
+https://mpago.la/15Ehn25
+https://mpago.la/15Ehn26`}
+                  </textarea>
                 </div>
                 <Button type='submit'>Agregar Links</Button>
               </form>

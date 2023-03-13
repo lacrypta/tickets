@@ -1,41 +1,31 @@
-import { useCallback, useEffect, useState } from "react";
-import ProcessingLink, { LinkProcess } from "./ProcessingLink";
+import ProcessingLink from "./ProcessingLink";
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 interface LinksLoaderProps {
   links?: string[];
 }
 
 export const LinksLoader = ({ links = [] }: LinksLoaderProps) => {
-  const [processingLinks, setProcessingLinks] = useState<LinkProcess[]>([]);
-  const [processing, setProcessing] = useState(false);
-
-  const processLinks = useCallback(
-    async (links: string[]) => {
-      setProcessing(true);
-      const _processingLinks = links.map(
-        (link) =>
-          ({
-            url: link,
-            status: "pending",
-          } as LinkProcess)
-      );
-      setProcessingLinks(_processingLinks);
-      console.info("Start Processing Links...");
-      console.dir(processingLinks);
-    },
-    [processingLinks]
-  );
-
-  useEffect(() => {
-    processLinks(links);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [links]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const handleFinished = () => {
+    setCurrentIndex((c) => c + 1);
+    console.info("currentIndex", currentIndex);
+  };
 
   return (
     <div>
-      {processingLinks.map((link, k) => (
-        <ProcessingLink link={link} key={k} />
-      ))}
+      <AnimatePresence>
+        {links.map((link, k) => (
+          <ProcessingLink
+            active={k <= currentIndex}
+            link={link}
+            key={k}
+            index={k}
+            onFinished={handleFinished}
+          />
+        ))}
+      </AnimatePresence>
     </div>
   );
 };

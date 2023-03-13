@@ -38,7 +38,7 @@ export const Details = () => {
       <h1>Entrada</h1>
       <div>Nombre : {purchase?.user.fullname}</div>
       <div>E-mail : {purchase?.user.email}</div>
-      <div>Te enviamos por por mail el QR</div>
+      <div>Te enviamos por mail los detalles de la entrada</div>
       <div className='flex justify-center'>
         <motion.div
           initial={{ opacity: 0, scale: 0 }}

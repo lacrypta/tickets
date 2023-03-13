@@ -19,7 +19,7 @@ const html = `<div style="padding: 1em; background: white;">
 
             <div><h2>Tercer Paso</h2></div>
             <div>Guardá la fecha en tu calendario (Link automático para Google Calendar)</div>
-            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20230310T210000Z%2F20230311T000000Z&details=Primera%20capacitaci%C3%B3n%20de%20La%20Crypta%0A%0A%3Ca%20href%3D%22https%3A%2F%2Fentradas.lacrypta.com.ar%22%3ELink%20a%20Entrada%3C%2Fa%3E&location=Villanueva%201367%2C%20C1426%20BMI%2C%20Buenos%20Aires&text=Qu%C3%A9%20c%40raj0%20es%20Bitcoin%3F">Agregar al Calendario</a>
+            <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20230331T210000Z/20230331T000000Z&details=Primera+capacitaci%C3%B3n+de+La+Crypta%0A%0A%3Ca+href%3D%22https://entradas.lacrypta.com.ar%22%3ELink+a+Entrada%3C/a%3E&location=Villanueva+1367,+C1426+BMI,+Buenos+Aires&text=Qu%C3%A9+c@raj0+es+Bitcoin?">Agregar al Calendario</a>
             <hr />
 
             <div><h2>Para ver tu Ticket</h2></div>
@@ -29,7 +29,7 @@ const html = `<div style="padding: 1em; background: white;">
             <br />
             <hr />
             <br />
-            <div><h3>10 de Marzo 20:00 (Puntual)</h3></div>
+            <div><h3>31 de Marzo 18:00 (Puntual)</h3></div>
             <div>Dirección: <a href="https://www.google.com/maps/place/Villanueva+1367,+C1426+BMI,+Buenos+Aires/@-34.5648535,-58.4453019,17z/data=!3m1!4b1!4m5!3m4!1s0x95bcb5c8870cdc23:0xc945d369aa39b3e0!8m2!3d-34.5648579!4d-58.4431132">Villanueva 1367, CABA</a></div>
 
             

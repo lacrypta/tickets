@@ -13,11 +13,11 @@ import {
   Transition,
 } from "../components/common";
 import { OrderProvider } from "../contexts/Order";
-import Debugger from "../components/Debugger";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { QrScannerProvider } from "../contexts/QrScanner";
 import { PurchaseProvider } from "../contexts/Purchase";
+import WhatsAppButton from "../components/common/WhatsAppButton";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -44,10 +44,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                   <Transition>
                     <Component {...pageProps} />
                   </Transition>
-                  {process.env.NEXT_PUBLIC_DEBUG === "1" ? <Debugger /> : ""}
                 </div>
               </div>
-
+              <WhatsAppButton />
               <Footer />
             </ThirdwebProvider>
           </OrderProvider>

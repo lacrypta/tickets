@@ -101,7 +101,26 @@ export const onMercadoPagoWebhook = functions
       }
 
       functions.logger.info("Start:MercadoPago getPayment");
-      const { paymentId, amount } = await getPayment(mpPaymentId);
+
+      // Get MercadoPago Payment
+      const mpPayment = (await mercadopago.payment.get(mpPaymentId)).body;
+      const amount = mpPayment.transaction_details.total_paid_amount;
+      // Get MercadoPago Order
+      const mpOrder = (
+        await mercadopago.merchant_orders.get(mpPayment.order.id)
+      ).body;
+      console.info("mpOrder:");
+      console.dir(mpOrder);
+      const preferenceId = mpOrder.preference_id;
+
+      // Get local PaymentID from PreferenceID
+      const preference = await admin
+        .firestore()
+        .collection("preferences")
+        .doc(preferenceId)
+        .get();
+      const paymentId = preference.data()?.paymentId;
+
       functions.logger.info("FINISH:MercadoPago getPayment");
       await setPaymentAsPaid({ paymentId, amount, method: "mercadopago" });
 
@@ -179,7 +198,7 @@ async function createPreference(payment: IPayment): Promise<IPreference> {
         },
       ],
       back_urls: {
-        success: HOSTNAME + "pago/mercadopago",
+        success: HOSTNAME + "pago/procesando",
       },
       statement_descriptor: MP_ORDER_NAME,
       auto_return: "all",
@@ -202,20 +221,4 @@ async function createPreference(payment: IPayment): Promise<IPreference> {
   preferencesRef.set(preferenceData);
 
   return preferenceData;
-}
-
-async function getPayment(
-  mercadoPagoPaymentId: number
-): Promise<{ payment: any; paymentId: string; amount: number }> {
-  const payment = (await mercadopago.payment.get(mercadoPagoPaymentId)).body;
-  const paymentId = payment.additional_info.items[0].id;
-  const amount = payment.transaction_details.total_paid_amount;
-
-  console.info("MercadoPago Payment:");
-  console.dir(payment);
-  return {
-    payment,
-    paymentId,
-    amount,
-  };
 }

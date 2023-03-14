@@ -82,6 +82,7 @@ service cloud.firestore {
     
     // Orders
     match /orders/{orderId} {
+      allow read: if isAdmin();
     	allow get: if true;
       allow create: if filterCreateOrder(request.resource.data);
       allow update: if filterUpdateOrder(request.resource.data);

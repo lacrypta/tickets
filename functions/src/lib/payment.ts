@@ -25,10 +25,10 @@ export const setPaymentAsPaid = async ({
 
   // Validate payment
   if (payment?.method !== method) {
-    throw new Error("Invalid payment method");
+    throw new Error(`Invalid payment method (${method})`);
   }
-  if (payment?.status !== "waiting") {
-    throw new Error("Invalid payment method");
+  if (!["waiting", "executing"].includes(payment?.status)) {
+    throw new Error("Invalid payment status");
   }
   if (payment?.amount !== amount) {
     console.info("Payment amount:", payment?.amount);

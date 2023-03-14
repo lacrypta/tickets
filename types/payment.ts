@@ -35,7 +35,7 @@ export interface IBankPayment extends IPayment {
 }
 
 export type PaymentMethod = "crypto" | "mercadopago" | "invitation" | "bank";
-export type PaymentStatus = "waiting" | "paid" | "cancelled";
+export type PaymentStatus = "waiting" | "executing" | "paid" | "cancelled";
 
 export interface IPaymentHook {
   payment?: IPayment;

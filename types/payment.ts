@@ -30,8 +30,12 @@ export interface IInvitacionPayment extends IPayment {
   secret: string;
 }
 
-export type PaymentMethod = "crypto" | "mercadopago" | "invitation";
-export type PaymentStatus = "waiting" | "paid" | "cancelled";
+export interface IBankPayment extends IPayment {
+  method: "bank";
+}
+
+export type PaymentMethod = "crypto" | "mercadopago" | "invitation" | "bank";
+export type PaymentStatus = "waiting" | "executing" | "paid" | "cancelled";
 
 export interface IPaymentHook {
   payment?: IPayment;

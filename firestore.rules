@@ -53,7 +53,7 @@ service cloud.firestore {
     	return
       	paymentData.keys().hasOnly(limitedKeys) &&
         paymentData.amount > 0 &&
-      	paymentData.method in ['crypto', 'mercadopago', 'invitation'] &&
+      	paymentData.method in ['crypto', 'mercadopago', 'invitation', 'bank'] &&
         paymentData.status in ['waiting', 'paid', 'cancelled'] &&
         paymentData.createdAt == request.time &&
         exists(/databases/$(database)/documents/orders/$(paymentData.orderId));

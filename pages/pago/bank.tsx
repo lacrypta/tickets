@@ -60,9 +60,6 @@ Envío la captura de la transacción.`);
           <b>CBU:</b> 0000168300000000702647
         </div>
         <div>
-          <b>Monto:</b> 100
-        </div>
-        <div>
           <Button onClick={openWhatsApp}>
             <img
               src={whatsAppImage.src}

@@ -70,7 +70,7 @@ export const setPaymentAsPaid = async ({
   sendEmail({
     email: order.user.email,
     fullname: order.user.fullname,
-    url: HOSTNAME + "entrada/" + purchaseRef.id,
+    url: HOSTNAME + "/entrada/" + purchaseRef.id,
   }).then(() => {
     functions.logger.info(`E-mail sent to (${order.user.email})`);
   });

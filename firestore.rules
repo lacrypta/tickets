@@ -54,7 +54,7 @@ service cloud.firestore {
       	paymentData.keys().hasOnly(limitedKeys) &&
         paymentData.amount > 0 &&
       	paymentData.method in ['crypto', 'mercadopago', 'invitation', 'bank'] &&
-        paymentData.status in ['waiting', 'paid', 'cancelled'] &&
+        paymentData.status in ['waiting', 'executing', 'paid', 'cancelled'] &&
         paymentData.createdAt == request.time &&
         exists(/databases/$(database)/documents/orders/$(paymentData.orderId));
     }
@@ -92,6 +92,7 @@ service cloud.firestore {
     // Payments
     match /payments/{paymentId} {
       allow get: if true;
+      allow write: if isAdmin();
       allow create: if filterCreatePayment(request.resource.data);
     }
 

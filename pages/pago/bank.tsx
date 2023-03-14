@@ -7,6 +7,8 @@ import Card from "../../components/common/Card";
 import useLoading from "../../hooks/useLoading";
 import { useRedirectOnEmpty } from "../../hooks/useRedirectOnEmpty";
 
+const PRICE = parseFloat(process.env.NEXT_PUBLIC_TICKET_PRICE || "2000");
+
 const BankPage: NextPage = () => {
   const { setActive } = useLoading();
 
@@ -27,7 +29,7 @@ const BankPage: NextPage = () => {
 
       <Card>
         <h1>Crypto</h1>
-        <Price value={1000} />
+        <Price value={PRICE} />
         Bancooo
       </Card>
     </div>

@@ -21,7 +21,8 @@ const BankPage: NextPage = () => {
 
   const openWhatsApp = () => {
     const phone = "541131080456";
-    const message = encodeURIComponent(`E-mail : *${order?.user.email}*.
+    const message = encodeURIComponent(`Nombre : *${order?.user.fullname}*.
+E-mail : *${order?.user.email}*.
 Envío la captura de la transacción.`);
 
     window.open(

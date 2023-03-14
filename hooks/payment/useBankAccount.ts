@@ -1,9 +1,11 @@
 import { useCallback } from "react";
 import { IBankPayment, IPayment, IPaymentHook } from "./../../types/payment";
 import useOrder from "../useOrder";
+import { IOrder } from "../../types/order";
 
 export interface IUseOrderResult extends IPaymentHook {
   payment?: IBankPayment;
+  order?: IOrder;
   createPayment: () => Promise<IPayment>;
 }
 
@@ -12,7 +14,7 @@ const TICKET_AMOUNT = parseFloat(
 );
 
 export const useBank = (): IUseOrderResult => {
-  const { payment, createPayment: createGenericPayment } = useOrder();
+  const { order, payment, createPayment: createGenericPayment } = useOrder();
 
   const createPayment = useCallback(async (): Promise<IBankPayment> => {
     const payment: IBankPayment = {
@@ -27,6 +29,7 @@ export const useBank = (): IUseOrderResult => {
 
   return {
     payment: payment as IBankPayment,
+    order,
     createPayment,
   };
 };

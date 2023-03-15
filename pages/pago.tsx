@@ -60,7 +60,9 @@ const PaymentPage: NextPage = () => {
         <h1>Reservá tu lugar</h1>
 
         <div className='flex flex-col text-center space-y-4 text-2xl'>
-          <div className='text-lg text-right'>10 de Marzo, Belgrano, CABA</div>
+          <div className='text-lg text-right'>
+            31 de Marzo (19hs), Belgrano, CABA
+          </div>
           <Price value={ticketPrice} />
           <div>
             Entras con <b>Banco</b> y te vas con <b>Bitcoin</b>

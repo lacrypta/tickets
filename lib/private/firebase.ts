@@ -6,10 +6,12 @@ import { getFirestore } from "firebase-admin/firestore";
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT ?? "{}");
 
 // Set emulator variables if present
-process.env.FIREBASE_AUTH_EMULATOR_HOST =
-  process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST;
-process.env.FIRESTORE_EMULATOR_HOST =
-  process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST;
+// process.env.FIREBASE_AUTH_EMULATOR_HOST =
+//   process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST;
+// process.env.FIRESTORE_EMULATOR_HOST =
+//   process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST;
+
+// console.info(process.env.FIREBASE_AUTH_EMULATOR_HOST);
 
 // Initialize Firebase
 try {

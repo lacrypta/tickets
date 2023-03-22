@@ -9,10 +9,10 @@ const TextAttention = ({ children }: ITextAttentionProps) => {
   return (
     <motion.div
       className='box'
-      animate={{
-        scale: [0.8, 1.3, 1.5, 1.3, 0.8],
-        rotate: [0, 10, 0, -10, 0],
-      }}
+      // animate={{
+      //   scale: [0.8, 1.3, 1.5, 1.3, 0.8],
+      //   rotate: [0, 10, 0, -10, 0],
+      // }}
       transition={{
         duration: 1,
         ease: "easeInOut",

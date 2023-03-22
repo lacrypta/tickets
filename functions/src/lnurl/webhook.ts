@@ -28,6 +28,6 @@ export const onLNURLwWebhook = functions
       .collection("purchases")
       .doc(purchaseId as string)
       .update({
-        status: "claimed",
+        status: "withdrawn",
       });
   });

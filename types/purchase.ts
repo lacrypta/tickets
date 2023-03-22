@@ -12,4 +12,4 @@ export interface IPurchase {
   status: PurchaseStatus;
 }
 
-export type PurchaseStatus = "ready" | "claimed";
+export type PurchaseStatus = "ready" | "claimed" | "withdrawn";

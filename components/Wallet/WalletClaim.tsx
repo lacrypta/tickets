@@ -7,7 +7,7 @@ import { IPurchase } from "../../types/purchase";
 
 export const WalletClaim = () => {
   const { purchase } = useContext(PurchaseContext);
-  const sats = 4324234;
+  const sats = 1400;
   const router = useRouter();
   const claim = useCallback(() => {
     router.push("lightning://" + (purchase as IPurchase).lnUrlw);
@@ -19,15 +19,22 @@ export const WalletClaim = () => {
       <h2 className='text-2xl'>Listo para recibir?</h2>
       <div className='flex flex-col space-y-4 pt-4'>
         <p>El total es de {sats} satoshis</p>
-        <p>{sats} sats = ARS 1.000</p>
-        <p>
-          Hacé click en el botón y seleccióna <b>Muun</b>
-        </p>
+        <p>{sats} sats = ARS 2.000</p>
 
-        <Button disabled={!purchase?.lnUrlw} onClick={claim}>
-          {" "}
-          Recibir a <MuunSvg height='48' className='mr-2' />
-        </Button>
+        {purchase?.status === "claimed" ? (
+          <div>Excelente, completaste todos los pasos!</div>
+        ) : (
+          <>
+            <p>
+              Hacé click en el botón y seleccióna <b>Muun</b>
+            </p>
+
+            <Button disabled={!purchase?.lnUrlw} onClick={claim}>
+              {" "}
+              Recibir a <MuunSvg height='48' className='mr-2' />
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

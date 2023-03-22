@@ -7,7 +7,7 @@ export const generateWithdrawLink = async (
 ) => {
   const url = process.env.LNBITS_URL + "withdraw/api/v1/links";
   const body: LnUrlWithdrawBody = {
-    title: "Curso de La Crypta",
+    title: "Qué CAR@J# es Bitcoin?",
     max_withdrawable: sats,
     min_withdrawable: sats,
     is_unique: true,

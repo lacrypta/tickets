@@ -21,7 +21,7 @@ export const WalletClaim = () => {
         <p>El total es de {sats} satoshis</p>
         <p>{sats} sats = ARS 2.000</p>
 
-        {purchase?.status === "claimed" ? (
+        {purchase?.status === "withdrawn" ? (
           <div>Excelente, completaste todos los pasos!</div>
         ) : (
           <>

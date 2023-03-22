@@ -30,4 +30,8 @@ export const onLNURLwWebhook = functions
       .update({
         status: "withdrawn",
       });
+
+    console.info("Updated!");
+
+    res.status(200).send("OK");
   });

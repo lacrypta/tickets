@@ -13,7 +13,7 @@ export const Details = () => {
 
   useEffect(() => {
     if (purchase) {
-      if (purchase.status === "claimed") {
+      if (["claimed", "withdrawn"].includes(purchase.status)) {
         console.info("****** ROUTER");
         console.dir(router);
         router.push("/wallet");

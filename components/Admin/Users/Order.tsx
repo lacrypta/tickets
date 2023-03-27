@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { IOrder } from "../../../types/order";
 import { db, doc, updateDoc } from "../../../lib/public/firebase";
 
@@ -7,9 +7,10 @@ interface OrderProps {
 }
 
 export const Order = ({ order }: OrderProps) => {
+  const [processing, setProcessing] = useState(false);
   const setAsPaid = useCallback(() => {
     const paymentRef = doc(db, "payments", order.paymentId as string);
-
+    setProcessing(true);
     updateDoc(paymentRef, {
       status: "executing",
     });
@@ -21,10 +22,14 @@ export const Order = ({ order }: OrderProps) => {
         <div>{order.user.fullname}</div>
         <div>{order.user.email}</div>
       </div>
-      <div className='bg-gray-700/[0.5] rounded-lg ring-offset-4 ring-white hover:bg-gray-300/[0.5] active:bg-gray-600/[0.2] text-white p-3'>
+      <div>
         {order.status === "pending" && (
-          <button className='' onClick={setAsPaid}>
-            PAGADO
+          <button
+            disabled={processing}
+            className='bg-gray-700/[0.5] rounded-lg ring-offset-4 ring-white enabled:hover:bg-gray-300/[0.5] enabled:active:bg-gray-600/[0.2] text-white p-3 disabled:opacity-25'
+            onClick={setAsPaid}
+          >
+            {processing ? "Procesando..." : "Marcar como pagado"}
           </button>
         )}
       </div>

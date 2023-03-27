@@ -9,7 +9,7 @@ const CLOUD_FUNCTIONS_REGION =
   process.env.CLOUD_FUNCTIONS_REGION || "southamerica-east1";
 
 const SAT_AMOUNT = parseInt(process.env.LIGHTNING_CLAIM_AMOUNT || "10000");
-// const FUNCTIONS_URL = `https://${CLOUD_FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/`;
+const FUNCTIONS_URL = `https://${CLOUD_FUNCTIONS_REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net`;
 
 export const onTicketScan = functions
   .region(CLOUD_FUNCTIONS_REGION)
@@ -28,7 +28,9 @@ export const onTicketScan = functions
 
     try {
       // Request for LNURL to lnbits
-      const lnUrl = await generateWithdrawLink(SAT_AMOUNT);
+
+      const webhookUrl = `${FUNCTIONS_URL}/onLNURLwWebhook?purchaseId=${purchaseId}`;
+      const lnUrl = await generateWithdrawLink(SAT_AMOUNT, webhookUrl);
 
       // update purchase lnUrl
       await admin.firestore().collection("purchases").doc(purchaseId).update({

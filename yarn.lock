@@ -2972,71 +2972,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@motionone/animation@npm:^10.15.1":
-  version: 10.15.1
-  resolution: "@motionone/animation@npm:10.15.1"
-  dependencies:
-    "@motionone/easing": ^10.15.1
-    "@motionone/types": ^10.15.1
-    "@motionone/utils": ^10.15.1
-    tslib: ^2.3.1
-  checksum: 75b7a1e6c47c27073a578eb5559ea0a6e7075862c72e1eb1598403c8c2725f596a95b0369514c9e72f3c7439a9845c468b85a14d4e500df48e09d01b0739d4a7
-  languageName: node
-  linkType: hard
-
-"@motionone/dom@npm:^10.15.3":
-  version: 10.15.5
-  resolution: "@motionone/dom@npm:10.15.5"
-  dependencies:
-    "@motionone/animation": ^10.15.1
-    "@motionone/generators": ^10.15.1
-    "@motionone/types": ^10.15.1
-    "@motionone/utils": ^10.15.1
-    hey-listen: ^1.0.8
-    tslib: ^2.3.1
-  checksum: 2453fe3df6a2b4b339d075bcd598bda1eee1926ba0ad881edfd154362b0992c91f31c08d83c469c7e8cb8bf8ebc0ed5530972673cf5c74d99e46e3772cf5f1cb
-  languageName: node
-  linkType: hard
-
-"@motionone/easing@npm:^10.15.1":
-  version: 10.15.1
-  resolution: "@motionone/easing@npm:10.15.1"
-  dependencies:
-    "@motionone/utils": ^10.15.1
-    tslib: ^2.3.1
-  checksum: cf7cfcf9917525d892334c58282425aafc69d9ab9004c190bfa7cf91317a680e8143f227adc79557424e7f26cdf8478dcbb2ae467e744cebc58195d6f0b8153a
-  languageName: node
-  linkType: hard
-
-"@motionone/generators@npm:^10.15.1":
-  version: 10.15.1
-  resolution: "@motionone/generators@npm:10.15.1"
-  dependencies:
-    "@motionone/types": ^10.15.1
-    "@motionone/utils": ^10.15.1
-    tslib: ^2.3.1
-  checksum: 0eb6797a64d536bb5c26628343d6594a2ebc45c3c447b8ce442b4ac3a41be847b860ac009bda7968fc7d339d2ee49b18bfe36306c5dd99cf17c7d84c82de93f3
-  languageName: node
-  linkType: hard
-
-"@motionone/types@npm:^10.15.1":
-  version: 10.15.1
-  resolution: "@motionone/types@npm:10.15.1"
-  checksum: 98091f7dca257508d94d1080678c433da39a814e8e58aaa742212bf6c2a5b5e2120a6251a06e3ea522219ce6d1b6eb6aa2cab224b803fe52789033d8398ef0aa
-  languageName: node
-  linkType: hard
-
-"@motionone/utils@npm:^10.15.1":
-  version: 10.15.1
-  resolution: "@motionone/utils@npm:10.15.1"
-  dependencies:
-    "@motionone/types": ^10.15.1
-    hey-listen: ^1.0.8
-    tslib: ^2.3.1
-  checksum: 6ef13cd6637ec87c340e5536f849f8c40d30cc90139a3856d11cd70d78e3740f8815b0e63564fefd23c05a060da7a0ea5395390549606ed8801a7b832b74e04e
-  languageName: node
-  linkType: hard
-
 "@next/env@npm:13.1.1":
   version: 13.1.1
   resolution: "@next/env@npm:13.1.1"
@@ -7592,13 +7527,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "framer-motion@npm:9.0.1"
+"framer-motion@npm:^10.9.1":
+  version: 10.9.1
+  resolution: "framer-motion@npm:10.9.1"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
-    "@motionone/dom": ^10.15.3
-    hey-listen: ^1.0.8
     tslib: ^2.4.0
   peerDependencies:
     react: ^18.0.0
@@ -7606,7 +7539,12 @@ __metadata:
   dependenciesMeta:
     "@emotion/is-prop-valid":
       optional: true
-  checksum: e4e47bad607ad9882c515223dab2357203812039bb47f2787a29b9e951299cb6b94d18a46989bb6fc6a5a31a417a58c3cf210e2e6867d2ab85190550767465de
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: d2eacc83a1ab308a8cfa404b95fb5fb821b6ff821238e365b6bf0b999a1342b00287c58c9c6d29c00b84066315fdf86acc081d4289c03c17f2f4e58e5bfc2e3e
   languageName: node
   linkType: hard
 
@@ -7638,7 +7576,7 @@ __metadata:
 
 "fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -8106,13 +8044,6 @@ __metadata:
     inherits: ^2.0.3
     minimalistic-assert: ^1.0.1
   checksum: e350096e659c62422b85fa508e4b3669017311aa4c49b74f19f8e1bc7f3a54a584fdfd45326d4964d6011f2b2d882e38bea775a96046f2a61b7779a979629d8f
-  languageName: node
-  linkType: hard
-
-"hey-listen@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "hey-listen@npm:1.0.8"
-  checksum: 6bad60b367688f5348e25e7ca3276a74b59ac5a09b0455e6ff8ab7d4a9e38cd2116c708a7dcd8a954d27253ce1d8717ec891d175723ea739885b828cf44e4072
   languageName: node
   linkType: hard
 
@@ -9023,7 +8954,7 @@ __metadata:
     file-loader: ^6.2.0
     firebase: ^9.10.0
     firebase-admin: ^11.5.0
-    framer-motion: ^9.0.1
+    framer-motion: ^10.9.1
     mercadopago: ^1.5.14
     next: ^13.1.1
     next-axiom: ^0.16.0
@@ -10887,7 +10818,7 @@ __metadata:
 
 "resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
   version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
+  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -10900,7 +10831,7 @@ __metadata:
 
 "resolve@patch:resolve@^2.0.0-next.4#~builtin<compat/resolve>":
   version: 2.0.0-next.4
-  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=c3c19d"
+  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=07638b"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -11783,7 +11714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0":
+"tslib@npm:^2.1.0, tslib@npm:^2.4.0":
   version: 2.4.1
   resolution: "tslib@npm:2.4.1"
   checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
@@ -11895,11 +11826,11 @@ __metadata:
 
 "typescript@patch:typescript@4.9.4#~builtin<compat/typescript>":
   version: 4.9.4
-  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=23ec76"
+  resolution: "typescript@patch:typescript@npm%3A4.9.4#~builtin<compat/typescript>::version=4.9.4&hash=a1c5e5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3e2ab0772908676d9b9cb83398c70003a3b08e1c6b3b122409df9f4b520f2fdaefa20c3d7d57dce283fed760ac94b3ce94d4a7fa875127b67852904425a1f0dc
+  checksum: 37f6e2c3c5e2aa5934b85b0fddbf32eeac8b1bacf3a5b51d01946936d03f5377fe86255d4e5a4ae628fd0cd553386355ad362c57f13b4635064400f3e8e05b9d
   languageName: node
   linkType: hard
 

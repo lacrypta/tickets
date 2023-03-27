@@ -19,7 +19,7 @@ const html = `<div style="padding: 1em; background: white;">
 
             <div><h2>Tercer Paso</h2></div>
             <div>Guardá la fecha en tu calendario (Link automático para Google Calendar)</div>
-            <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20230331T210000Z/20230331T000000Z&details=Primera+capacitaci%C3%B3n+de+La+Crypta%0A%0A%3Ca+href%3D%22https://entradas.lacrypta.com.ar%22%3ELink+a+Entrada%3C/a%3E&location=Villanueva+1367,+C1426+BMI,+Buenos+Aires&text=Qu%C3%A9+c@raj0+es+Bitcoin?">Agregar al Calendario</a>
+            <a href="https://calendar.google.com/calendar/u/0/r/eventedit?dates=20230331T220000Z/20230331T240000Z&details=Primera+capacitaci%C3%B3n+de+La+Crypta%0A%0A%3Ca+href%3D%22https://entradas.lacrypta.com.ar%22%3ELink+a+Entrada%3C/a%3E&location=Villanueva+1367,+C1426+BMI,+Buenos+Aires&text=Qu%C3%A9+CAR@JO+es+Bitcoin?">Agregar al Calendario</a>
             <hr />
 
             <div><h2>Para ver tu Ticket</h2></div>

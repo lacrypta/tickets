@@ -7,7 +7,7 @@ import { IPurchase } from "../../types/purchase";
 
 export const WalletClaim = () => {
   const { purchase } = useContext(PurchaseContext);
-  const sats = 1400;
+  const sats = 18000;
   const router = useRouter();
   const claim = useCallback(() => {
     router.push("lightning://" + (purchase as IPurchase).lnUrlw);

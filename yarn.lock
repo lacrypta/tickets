@@ -2291,6 +2291,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@firebase/component@npm:0.6.4":
+  version: 0.6.4
+  resolution: "@firebase/component@npm:0.6.4"
+  dependencies:
+    "@firebase/util": 1.9.3
+    tslib: ^2.1.0
+  checksum: 5d7006e4bc70508f16fe9297c351ca7eff29b59f7fd4cc99a6e28f93b62f422d0401d84b0ddc38a52f7125aa646c9a98d014a86afdd2c50caf178b1987f71ab6
+  languageName: node
+  linkType: hard
+
 "@firebase/database-compat@npm:0.3.0":
   version: 0.3.0
   resolution: "@firebase/database-compat@npm:0.3.0"
@@ -2392,7 +2402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/firestore@npm:3.8.0, @firebase/firestore@npm:^3.5.0":
+"@firebase/firestore@npm:3.8.0":
   version: 3.8.0
   resolution: "@firebase/firestore@npm:3.8.0"
   dependencies:
@@ -2407,6 +2417,24 @@ __metadata:
   peerDependencies:
     "@firebase/app": 0.x
   checksum: 90f3c738d1f021a62d3541f43256ca32153f268eb716b3ea7dd43635367d263ff1aa4f73faf5e072580667d9f3bf8b50bbcd00533b19f322abe3d9cba05521b1
+  languageName: node
+  linkType: hard
+
+"@firebase/firestore@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "@firebase/firestore@npm:3.12.0"
+  dependencies:
+    "@firebase/component": 0.6.4
+    "@firebase/logger": 0.4.0
+    "@firebase/util": 1.9.3
+    "@firebase/webchannel-wrapper": 0.10.0
+    "@grpc/grpc-js": ~1.7.0
+    "@grpc/proto-loader": ^0.6.13
+    node-fetch: 2.6.7
+    tslib: ^2.1.0
+  peerDependencies:
+    "@firebase/app": 0.x
+  checksum: a2cd8cf47df3d36534b685a512f4cd52cf9ee874f232f20a1ee9b84e92f49bbe4add435988ddf53b00c98c96d05e290e96bfea4a8f55432ebcd5dcd4b8d219a4
   languageName: node
   linkType: hard
 
@@ -2663,6 +2691,22 @@ __metadata:
   dependencies:
     tslib: ^2.1.0
   checksum: 7ca296bf92cc0140639c79b4e2a1bf2644d8aa6aa120d0d570b0f352021c3e5e8dc938df98807d1c7e13ea0e537a5c5e1eefa2e6e67e4b994866118a73e645ec
+  languageName: node
+  linkType: hard
+
+"@firebase/util@npm:1.9.3":
+  version: 1.9.3
+  resolution: "@firebase/util@npm:1.9.3"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: b2dbd39229580df2075d102bc26a895eefdfb7ddc7bd71da6765f9ff4a61f5b67b6583e7e20676c56dc0e3f9379376fdef09a46b37b8d088b9de3eb0afbc066a
+  languageName: node
+  linkType: hard
+
+"@firebase/webchannel-wrapper@npm:0.10.0":
+  version: 0.10.0
+  resolution: "@firebase/webchannel-wrapper@npm:0.10.0"
+  checksum: 631b979c6fac727f9a7f7d05c10f1e9811bdaf20427c51dc6a706c8553a4f9c60deaa28861eb9d5004f6fb1b40e827f152e26ba8a75bb30a507449fb107ce332
   languageName: node
   linkType: hard
 
@@ -8996,7 +9040,7 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.10.5
     "@emotion/styled": ^11.10.5
-    "@firebase/firestore": ^3.5.0
+    "@firebase/firestore": ^3.12.0
     "@headlessui/react": ^1.7.7
     "@svgr/webpack": ^6.5.1
     "@tailwindcss/forms": ^0.5.3

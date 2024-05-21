@@ -20,7 +20,7 @@
     "firebase-admin": "^11.5.0",
     "firebase-functions": "^4.2.0",
     "mercadopago": "^1.5.14",
-    "nodemailer": "^6.9.1"
+    "nodemailer": "^6.9.9"
   },
   "devDependencies": {
     "@types/mercadopago": "^1.5.8",

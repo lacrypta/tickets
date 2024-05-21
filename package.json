@@ -12,7 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@firebase/firestore": "^3.5.0",
+    "@firebase/firestore": "^3.12.2",
     "@headlessui/react": "^1.7.7",
     "@thirdweb-dev/react": "^3.7.3",
     "@thirdweb-dev/sdk": "^3.7.3",
